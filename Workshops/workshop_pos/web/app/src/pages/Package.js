@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import config from '../config';
+import Modal from '../components/Modal';
 
 function Package() {
   const [packages, setPackages] = useState([]);
+  const [yourPackage, setYourPackage] = useState({});
 
   useEffect(() => {
     fetchData();
@@ -22,6 +24,10 @@ function Package() {
     } catch (error) {
       console.log(error.message);
     }
+  };
+
+  const choosePackage = (item) => {
+    setYourPackage(item);
   };
 
   return (
@@ -52,14 +58,45 @@ function Package() {
                     })}
                   </div>
                   <div className="mt-3">
-                    <button className="btn btn-primary">สมัคร</button>
+                    <button
+                      className="btn btn-primary"
+                      data-bs-toggle="modal"
+                      data-bs-target="#modalRegister"
+                      onClick={(e) => choosePackage(item)}
+                    >
+                      สมัคร
+                    </button>
                   </div>
                 </div>
               </div>
             </div>
           ))}
-        </div>{' '}
+        </div>
       </div>
+
+      <Modal id="modalRegister" title="สมัครใช้บริการ">
+        <form>
+          <div>
+            {/* <label>package</label> */}
+            <div className="alert alert-info">
+              {yourPackage.name} ราคา {yourPackage.price} ต่อเดือน
+            </div>
+          </div>
+          <div className="mt-3">
+            <label>ชื่อร้าน</label>
+            <input className="form-control" />
+          </div>
+          <div className="mt-3">
+            <label>เบอร์โทร</label>
+            <input className="form-control" />
+          </div>
+          <div className="mt-3">
+            <button className="btn btn-primary">
+              ยืนยันการสมัคร <i className="fa fa-arrow-right ms-2"></i>
+            </button>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 }
