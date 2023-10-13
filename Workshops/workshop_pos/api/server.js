@@ -1,7 +1,9 @@
 const express = require('express');
-const { request } = require('./controllers/PackageController');
+const cors = require('cors');
 const app = express();
 const port = 3000;
+
+app.use(cors());
 
 // const PackageController = require('./controllers/PackageController');
 
