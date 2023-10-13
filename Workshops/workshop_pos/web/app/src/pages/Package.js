@@ -2,10 +2,13 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import config from '../config';
 import Modal from '../components/Modal';
+import Swal from 'sweetalert2';
 
 function Package() {
   const [packages, setPackages] = useState([]);
   const [yourPackage, setYourPackage] = useState({});
+  const [name, setName] = useState();
+  const [phone, setPhone] = useState();
 
   useEffect(() => {
     fetchData();
@@ -28,6 +31,42 @@ function Package() {
 
   const choosePackage = (item) => {
     setYourPackage(item);
+  };
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    try {
+      Swal.fire({
+        title: 'ยืนยันการสมัคร',
+        text: 'โปรดยืนยันการสมัครใช้บริการ package ของเรา',
+        icon: 'question',
+        showCancelButton: true,
+        showConfirmButton: true,
+      }).then((res) => {
+        if (res.isConfirmed) {
+          const payload = {
+            packageId: yourPackage.id,
+            name: name,
+            phone: phone,
+          };
+          axios
+            .post(config.api_path + '/package/memberRegister', payload)
+            .then((res) => {
+              if (res.data.message === 'success') {
+                Swal.fire({
+                  title: 'บันทึกข้อมูล',
+                  text: 'บันทึกข้อมูลการสมัครแล้ว',
+                  icon: 'success',
+                  timer: 2000,
+                });
+                document.getElementById('btnModalClose').click();
+              }
+            });
+        }
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   return (
@@ -75,7 +114,7 @@ function Package() {
       </div>
 
       <Modal id="modalRegister" title="สมัครใช้บริการ">
-        <form>
+        <form onSubmit={handleRegister}>
           <div>
             {/* <label>package</label> */}
             <div className="alert alert-info">
@@ -84,11 +123,17 @@ function Package() {
           </div>
           <div className="mt-3">
             <label>ชื่อร้าน</label>
-            <input className="form-control" />
+            <input
+              className="form-control"
+              onChange={(e) => setName(e.target.value)}
+            />
           </div>
           <div className="mt-3">
             <label>เบอร์โทร</label>
-            <input className="form-control" />
+            <input
+              className="form-control"
+              onChange={(e) => setPhone(e.target.value)}
+            />
           </div>
           <div className="mt-3">
             <button className="btn btn-primary">

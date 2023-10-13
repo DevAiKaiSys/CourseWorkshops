@@ -14,3 +14,4 @@ install bootstrap with CDN
 ```
 
 npm install axios
+npm install sweetalert2
