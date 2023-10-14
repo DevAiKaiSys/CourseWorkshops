@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const MemberModel = require('../models/MemberModel');
 const jwt = require('jsonwebtoken');
-const { getToken } = require('./Service');
+const { getToken, isLogin } = require('./Service');
 const PackageModel = require('../models/PackageModel');
 
 require('dotenv').config();
@@ -26,7 +26,7 @@ app.post('/member/signin', async (req, res) => {
   }
 });
 
-app.get('/member/info', async (req, res) => {
+app.get('/member/info', isLogin, async (req, res) => {
   try {
     MemberModel.belongsTo(PackageModel);
 
