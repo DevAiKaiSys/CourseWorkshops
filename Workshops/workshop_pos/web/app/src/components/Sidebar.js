@@ -18,6 +18,7 @@ function Sidebar() {
         .then((res) => {
           if (res.data.message === 'success') {
             setMemberName(res.data.result.name);
+            setPackageName(res.data.result.package.name);
           }
         })
         .catch((err) => {
@@ -58,7 +59,7 @@ function Sidebar() {
               Alexander Pierce
             </a> */}
             <div>{memberName}</div>
-            <div>{packageName}</div>
+            <div>Package: {packageName}</div>
           </div>
         </div>
 
