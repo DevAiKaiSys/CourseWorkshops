@@ -3,12 +3,15 @@ import axios from 'axios';
 import config from '../config';
 import Modal from '../components/Modal';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 function Package() {
   const [packages, setPackages] = useState([]);
   const [yourPackage, setYourPackage] = useState({});
   const [name, setName] = useState();
   const [phone, setPhone] = useState();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchData();
@@ -60,12 +63,19 @@ function Package() {
                   timer: 2000,
                 });
                 document.getElementById('btnModalClose').click();
+
+                navigate('/login');
               }
             });
         }
       });
     } catch (error) {
-      console.log(error.message);
+      // console.log(error.message);
+      Swal.fire({
+        title: 'error',
+        message: error.message,
+        icon: 'error',
+      });
     }
   };
 
