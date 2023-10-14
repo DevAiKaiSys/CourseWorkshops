@@ -1,6 +1,37 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import Swal from 'sweetalert2';
+import config from '../config';
 
 function Sidebar() {
+  const [memberName, setMemberName] = useState();
+  const [packageName, setPackageName] = useState();
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      axios
+        .get(config.api_path + '/member/info', config.headers)
+        .then((res) => {
+          if (res.data.message === 'success') {
+            setMemberName(res.data.result.name);
+          }
+        })
+        .catch((err) => {
+          throw err.response.data;
+        });
+    } catch (error) {
+      Swal.fire({
+        title: 'error',
+        text: error.message,
+        icon: 'error',
+      });
+    }
+  };
+
   return (
     <aside className="main-sidebar sidebar-dark-primary elevation-4">
       <a href="index3.html" className="brand-link">
@@ -10,7 +41,7 @@ function Sidebar() {
           className="brand-image img-circle elevation-3"
           style={{ opacity: 0.8 }}
         />
-        <span className="brand-text font-weight-light">AdminLTE 3</span>
+        <span className="brand-text font-weight-light">POS on Cloud</span>
       </a>
 
       <div className="sidebar">
@@ -22,10 +53,12 @@ function Sidebar() {
               alt="User Image"
             />
           </div>
-          <div className="info">
-            <a href="#" className="d-block">
+          <div className="info text-white">
+            {/* <a href="#" className="d-block">
               Alexander Pierce
-            </a>
+            </a> */}
+            <div>{memberName}</div>
+            <div>{packageName}</div>
           </div>
         </div>
 

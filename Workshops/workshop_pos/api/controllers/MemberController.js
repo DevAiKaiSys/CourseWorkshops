@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const MemberModel = require('../models/MemberModel');
 const jwt = require('jsonwebtoken');
+const { getToken } = require('./Service');
 
 require('dotenv').config();
 
@@ -19,6 +20,19 @@ app.post('/member/signin', async (req, res) => {
       return res.send({ token: token, message: 'success' });
     }
     res.status(401).send({ message: 'not found' });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+});
+
+app.get('/member/info', async (req, res) => {
+  try {
+    const token = getToken(req);
+    const payload = jwt.decode(token);
+    const member = await MemberModel.findByPk(payload.id, {
+      attributes: ['id', 'name'],
+    });
+    res.send({ result: member, message: 'success' });
   } catch (error) {
     res.status(500).send({ message: error.message });
   }
