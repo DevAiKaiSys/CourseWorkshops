@@ -16,6 +16,9 @@ const MemberModel = sequelize.define('member', {
   phone: {
     type: DataTypes.STRING(255),
   },
+  pass: {
+    type: DataTypes.STRING(255),
+  },
 });
 
 // เปิดใช้เฉพาะตอนอัพเดทไม่แนะนำให้เปิดตลอด

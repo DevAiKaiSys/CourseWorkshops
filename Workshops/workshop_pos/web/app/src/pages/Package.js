@@ -10,6 +10,7 @@ function Package() {
   const [yourPackage, setYourPackage] = useState({});
   const [name, setName] = useState();
   const [phone, setPhone] = useState();
+  const [pass, setPass] = useState();
 
   const navigate = useNavigate();
 
@@ -51,6 +52,7 @@ function Package() {
             packageId: yourPackage.id,
             name: name,
             phone: phone,
+            pass: pass,
           };
           axios
             .post(config.api_path + '/package/memberRegister', payload)
@@ -73,7 +75,7 @@ function Package() {
       // console.log(error.message);
       Swal.fire({
         title: 'error',
-        message: error.message,
+        text: error.message,
         icon: 'error',
       });
     }
@@ -143,6 +145,14 @@ function Package() {
             <input
               className="form-control"
               onChange={(e) => setPhone(e.target.value)}
+            />
+          </div>
+          <div className="mt-3">
+            <label>รหัสผ่าน</label>
+            <input
+              type="password"
+              className="form-control"
+              onChange={(e) => setPass(e.target.value)}
             />
           </div>
           <div className="mt-3">
