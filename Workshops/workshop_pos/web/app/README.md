@@ -16,3 +16,19 @@ install bootstrap with CDN
 npm install axios
 npm install sweetalert2
 npm install react-router-dom
+
+use Template AdminLTE
+
+```
+https://adminlte.io/
+```
+
+Tip convenrt html to js
+find & replace with regex
+
+```
+<!--[\s\S\n]*?-->  replace  null
+<input(?!.*\/>)((?:[\s\S\n]*?))>  replace  <input$1/>
+<img(?!.*\/>)((?:[\s\S\n]*?))>  replace  <img$1/>
+class=  replace  className=
+```

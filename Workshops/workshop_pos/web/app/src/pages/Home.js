@@ -1,7 +1,12 @@
 import React from 'react';
+import Template from '../components/Template';
 
 function Home() {
-  return <div>Home</div>;
+  return (
+    <div>
+      <Template></Template>
+    </div>
+  );
 }
 
 export default Home;
