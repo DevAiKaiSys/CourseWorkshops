@@ -10,7 +10,9 @@ function Login() {
 
   const navigate = useNavigate();
 
-  const handleSignIn = async () => {
+  const handleSignIn = async (e) => {
+    e.preventDefault();
+
     try {
       const payload = {
         phone: phone,
@@ -70,7 +72,10 @@ function Login() {
           </div>
           <div className="my-3">
             <button className="btn btn-primary" onClick={handleSignIn}>
-              <i className="fa fa-check me-2"></i>Sign In
+              {/* Bootstrap 5 */}
+              {/* <i className="fa fa-check me-2"></i>Sign In */}
+              {/* Bootstrap 4 */}
+              <i className="fa fa-check mr-2"></i>Sign In
             </button>
           </div>
         </div>

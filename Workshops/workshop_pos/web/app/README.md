@@ -17,7 +17,8 @@ npm install axios
 npm install sweetalert2
 npm install react-router-dom
 
-use Template AdminLTE
+use Template AdminLTE v3.2.0
+downgrade to Bootstrap 4
 
 ```
 https://adminlte.io/

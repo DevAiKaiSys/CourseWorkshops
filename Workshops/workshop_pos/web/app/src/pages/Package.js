@@ -39,6 +39,7 @@ function Package() {
 
   const handleRegister = async (e) => {
     e.preventDefault();
+
     try {
       Swal.fire({
         title: 'ยืนยันการสมัคร',
@@ -111,8 +112,12 @@ function Package() {
                   <div className="mt-3">
                     <button
                       className="btn btn-primary"
-                      data-bs-toggle="modal"
-                      data-bs-target="#modalRegister"
+                      // Bootstrap 5
+                      // data-bs-toggle="modal"
+                      // data-bs-target="#modalRegister"
+                      // Bootstrap 4
+                      data-toggle="modal"
+                      data-target="#modalRegister"
                       onClick={(e) => choosePackage(item)}
                     >
                       สมัคร
@@ -157,7 +162,10 @@ function Package() {
           </div>
           <div className="mt-3">
             <button className="btn btn-primary">
-              ยืนยันการสมัคร <i className="fa fa-arrow-right ms-2"></i>
+              {/* Bootstrap 5 */}
+              {/* ยืนยันการสมัคร <i className="fa fa-arrow-right ms-2"></i> */}
+              {/* Bootstrap 4 */}
+              ยืนยันการสมัคร <i className="fa fa-arrow-right ml-2"></i>
             </button>
           </div>
         </form>
