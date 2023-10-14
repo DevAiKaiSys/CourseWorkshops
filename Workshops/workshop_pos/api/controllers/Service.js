@@ -15,7 +15,7 @@ const isLogin = (req, res, next) => {
     try {
       const verify = jwt.verify(token, secret);
       if (verify != null) {
-        next();
+        return next();
       }
     } catch (error) {}
   }

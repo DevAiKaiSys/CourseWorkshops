@@ -9,7 +9,7 @@ function Navbar() {
             <i className="fas fa-bars"></i>
           </a>
         </li>
-        <li className="nav-item d-none d-sm-inline-block">
+        {/* <li className="nav-item d-none d-sm-inline-block">
           <a href="index3.html" className="nav-link">
             Home
           </a>
@@ -18,10 +18,10 @@ function Navbar() {
           <a href="#" className="nav-link">
             Contact
           </a>
-        </li>
+        </li> */}
       </ul>
 
-      <ul className="navbar-nav ml-auto">
+      {/* <ul className="navbar-nav ml-auto">
         <li className="nav-item">
           <a
             className="nav-link"
@@ -185,6 +185,17 @@ function Navbar() {
           >
             <i className="fas fa-th-large"></i>
           </a>
+        </li>
+      </ul> */}
+
+      <ul className="navbar-nav ml-auto">
+        <li className="nav-item">
+          <button className="btn btn-info mr-2">
+            <i className="fa fa-user mr-2"></i>Profile
+          </button>
+          <button className="btn btn-danger">
+            <i className="fa fa-times mr-2"></i>Signout
+          </button>
         </li>
       </ul>
     </nav>
