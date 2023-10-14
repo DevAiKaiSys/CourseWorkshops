@@ -2,10 +2,13 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import Swal from 'sweetalert2';
 import config from '../config';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
   const [phone, setPhone] = useState();
   const [pass, setPass] = useState();
+
+  const navigate = useNavigate();
 
   const handleSignIn = async () => {
     try {
@@ -23,6 +26,9 @@ function Login() {
               icon: 'success',
               timer: 2000,
             });
+
+            localStorage.setItem(config.token_name, res.data.token);
+            navigate('/home');
           } else {
             Swal.fire({
               title: 'Sign In',
