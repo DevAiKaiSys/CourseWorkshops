@@ -3,7 +3,7 @@ import config from '../config';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import Modal from './Modal';
-import axios from 'axios';
+import axios, { Axios } from 'axios';
 
 function Navbar() {
   const [memberName, setMemberName] = useState('');
@@ -28,7 +28,7 @@ function Navbar() {
   const handleEditProfile = async () => {
     try {
       axios
-        .get(config.api_path + '/member/info', config.headers)
+        .get(config.api_path + '/member/info', config.headers())
         .then((res) => {
           if (res.data.message === 'success') {
             setMemberName(res.data.result.name);
@@ -41,6 +41,29 @@ function Navbar() {
       Swal.fire({
         title: 'error',
         text: error.message,
+        icon: 'error',
+      });
+    }
+  };
+
+  const handleChangeSave = async () => {
+    try {
+      const url = config.api_path + '/member/changeProfile';
+      const payload = { memberName: memberName };
+      await axios.put(url, payload, config.headers()).then((res) => {
+        if (res.data.message === 'success') {
+          Swal.fire({
+            title: 'เปลี่ยนข้อมูล',
+            text: 'เปลี่ยนแปลงข้อมูลร้านของคุณแล้ว',
+            icon: 'success',
+            timer: 2000,
+          });
+        }
+      });
+    } catch (e) {
+      Swal.fire({
+        title: 'error',
+        text: e.message,
         icon: 'error',
       });
     }
@@ -267,7 +290,7 @@ function Navbar() {
           />
         </div>
         <div className="mt-3">
-          <button className="btn btn-primary">
+          <button className="btn btn-primary" onClick={handleChangeSave}>
             <i className="fa fa-check mr-2"></i>Save
           </button>
         </div>

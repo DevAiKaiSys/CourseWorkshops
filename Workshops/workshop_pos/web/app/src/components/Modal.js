@@ -17,6 +17,7 @@ function Modal(props) {
     //           {props.title}
     //         </h1>
     //         <button
+    //           id="btnModalClose"
     //           type="button"
     //           className="btn-close"
     //           data-bs-dismiss="modal"
@@ -74,6 +75,7 @@ function Modal(props) {
               {props.title}
             </h5>
             <button
+              id="btnModalClose"
               type="button"
               className="close"
               data-dismiss="modal"

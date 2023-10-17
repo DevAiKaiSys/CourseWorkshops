@@ -14,7 +14,7 @@ function Sidebar() {
   const fetchData = async () => {
     try {
       axios
-        .get(config.api_path + '/member/info', config.headers)
+        .get(config.api_path + '/member/info', config.headers())
         .then((res) => {
           if (res.data.message === 'success') {
             setMemberName(res.data.result.name);

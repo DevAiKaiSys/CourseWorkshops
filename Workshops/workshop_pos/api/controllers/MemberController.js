@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const MemberModel = require('../models/MemberModel');
 const jwt = require('jsonwebtoken');
-const { getToken, isLogin } = require('./Service');
+const { isLogin, getMemberId } = require('./Service');
 const PackageModel = require('../models/PackageModel');
 
 require('dotenv').config();
@@ -30,15 +30,30 @@ app.get('/member/info', isLogin, async (req, res) => {
   try {
     MemberModel.belongsTo(PackageModel);
 
-    const token = getToken(req);
-    const payload = jwt.decode(token);
-    const member = await MemberModel.findByPk(payload.id, {
+    const memberId = getMemberId(req);
+    console.log(memberId);
+    const member = await MemberModel.findByPk(memberId, {
       attributes: ['id', 'name'],
       include: [{ model: PackageModel, attributes: ['name'] }],
     });
     res.send({ result: member, message: 'success' });
   } catch (error) {
     res.status(500).send({ message: error.message });
+  }
+});
+
+app.put('/member/changeProfile', isLogin, async (req, res) => {
+  try {
+    const memberId = getMemberId(req);
+    const payload = { name: req.body.memberName };
+    const result = await MemberModel.update(payload, {
+      where: {
+        id: memberId,
+      },
+    });
+    res.send({ message: 'success', result: result });
+  } catch (e) {
+    res.status(500).send({ message: e.message });
   }
 });
 
