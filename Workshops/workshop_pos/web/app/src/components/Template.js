@@ -2,7 +2,7 @@ import React from 'react';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 
-function Template() {
+function Template(props) {
   return (
     <div>
       <div className="wrapper">
@@ -19,6 +19,10 @@ function Template() {
         <Navbar />
 
         <Sidebar />
+
+        <div className="content-wrapper pt-3">
+          <section className="content">{props.children}</section>
+        </div>
 
         {/* <div className="content-wrapper">
           <div className="content-header">

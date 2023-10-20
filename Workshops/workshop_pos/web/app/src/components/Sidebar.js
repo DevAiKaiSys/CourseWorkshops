@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import config from '../config';
+import { Link } from 'react-router-dom';
 
 function Sidebar() {
   const [memberName, setMemberName] = useState();
@@ -63,7 +64,7 @@ function Sidebar() {
           </div>
         </div>
 
-        <div className="form-inline">
+        {/* <div className="form-inline">
           <div className="input-group" data-widget="sidebar-search">
             <input
               className="form-control form-control-sidebar"
@@ -77,7 +78,7 @@ function Sidebar() {
               </button>
             </div>
           </div>
-        </div>
+        </div> */}
 
         <nav className="mt-2">
           <ul
@@ -86,7 +87,7 @@ function Sidebar() {
             role="menu"
             data-accordion="false"
           >
-            <li className="nav-item menu-open">
+            {/* <li className="nav-item menu-open">
               <a href="#" className="nav-link active">
                 <i className="nav-icon fas fa-tachometer-alt"></i>
                 <p>
@@ -114,8 +115,8 @@ function Sidebar() {
                   </a>
                 </li>
               </ul>
-            </li>
-            <li className="nav-item">
+            </li> */}
+            {/* <li className="nav-item">
               <a href="pages/widgets.html" className="nav-link">
                 <i className="nav-icon fas fa-th"></i>
                 <p>
@@ -123,8 +124,20 @@ function Sidebar() {
                   <span className="right badge badge-danger">New</span>
                 </p>
               </a>
+            </li> */}
+            <li className="nav-item">
+              <Link to="/dashboard" className="nav-link">
+                <i className="nav-icon fas fa-th"></i>
+                <p>Dashboard</p>
+              </Link>
             </li>
             <li className="nav-item">
+              <Link to="/product" className="nav-link">
+                <i className="nav-icon fas fa-box"></i>
+                <p>สินค้า</p>
+              </Link>
+            </li>
+            {/* <li className="nav-item">
               <a href="#" className="nav-link">
                 <i className="nav-icon fas fa-copy"></i>
                 <p>
@@ -760,7 +773,7 @@ function Sidebar() {
                 <i className="nav-icon far fa-circle text-info"></i>
                 <p>Informational</p>
               </a>
-            </li>
+            </li> */}
           </ul>
         </nav>
       </div>
