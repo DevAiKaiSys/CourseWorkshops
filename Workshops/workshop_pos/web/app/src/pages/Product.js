@@ -33,9 +33,7 @@ function Product() {
         // Fetch data after successful save
         fetchData();
 
-        // Close modal (if you're using Bootstrap modal)
-        const closeModalButton = document.getElementById('btnModalClose');
-        closeModalButton && closeModalButton.click();
+        handleClose();
       }
     } catch (error) {
       Swal.fire({
@@ -70,6 +68,15 @@ function Product() {
     }
   };
 
+  const handleClose = () => {
+    const btns = document.getElementsByClassName('btnModalClose');
+    console.log(btns.length);
+    Array.from(btns).forEach((btn) => {
+      console.log(btn);
+      btn.click();
+    });
+  };
+
   return (
     <div>
       <Template>
@@ -80,6 +87,7 @@ function Product() {
               className="btn btn-primary"
               data-toggle="modal"
               data-target="#modalProduct"
+              onClick={(e) => setProduct({})}
             >
               <i className="fa fa-plus mr-2"></i>เพิ่มรายการ
             </button>
@@ -137,6 +145,7 @@ function Product() {
               <label>barcode</label>
               <input
                 className="form-control"
+                value={product.barcode}
                 onChange={(e) =>
                   setProduct({
                     ...product,
@@ -149,6 +158,7 @@ function Product() {
               <label>ชื่อสินค้า</label>
               <input
                 className="form-control"
+                value={product.name}
                 onChange={(e) =>
                   setProduct({
                     ...product,
@@ -161,6 +171,7 @@ function Product() {
               <label>ราคาจำหน่าย</label>
               <input
                 className="form-control"
+                value={product.price}
                 onChange={(e) =>
                   setProduct({
                     ...product,
@@ -173,6 +184,7 @@ function Product() {
               <label>ราคาทุน</label>
               <input
                 className="form-control"
+                value={product.cost}
                 onChange={(e) =>
                   setProduct({
                     ...product,
@@ -185,6 +197,7 @@ function Product() {
               <label>รายละเอียด</label>
               <input
                 className="form-control"
+                value={product.detail}
                 onChange={(e) =>
                   setProduct({
                     ...product,

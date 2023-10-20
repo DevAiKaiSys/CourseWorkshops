@@ -81,7 +81,7 @@ function Modal(props) {
             <button
               id="btnModalClose"
               type="button"
-              className="close"
+              className="close btnModalClose"
               data-dismiss="modal"
               aria-label="Close"
             >
