@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Template from '../components/Template';
 import axios from 'axios';
 import config from '../config';
@@ -13,16 +13,51 @@ function Product() {
     e.preventDefault();
 
     try {
+      const response = await axios.post(
+        `${config.api_path}/product/insert`,
+        product,
+        config.headers()
+      );
+
+      if (response.status === 201) {
+        Swal.fire({
+          title: 'บันทึกข้อมูล',
+          text: 'บันทึกข้อมูลสินค้าแล้ว',
+          icon: 'success',
+          timer: 2000,
+        });
+
+        // Reset the product object
+        setProduct({});
+
+        // Fetch data after successful save
+        fetchData();
+
+        // Close modal (if you're using Bootstrap modal)
+        const closeModalButton = document.getElementById('btnModalClose');
+        closeModalButton && closeModalButton.click();
+      }
+    } catch (error) {
+      Swal.fire({
+        title: 'error',
+        text: error.message,
+        icon: 'warning',
+        timer: 2000,
+      });
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
       await axios
-        .post(config.api_path + '/product/insert', product, config.headers())
+        .get(config.api_path + '/product/list', config.headers())
         .then((res) => {
-          if (res.status === 201) {
-            Swal.fire({
-              title: 'บันทึกข้อมูล',
-              text: 'บันทึกข้อมูลสินค้าแล้ว',
-              icon: 'success',
-              timer: 2000,
-            });
+          if (res.status === 200) {
+            setProducts(res.data.results);
           }
         });
     } catch (error) {
@@ -48,6 +83,49 @@ function Product() {
             >
               <i className="fa fa-plus mr-2"></i>เพิ่มรายการ
             </button>
+            <table className="mt-3 table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th>barcode</th>
+                  <th>ชื่อสินค้า</th>
+                  <th className="text-right">ราคาทุน</th>
+                  <th className="text-right">ราคาจำหน่าย</th>
+                  <th>รายละเอียด</th>
+                  <th width="150px">action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {products.length > 0 ? (
+                  products.map((item, index) => (
+                    <tr key={index}>
+                      <td>{item.barcode}</td>
+                      <td>{item.name}</td>
+                      <td className="text-right">
+                        {parseInt(item.cost).toLocaleString('th-TH')}
+                      </td>
+                      <td className="text-right">
+                        {parseInt(item.price).toLocaleString('th-TH')}
+                      </td>
+                      <td>{item.detail}</td>
+                      <td className="text-center">
+                        <button className="btn btn-info">
+                          <i className="fa fa-pencil-alt"></i>
+                        </button>
+                        <button className="btn btn-danger ml-2">
+                          <i className="fa fa-times"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="6" className="text-center">
+                      No products available.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
           </div>
         </div>
       </Template>
