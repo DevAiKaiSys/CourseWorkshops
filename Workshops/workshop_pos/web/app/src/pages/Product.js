@@ -13,13 +13,17 @@ function Product() {
     e.preventDefault();
 
     try {
+      let url = '/product/insert';
+      if (product.id) {
+        url = '/product/update';
+      }
       const response = await axios.post(
-        `${config.api_path}/product/insert`,
+        `${config.api_path}${url}`,
         product,
         config.headers()
       );
 
-      if (response.status === 201) {
+      if (response.status === 201 || response.status === 200) {
         Swal.fire({
           title: 'บันทึกข้อมูล',
           text: 'บันทึกข้อมูลสินค้าแล้ว',
@@ -151,7 +155,12 @@ function Product() {
                       </td>
                       <td>{item.detail}</td>
                       <td className="text-center">
-                        <button className="btn btn-info">
+                        <button
+                          className="btn btn-info"
+                          onClick={(e) => setProduct(item)}
+                          data-toggle="modal"
+                          data-target="#modalProduct"
+                        >
                           <i className="fa fa-pencil-alt"></i>
                         </button>
                         <button
