@@ -23,4 +23,13 @@ app.post('/product/insert', isLogin, async (req, res) => {
   }
 });
 
+app.delete('/product/delete/:id', isLogin, async (req, res) => {
+  try {
+    const result = await ProductModel.destroy({ where: { id: req.params.id } });
+    res.status(200).send({ message: 'success', result: result });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+});
+
 module.exports = app;

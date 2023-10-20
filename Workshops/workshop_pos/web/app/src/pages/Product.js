@@ -77,6 +77,41 @@ function Product() {
     });
   };
 
+  const handleDelete = (item) => {
+    Swal.fire({
+      title: 'ลบข้อมูล',
+      text: 'ยืนยันการลบข้อมูลออกจากระบบ',
+      icon: 'question',
+      showCancelButton: true,
+      showConfirmButton: true,
+    }).then(async (res) => {
+      if (res.isConfirmed) {
+        try {
+          const response = await axios.delete(
+            `${config.api_path}/product/delete/${item.id}`,
+            config.headers()
+          );
+          if (response.status === 200) {
+            Swal.fire({
+              title: 'ลบข้อมูล',
+              text: 'ลบข้อมูลสินค้าแล้ว',
+              icon: 'success',
+              timer: 2000,
+            });
+            fetchData();
+          }
+        } catch (error) {
+          Swal.fire({
+            title: 'error',
+            text: error.message,
+            icon: 'warning',
+            timer: 2000,
+          });
+        }
+      }
+    });
+  };
+
   return (
     <div>
       <Template>
@@ -119,7 +154,10 @@ function Product() {
                         <button className="btn btn-info">
                           <i className="fa fa-pencil-alt"></i>
                         </button>
-                        <button className="btn btn-danger ml-2">
+                        <button
+                          className="btn btn-danger ml-2"
+                          onClick={(e) => handleDelete(item)}
+                        >
                           <i className="fa fa-times"></i>
                         </button>
                       </td>
