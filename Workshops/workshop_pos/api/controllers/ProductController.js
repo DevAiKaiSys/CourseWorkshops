@@ -1,7 +1,5 @@
 const express = require('express');
 const app = express();
-const PackageModel = require('../models/PackageModel');
-const MemberModel = require('../models/MemberModel');
 const { isLogin } = require('./Service');
 const ProductModel = require('../models/ProductModel');
 

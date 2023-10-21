@@ -12,6 +12,7 @@ app.use(express.json());
 app.use(require('./controllers/PackageController'));
 app.use(require('./controllers/MemberController'));
 app.use(require('./controllers/ProductController'));
+app.use(require('./controllers/ProductImageController'));
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

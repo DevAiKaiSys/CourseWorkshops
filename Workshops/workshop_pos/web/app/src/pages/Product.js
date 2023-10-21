@@ -73,12 +73,28 @@ function Product() {
   };
 
   const handleClose = () => {
-    const btns = document.getElementsByClassName('btnModalClose');
-    console.log(btns.length);
-    Array.from(btns).forEach((btn) => {
-      console.log(btn);
-      btn.click();
-    });
+    // const btns = document.getElementsByClassName('btnModalClose');
+    // Array.from(btns).forEach((btn) => {
+    //   console.log(btn);
+    //   btn.click();
+    // });
+
+    const modalElement = document.querySelector('.modal.show');
+
+    // Step 2: Find all elements and child elements with id="btnModalClose" inside the modal element
+    if (modalElement) {
+      const elementsWithIdClose =
+        modalElement.querySelectorAll('#btnModalClose');
+
+      // Step 3: Loop through all elements and child elements with id="btnModalClose"
+      elementsWithIdClose.forEach((element) => {
+        element.click();
+      });
+
+      // You can perform further operations on elementsWithIdClose if needed
+    } else {
+      console.log('Modal element with class "modal fade show" not found.');
+    }
   };
 
   const handleDelete = (item) => {
