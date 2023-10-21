@@ -149,13 +149,13 @@ function Product() {
         },
       };
       const formData = new FormData();
-      formData.append('file', productImage);
-      formData.append('fileName', productImage.Name);
+      formData.append('productImage', productImage);
+      formData.append('productImageName', productImage.name);
 
       await axios
         .post(config.api_path + '/productImage/insert', formData, _config)
-        .then(() => {
-          if (res.data.status === 200) {
+        .then((res) => {
+          if (res.data.status === 201) {
             Swal.fire({
               title: 'upload ภาพสินค้า',
               text: 'upload ภาพสิรค้าเรียบร้อยแล้ว',
