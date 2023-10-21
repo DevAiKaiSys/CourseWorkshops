@@ -429,13 +429,25 @@ function Product() {
           <div className="row">
             {productImages.length > 0
               ? productImages.map((item, index) => (
-                  <div className="col-4" key={index}>
-                    <img src={item.imageName} alt="" />
-                    {item.isMain ? (
-                      <button className="btn btn-info">ภาพหลัก</button>
-                    ) : (
-                      <button className="btn btn-default">ภาพหลัก</button>
-                    )}
+                  <div className="col-3" key={index}>
+                    <div className="card">
+                      <img
+                        className="card-img-top"
+                        src={`${config.api_path}/uploads/${item.imageName}`}
+                        alt=""
+                        width="100%"
+                      />
+                      <div className="card-body text-center">
+                        {item.isMain ? (
+                          <button className="btn btn-info">
+                            <i className="fa fa-check mr-2"></i>
+                            ภาพหลัก
+                          </button>
+                        ) : (
+                          <button className="btn btn-default">ภาพหลัก</button>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 ))
               : ''}
