@@ -164,7 +164,8 @@ function Product() {
               timer: 2000,
             });
 
-            fetchDataProductImage();
+            // fetchDataProductImage();
+            fetchDataProductImage(product);
 
             handleCloseModal();
           }
@@ -179,7 +180,47 @@ function Product() {
     }
   };
 
-  const fetchDataProductImage = async () => {};
+  // useEffect(() => {
+  //   // This code will run after every render, including the initial render and after state updates
+  //   if (product.id !== undefined) {
+  //     console.log('Product in useEffect:', product);
+  //     fetchDataProductImage();
+  //   }
+  // }, [product]); // The effect will re-run whenever the 'product' state variable changes
+
+  // const fetchDataProductImage = async () => {
+  const fetchDataProductImage = async (item) => {
+    try {
+      console.log(product);
+      await axios
+        .get(
+          // `${config.api_path}/productImage/list/${product.id}`,
+          `${config.api_path}/productImage/list/${item.id}`,
+          config.headers()
+        )
+        .then((res) => {
+          if (res.status === 200) {
+            setProductImages(res.data.results);
+            console.log(res.data.results.length);
+          }
+        })
+        .catch((err) => {
+          throw err.response.data;
+        });
+    } catch (error) {
+      Swal.fire({
+        title: 'error',
+        text: error.message,
+        icon: 'warning',
+        timer: 2000,
+      });
+    }
+  };
+
+  const handleChooseProduct = async (item) => {
+    setProduct(item);
+    fetchDataProductImage(item);
+  };
 
   return (
     <div>
@@ -222,7 +263,11 @@ function Product() {
                       <td className="text-center">
                         <button
                           className="btn btn-primary mr-2"
-                          onClick={(e) => setProduct(item)}
+                          // onClick={(e) => {
+                          //   setProduct(item);
+                          //   // fetchDataProductImage();
+                          // }}
+                          onClick={(e) => handleChooseProduct(item)}
                           data-toggle="modal"
                           data-target="#modalProductImage"
                         >
@@ -377,6 +422,23 @@ function Product() {
             ) : (
               ''
             )}
+          </div>
+
+          <hr />
+          <h5 className="mt-3">ภาพสินค้า</h5>
+          <div className="row">
+            {productImages.length > 0
+              ? productImages.map((item, index) => (
+                  <div className="col-4" key={index}>
+                    <img src={item.imageName} alt="" />
+                    {item.isMain ? (
+                      <button className="btn btn-info">ภาพหลัก</button>
+                    ) : (
+                      <button className="btn btn-default">ภาพหลัก</button>
+                    )}
+                  </div>
+                ))
+              : ''}
           </div>
         </form>
       </Modal>

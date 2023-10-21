@@ -6,14 +6,17 @@ const fileUpload = require('express-fileupload');
 
 app.use(fileUpload());
 
-// app.get('/productImage/list/:productId', isLogin, async (req, res) => {
-//   try {
-//     const results = await ProductImageModel.findAll({ order: [['id', 'DESC']] });
-//     res.status(200).send({ results: results });
-//   } catch (error) {
-//     res.status(500).send({ message: error.message });
-//   }
-// });
+app.get('/productImage/list/:productId', isLogin, async (req, res) => {
+  try {
+    const results = await ProductImageModel.findAll({
+      where: { productId: req.params.productId },
+      order: [['id', 'DESC']],
+    });
+    res.status(200).send({ results: results });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+});
 
 app.post('/productImage/insert', isLogin, async (req, res) => {
   try {
