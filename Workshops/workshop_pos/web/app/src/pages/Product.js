@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Template from '../components/Template';
-import axios from 'axios';
+import axios, { Axios } from 'axios';
 import config from '../config';
 import Swal from 'sweetalert2';
 import Modal from '../components/Modal';
@@ -142,6 +142,28 @@ function Product() {
     e.preventDefault();
 
     try {
+      const _config = {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem(config.token_name),
+          'content-type': 'multipart/form-data',
+        },
+      };
+      const formData = new FormData();
+      formData.append('file', productImage);
+      formData.append('fileName', productImage.Name);
+
+      await axios
+        .post(config.api_path + '/productImage/insert', formData, _config)
+        .then(() => {
+          if (res.data.status === 200) {
+            Swal.fire({
+              title: 'upload ภาพสินค้า',
+              text: 'upload ภาพสิรค้าเรียบร้อยแล้ว',
+              icon: 'success',
+              timer: 2000,
+            });
+          }
+        });
     } catch (error) {
       Swal.fire({
         title: 'error',
@@ -151,6 +173,8 @@ function Product() {
       });
     }
   };
+
+  const fetchDataProductImage = async () => {};
 
   return (
     <div>
@@ -307,7 +331,7 @@ function Product() {
       </Modal>
 
       <Modal id="modalProductImage" title="ภาพสินค้า" modalSize="modal-lg">
-        <form onSubmit={handleSave}>
+        <form onSubmit={handleUpload}>
           <div className="row">
             <div className="col-4">
               <div>barcode</div>
@@ -340,10 +364,14 @@ function Product() {
           </div>
 
           <div className="mt-3">
-            <div className="btn btn-primary">
-              <i className="fa fa-check mr-2"></i>
-              Upload and Save
-            </div>
+            {productImage ? (
+              <button className="btn btn-primary">
+                <i className="fa fa-check mr-2"></i>
+                Upload and Save
+              </button>
+            ) : (
+              ''
+            )}
           </div>
         </form>
       </Modal>
