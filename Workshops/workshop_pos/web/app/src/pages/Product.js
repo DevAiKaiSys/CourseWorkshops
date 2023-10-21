@@ -39,7 +39,7 @@ function Product() {
         // Fetch data after successful save
         fetchData();
 
-        handleClose();
+        handleCloseModal();
       }
     } catch (error) {
       Swal.fire({
@@ -74,7 +74,7 @@ function Product() {
     }
   };
 
-  const handleClose = () => {
+  const handleCloseModal = () => {
     // const btns = document.getElementsByClassName('btnModalClose');
     // Array.from(btns).forEach((btn) => {
     //   console.log(btn);
@@ -151,17 +151,22 @@ function Product() {
       const formData = new FormData();
       formData.append('productImage', productImage);
       formData.append('productImageName', productImage.name);
+      formData.append('productId', product.id);
 
       await axios
         .post(config.api_path + '/productImage/insert', formData, _config)
         .then((res) => {
-          if (res.data.status === 201) {
+          if (res.status === 201) {
             Swal.fire({
               title: 'upload ภาพสินค้า',
               text: 'upload ภาพสิรค้าเรียบร้อยแล้ว',
               icon: 'success',
               timer: 2000,
             });
+
+            fetchDataProductImage();
+
+            handleCloseModal();
           }
         });
     } catch (error) {
