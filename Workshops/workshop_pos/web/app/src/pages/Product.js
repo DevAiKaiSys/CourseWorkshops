@@ -8,7 +8,7 @@ import Modal from '../components/Modal';
 function Product() {
   const [product, setProduct] = useState({});
   const [products, setProducts] = useState([]);
-  const [productImage, setProductImage] = useState({});
+  const [productImage, setProductImage] = useState();
   const [productImages, setProductImages] = useState([]);
 
   const handleSave = async (e) => {
@@ -132,6 +132,24 @@ function Product() {
         }
       }
     });
+  };
+
+  const handleChangeFile = (e) => {
+    setProductImage(e.target.files[0]);
+  };
+
+  const handleUpload = async (e) => {
+    e.preventDefault();
+
+    try {
+    } catch (error) {
+      Swal.fire({
+        title: 'error',
+        text: error.message,
+        icon: 'warning',
+        timer: 2000,
+      });
+    }
   };
 
   return (
@@ -311,8 +329,14 @@ function Product() {
 
             <div className="col-12 mt-3">
               <div>เลือกภาพสินค้า</div>
-              <input type="file" name="imageName" className="form-control" />
+              <input
+                type="file"
+                name="imageName"
+                className="form-control"
+                onChange={handleChangeFile}
+              />
             </div>
+            {/* {productImage ? <div>File: {productImage.name}</div> : ''} */}
           </div>
 
           <div className="mt-3">
