@@ -8,6 +8,8 @@ import Modal from '../components/Modal';
 function Product() {
   const [product, setProduct] = useState({});
   const [products, setProducts] = useState([]);
+  const [productImage, setProductImage] = useState({});
+  const [productImages, setProductImages] = useState([]);
 
   const handleSave = async (e) => {
     e.preventDefault();
@@ -154,7 +156,7 @@ function Product() {
                   <th className="text-right">ราคาทุน</th>
                   <th className="text-right">ราคาจำหน่าย</th>
                   <th>รายละเอียด</th>
-                  <th width="150px">action</th>
+                  <th width="170px">action</th>
                 </tr>
               </thead>
               <tbody>
@@ -172,7 +174,15 @@ function Product() {
                       <td>{item.detail}</td>
                       <td className="text-center">
                         <button
-                          className="btn btn-info"
+                          className="btn btn-primary mr-2"
+                          onClick={(e) => setProduct(item)}
+                          data-toggle="modal"
+                          data-target="#modalProductImage"
+                        >
+                          <i className="fa fa-image"></i>
+                        </button>
+                        <button
+                          className="btn btn-info mr-2"
                           onClick={(e) => setProduct(item)}
                           data-toggle="modal"
                           data-target="#modalProduct"
@@ -180,7 +190,7 @@ function Product() {
                           <i className="fa fa-pencil-alt"></i>
                         </button>
                         <button
-                          className="btn btn-danger ml-2"
+                          className="btn btn-danger"
                           onClick={(e) => handleDelete(item)}
                         >
                           <i className="fa fa-times"></i>
@@ -274,6 +284,42 @@ function Product() {
             <button className="btn btn-primary">
               <i className="fa fa-check mr-2"></i>Save
             </button>
+          </div>
+        </form>
+      </Modal>
+
+      <Modal id="modalProductImage" title="ภาพสินค้า" modalSize="modal-lg">
+        <form onSubmit={handleSave}>
+          <div className="row">
+            <div className="col-4">
+              <div>barcode</div>
+              <input
+                className="form-control"
+                value={product.barcode}
+                disabled
+              />
+            </div>
+            <div className="col-8">
+              <div>ชื่อสินค้า</div>
+              <input className="form-control" value={product.name} disabled />
+            </div>
+
+            <div className="col-12 mt-3">
+              <div>รายละเอียด</div>
+              <input className="form-control" value={product.detail} disabled />
+            </div>
+
+            <div className="col-12 mt-3">
+              <div>เลือกภาพสินค้า</div>
+              <input type="file" name="imageName" className="form-control" />
+            </div>
+          </div>
+
+          <div className="mt-3">
+            <div className="btn btn-primary">
+              <i className="fa fa-check mr-2"></i>
+              Upload and Save
+            </div>
           </div>
         </form>
       </Modal>
