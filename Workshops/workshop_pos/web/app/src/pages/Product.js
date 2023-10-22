@@ -141,43 +141,54 @@ function Product() {
   const handleUpload = async (e) => {
     e.preventDefault();
 
-    try {
-      const _config = {
-        headers: {
-          Authorization: 'Bearer ' + localStorage.getItem(config.token_name),
-          'content-type': 'multipart/form-data',
-        },
-      };
-      const formData = new FormData();
-      formData.append('productImage', productImage);
-      formData.append('productImageName', productImage.name);
-      formData.append('productId', product.id);
+    Swal.fire({
+      title: 'ยืนยันการอัพโหลดภาพสินค้า',
+      text: 'โปรดทำการยืนยัน เพื่ออัพโหลดภาพสินค้า',
+      icon: 'question',
+      showCancelButton: true,
+      showConfirmButton: true,
+    }).then(async (res) => {
+      if (res.isConfirmed) {
+        try {
+          const _config = {
+            headers: {
+              Authorization:
+                'Bearer ' + localStorage.getItem(config.token_name),
+              'content-type': 'multipart/form-data',
+            },
+          };
+          const formData = new FormData();
+          formData.append('productImage', productImage);
+          formData.append('productImageName', productImage.name);
+          formData.append('productId', product.id);
 
-      await axios
-        .post(config.api_path + '/productImage/insert', formData, _config)
-        .then((res) => {
-          if (res.status === 201) {
-            Swal.fire({
-              title: 'upload ภาพสินค้า',
-              text: 'upload ภาพสิรค้าเรียบร้อยแล้ว',
-              icon: 'success',
-              timer: 2000,
+          await axios
+            .post(config.api_path + '/productImage/insert', formData, _config)
+            .then((res) => {
+              if (res.status === 201) {
+                Swal.fire({
+                  title: 'upload ภาพสินค้า',
+                  text: 'upload ภาพสิรค้าเรียบร้อยแล้ว',
+                  icon: 'success',
+                  timer: 2000,
+                });
+
+                // fetchDataProductImage();
+                fetchDataProductImage(product.id);
+
+                handleCloseModal();
+              }
             });
-
-            // fetchDataProductImage();
-            fetchDataProductImage(product);
-
-            handleCloseModal();
-          }
-        });
-    } catch (error) {
-      Swal.fire({
-        title: 'error',
-        text: error.message,
-        icon: 'warning',
-        timer: 2000,
-      });
-    }
+        } catch (error) {
+          Swal.fire({
+            title: 'error',
+            text: error.message,
+            icon: 'warning',
+            timer: 2000,
+          });
+        }
+      }
+    });
   };
 
   // useEffect(() => {
@@ -189,19 +200,17 @@ function Product() {
   // }, [product]); // The effect will re-run whenever the 'product' state variable changes
 
   // const fetchDataProductImage = async () => {
-  const fetchDataProductImage = async (item) => {
+  const fetchDataProductImage = async (id) => {
     try {
-      console.log(product);
       await axios
         .get(
           // `${config.api_path}/productImage/list/${product.id}`,
-          `${config.api_path}/productImage/list/${item.id}`,
+          `${config.api_path}/productImage/list/${id}`,
           config.headers()
         )
         .then((res) => {
           if (res.status === 200) {
             setProductImages(res.data.results);
-            console.log(res.data.results.length);
           }
         })
         .catch((err) => {
@@ -217,9 +226,53 @@ function Product() {
     }
   };
 
-  const handleChooseProduct = async (item) => {
+  const handleChooseProduct = (item) => {
     setProduct(item);
-    fetchDataProductImage(item);
+    fetchDataProductImage(item.id);
+  };
+
+  const handleChooseMainImage = (item) => {
+    Swal.fire({
+      title: 'เลือกภาพหลัก',
+      text: 'ยืนยันการเลือกภาพนี้ เป็นภาพหลักของสินค้า',
+      icon: 'question',
+      showCancelButton: true,
+      showConfirmButton: true,
+    }).then(async (res) => {
+      if (res.isConfirmed) {
+        try {
+          const payload = { id: item.id, productId: item.productId };
+          await axios
+            .put(
+              `${config.api_path}/productImage/chooseMainImage`,
+              payload,
+              config.headers()
+            )
+            .then((res) => {
+              if (res.status === 200) {
+                Swal.fire({
+                  title: 'เลือกภาพหลัก',
+                  text: 'บันทึกการเลือกภาหลักของสินค้าแล้ว',
+                  icon: 'success',
+                  timer: 2000,
+                });
+                // fetchDataProductImage();
+                fetchDataProductImage(item.productId);
+              }
+            })
+            .catch((err) => {
+              throw err.response.data;
+            });
+        } catch (error) {
+          Swal.fire({
+            title: 'error',
+            text: error.message,
+            icon: 'warning',
+            timer: 2000,
+          });
+        }
+      }
+    });
   };
 
   return (
@@ -423,36 +476,41 @@ function Product() {
               ''
             )}
           </div>
+        </form>
 
-          <hr />
-          <h5 className="mt-3">ภาพสินค้า</h5>
-          <div className="row">
-            {productImages.length > 0
-              ? productImages.map((item, index) => (
-                  <div className="col-3" key={index}>
-                    <div className="card">
-                      <img
-                        className="card-img-top"
-                        src={`${config.api_path}/uploads/${item.imageName}`}
-                        alt=""
-                        width="100%"
-                      />
-                      <div className="card-body text-center">
-                        {item.isMain ? (
-                          <button className="btn btn-info">
-                            <i className="fa fa-check mr-2"></i>
-                            ภาพหลัก
-                          </button>
-                        ) : (
-                          <button className="btn btn-default">ภาพหลัก</button>
-                        )}
-                      </div>
+        <hr />
+        <h5 className="mt-3">ภาพสินค้า</h5>
+        <div className="row">
+          {productImages.length > 0
+            ? productImages.map((item, index) => (
+                <div className="col-3" key={index}>
+                  <div className="card">
+                    <img
+                      className="card-img-top"
+                      src={`${config.api_path}/uploads/${item.imageName}`}
+                      alt=""
+                      width="100%"
+                    />
+                    <div className="card-body text-center">
+                      {item.isMain ? (
+                        <button className="btn btn-info" disabled>
+                          <i className="fa fa-check mr-2"></i>
+                          ภาพหลัก
+                        </button>
+                      ) : (
+                        <button
+                          className="btn btn-default"
+                          onClick={() => handleChooseMainImage(item)}
+                        >
+                          ภาพหลัก
+                        </button>
+                      )}
                     </div>
                   </div>
-                ))
-              : ''}
-          </div>
-        </form>
+                </div>
+              ))
+            : ''}
+        </div>
       </Modal>
     </div>
   );

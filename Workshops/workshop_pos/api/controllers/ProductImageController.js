@@ -53,6 +53,26 @@ app.post('/productImage/insert', isLogin, async (req, res) => {
   }
 });
 
+app.put('/productImage/chooseMainImage', isLogin, async (req, res) => {
+  try {
+    await ProductImageModel.update(
+      { isMain: false },
+      {
+        where: { productId: req.body.productId },
+      }
+    );
+    const result = await ProductImageModel.update(
+      { isMain: true },
+      {
+        where: { id: req.body.id },
+      }
+    );
+    res.status(200).send({ message: 'success', result: result });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+});
+
 // app.delete('/productImage/delete/:id', isLogin, async (req, res) => {
 //   try {
 //     const result = await ProductImageModel.destroy({ where: { id: req.params.id } });
