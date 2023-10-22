@@ -139,8 +139,6 @@ function Product() {
   };
 
   const handleUpload = async (e) => {
-    e.preventDefault();
-
     Swal.fire({
       title: 'ยืนยันการอัพโหลดภาพสินค้า',
       text: 'โปรดทำการยืนยัน เพื่ออัพโหลดภาพสินค้า',
@@ -176,7 +174,7 @@ function Product() {
                 // fetchDataProductImage();
                 fetchDataProductImage(product.id);
 
-                handleCloseModal();
+                // handleCloseModal();
               }
             });
         } catch (error) {
@@ -263,6 +261,35 @@ function Product() {
             .catch((err) => {
               throw err.response.data;
             });
+        } catch (error) {
+          Swal.fire({
+            title: 'error',
+            text: error.message,
+            icon: 'warning',
+            timer: 2000,
+          });
+        }
+      }
+    });
+  };
+
+  const handleDeleteProductImage = (item) => {
+    Swal.fire({
+      title: 'ลบภาพสินค้า',
+      text: 'ยืนยันการลบภาพสินค้า',
+      icon: 'question',
+      showCancelButton: true,
+      showConfirmButton: true,
+    }).then(async (res) => {
+      if (res.isConfirmed) {
+        try {
+          const response = await axios.delete(
+            `${config.api_path}/productImage/delete/${item.id}`,
+            config.headers()
+          );
+          if (response.status === 200) {
+            fetchDataProductImage(item.productId);
+          }
         } catch (error) {
           Swal.fire({
             title: 'error',
@@ -434,49 +461,43 @@ function Product() {
       </Modal>
 
       <Modal id="modalProductImage" title="ภาพสินค้า" modalSize="modal-lg">
-        <form onSubmit={handleUpload}>
-          <div className="row">
-            <div className="col-4">
-              <div>barcode</div>
-              <input
-                className="form-control"
-                value={product.barcode}
-                disabled
-              />
-            </div>
-            <div className="col-8">
-              <div>ชื่อสินค้า</div>
-              <input className="form-control" value={product.name} disabled />
-            </div>
-
-            <div className="col-12 mt-3">
-              <div>รายละเอียด</div>
-              <input className="form-control" value={product.detail} disabled />
-            </div>
-
-            <div className="col-12 mt-3">
-              <div>เลือกภาพสินค้า</div>
-              <input
-                type="file"
-                name="imageName"
-                className="form-control"
-                onChange={handleChangeFile}
-              />
-            </div>
-            {/* {productImage ? <div>File: {productImage.name}</div> : ''} */}
+        <div className="row">
+          <div className="col-4">
+            <div>barcode</div>
+            <input className="form-control" value={product.barcode} disabled />
+          </div>
+          <div className="col-8">
+            <div>ชื่อสินค้า</div>
+            <input className="form-control" value={product.name} disabled />
           </div>
 
-          <div className="mt-3">
-            {productImage ? (
-              <button className="btn btn-primary">
-                <i className="fa fa-check mr-2"></i>
-                Upload and Save
-              </button>
-            ) : (
-              ''
-            )}
+          <div className="col-12 mt-3">
+            <div>รายละเอียด</div>
+            <input className="form-control" value={product.detail} disabled />
           </div>
-        </form>
+
+          <div className="col-12 mt-3">
+            <div>เลือกภาพสินค้า</div>
+            <input
+              type="file"
+              name="imageName"
+              className="form-control"
+              onChange={handleChangeFile}
+            />
+          </div>
+          {/* {productImage ? <div>File: {productImage.name}</div> : ''} */}
+        </div>
+
+        <div className="mt-3">
+          {productImage ? (
+            <button className="btn btn-primary" onClick={handleUpload}>
+              <i className="fa fa-check mr-2"></i>
+              Upload and Save
+            </button>
+          ) : (
+            ''
+          )}
+        </div>
 
         <hr />
         <h5 className="mt-3">ภาพสินค้า</h5>
@@ -491,7 +512,7 @@ function Product() {
                       alt=""
                       width="100%"
                     />
-                    <div className="card-body text-center">
+                    <div className="card-body text-center px-0">
                       {item.isMain ? (
                         <button className="btn btn-info" disabled>
                           <i className="fa fa-check mr-2"></i>
@@ -505,6 +526,13 @@ function Product() {
                           ภาพหลัก
                         </button>
                       )}
+
+                      <button
+                        className="btn btn-danger ml-2"
+                        onClick={(e) => handleDeleteProductImage(item)}
+                      >
+                        <i className="fa fa-times"></i>
+                      </button>
                     </div>
                   </div>
                 </div>

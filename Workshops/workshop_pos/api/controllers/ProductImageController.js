@@ -3,6 +3,7 @@ const app = express();
 const { isLogin } = require('./Service');
 const ProductImageModel = require('../models/ProductImageModel');
 const fileUpload = require('express-fileupload');
+const fs = require('fs');
 
 app.use(fileUpload());
 
@@ -73,13 +74,25 @@ app.put('/productImage/chooseMainImage', isLogin, async (req, res) => {
   }
 });
 
-// app.delete('/productImage/delete/:id', isLogin, async (req, res) => {
-//   try {
-//     const result = await ProductImageModel.destroy({ where: { id: req.params.id } });
-//     res.status(200).send({ message: 'success', result: result });
-//   } catch (error) {
-//     res.status(500).send({ message: error.message });
-//   }
-// });
+app.delete('/productImage/delete/:id', isLogin, async (req, res) => {
+  try {
+    const row = await ProductImageModel.findByPk(req.params.id);
+    const imageName = row.imageName;
+    // res.status(200).send({ imageName: imageName });
+
+    const result = await ProductImageModel.destroy({
+      where: { id: req.params.id },
+    });
+
+    try {
+      await fs.unlinkSync('uploads/' + imageName);
+    } catch (error) {
+      console.log(error.message);
+    }
+    res.status(200).send({ message: 'success' });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+});
 
 module.exports = app;
