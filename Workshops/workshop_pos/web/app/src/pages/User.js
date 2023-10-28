@@ -108,6 +108,41 @@ function User() {
     }
   };
 
+  const handleDelete = (item) => {
+    Swal.fire({
+      title: 'ลบข้อมูล',
+      text: 'ยืนยันการลบข้อมูลออกจากระบบ',
+      icon: 'question',
+      showCancelButton: true,
+      showConfirmButton: true,
+    }).then(async (res) => {
+      if (res.isConfirmed) {
+        try {
+          const response = await axios.delete(
+            `${config.api_path}/user/delete/${item.id}`,
+            config.headers()
+          );
+          if (response.status === 200) {
+            Swal.fire({
+              title: 'ลบข้อมูล',
+              text: 'ลบข้อมูลผู้ใช้แล้ว',
+              icon: 'success',
+              timer: 2000,
+            });
+            fetchData();
+          }
+        } catch (error) {
+          Swal.fire({
+            title: 'error',
+            text: error.message,
+            icon: 'warning',
+            timer: 2000,
+          });
+        }
+      }
+    });
+  };
+
   return (
     <>
       <Template>
@@ -149,7 +184,7 @@ function User() {
                         </button>
                         <button
                           className="btn btn-danger"
-                          // onClick={(e) => handleDelete(item)}
+                          onClick={(e) => handleDelete(item)}
                         >
                           <i className="fa fa-times"></i>
                         </button>
