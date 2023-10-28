@@ -1,9 +1,89 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Template from '../components/Template';
 import Modal from '../components/Modal';
+import Swal from 'sweetalert2';
+import axios from 'axios';
+import config from '../config';
 
 function User() {
-  const handleSave = () => {};
+  const [user, setUser] = useState({});
+  const [users, setUsers] = useState([]);
+
+  const handleSave = async (e) => {
+    e.preventDefault();
+
+    try {
+      // console.log(user);
+      const response = await axios.post(
+        `${config.api_path}/user/insert`,
+        user,
+        config.headers()
+      );
+
+      if (response.status === 201 || response.status === 200) {
+        Swal.fire({
+          title: 'บันทึกข้อมูล',
+          text: 'บันทึกข้อมูลเข้าระบบแล้ว',
+          icon: 'success',
+          timer: 2000,
+        });
+
+        // Reset the user object
+        setUser({});
+
+        // Fetch data after successful save
+        // fetchData();
+
+        handleCloseModal();
+      }
+    } catch (error) {
+      Swal.fire({
+        title: 'error',
+        text: error.message,
+        icon: 'warning',
+        timer: 2000,
+      });
+    }
+  };
+
+  const handleCloseModal = () => {
+    const modalElement = document.querySelector('.modal.show');
+
+    // Step 2: Find all elements and child elements with id="btnModalClose" inside the modal element
+    if (modalElement) {
+      const elementsWithIdClose =
+        modalElement.querySelectorAll('#btnModalClose');
+
+      // Step 3: Loop through all elements and child elements with id="btnModalClose"
+      elementsWithIdClose.forEach((element) => {
+        element.click();
+      });
+    } else {
+      console.log('Modal element with class "modal fade show" not found.');
+    }
+  };
+
+  const clearForm = () => {
+    setUser({});
+  };
+
+  useEffect(() => {
+    comparePassword();
+  }, [user.password, user.passwordConfirm]);
+
+  const comparePassword = () => {
+    if (user.password?.length > 0 && user.passwordConfirm?.length > 0) {
+      if (user.password != user.passwordConfirm) {
+        Swal.fire({
+          title: 'ตรวจสอบการกรอกรหัสผ่าน',
+          text: 'รหัสผ่านไม่ตรงกัน',
+          icon: 'error',
+        });
+      } else {
+        setUser({ ...user, pwr: user.password });
+      }
+    }
+  };
 
   return (
     <>
@@ -90,23 +170,44 @@ function User() {
         <form onSubmit={handleSave}>
           <div className="mt-3 ">
             <label>ชื่อ</label>
-            <input className="form-control" />
+            <input
+              className="form-control"
+              onChange={(e) => setUser({ ...user, name: e.target.value })}
+            />
           </div>
           <div className="mt-3 ">
             <label>username</label>
-            <input className="form-control" />
+            <input
+              className="form-control"
+              onChange={(e) => setUser({ ...user, user: e.target.value })}
+            />
           </div>
           <div className="mt-3 ">
             <label>password</label>
-            <input type="password" className="form-control" />
+            <input
+              type="password"
+              className="form-control"
+              onBlur={(e) => setUser({ ...user, password: e.target.value })}
+            />
           </div>
           <div className="mt-3 ">
             <label>ยืนยัน password</label>
-            <input type="password" className="form-control" />
+            <input
+              type="password"
+              className="form-control"
+              onBlur={(e) =>
+                setUser({ ...user, passwordConfirm: e.target.value })
+              }
+            />
           </div>
           <div className="mt-3 ">
             <label>ระดับ</label>
-            <select name="" id="" className="form-control">
+            <select
+              name=""
+              id=""
+              className="form-control"
+              onChange={(e) => setUser({ ...user, level: e.target.value })}
+            >
               <option value="user">User</option>
               <option value="admin">Admin</option>
             </select>
