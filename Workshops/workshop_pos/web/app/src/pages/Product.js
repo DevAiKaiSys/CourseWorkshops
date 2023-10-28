@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Template from '../components/Template';
-import axios, { Axios } from 'axios';
+import axios from 'axios';
 import config from '../config';
 import Swal from 'sweetalert2';
 import Modal from '../components/Modal';

@@ -137,6 +137,12 @@ function Sidebar() {
                 <p>สินค้า</p>
               </Link>
             </li>
+            <li className="nav-item">
+              <Link to="/user" className="nav-link">
+                <i className="nav-icon fas fa-users"></i>
+                <p>ผู้ใช้งานระบบ</p>
+              </Link>
+            </li>
             {/* <li className="nav-item">
               <a href="#" className="nav-link">
                 <i className="nav-icon fas fa-copy"></i>

@@ -31,7 +31,7 @@ app.get('/member/info', isLogin, async (req, res) => {
     MemberModel.belongsTo(PackageModel);
 
     const memberId = getMemberId(req);
-    console.log(memberId);
+    // console.log(memberId);
     const member = await MemberModel.findByPk(memberId, {
       attributes: ['id', 'name'],
       include: [{ model: PackageModel, attributes: ['name'] }],
