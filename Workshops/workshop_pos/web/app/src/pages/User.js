@@ -36,9 +36,12 @@ function User() {
     e.preventDefault();
 
     try {
-      // console.log(user);
+      let url = '/user/insert';
+      if (user.id) {
+        url = '/user/update';
+      }
       const response = await axios.post(
-        `${config.api_path}/user/insert`,
+        `${config.api_path}${url}`,
         user,
         config.headers()
       );
@@ -86,13 +89,9 @@ function User() {
     }
   };
 
-  const clearForm = () => {
-    setUser({});
-  };
-
-  useEffect(() => {
+  const handleBlur = () => {
     comparePassword();
-  }, [user.password, user.passwordConfirm]);
+  };
 
   const comparePassword = () => {
     if (user.password?.length > 0 && user.passwordConfirm?.length > 0) {
@@ -153,7 +152,7 @@ function User() {
               className="btn btn-primary"
               data-toggle="modal"
               data-target="#modalUser"
-              // onClick={(e) => setProduct({})}
+              onClick={() => setUser({})}
             >
               <i className="fa fa-plus mr-2"></i>เพิ่มรายการ
             </button>
@@ -176,9 +175,9 @@ function User() {
                       <td className="text-center">
                         <button
                           className="btn btn-info mr-2"
-                          // onClick={(e) => setUser(item)}
-                          // data-toggle="modal"
-                          // data-target="#modalUser"
+                          onClick={(e) => setUser(item)}
+                          data-toggle="modal"
+                          data-target="#modalUser"
                         >
                           <i className="fa fa-pencil-alt"></i>
                         </button>
@@ -210,6 +209,7 @@ function User() {
             <label>ชื่อ</label>
             <input
               className="form-control"
+              value={user.name ?? ''}
               onChange={(e) => setUser({ ...user, name: e.target.value })}
             />
           </div>
@@ -217,6 +217,7 @@ function User() {
             <label>username</label>
             <input
               className="form-control"
+              value={user.usr ?? ''}
               onChange={(e) => setUser({ ...user, usr: e.target.value })}
             />
           </div>
@@ -225,7 +226,9 @@ function User() {
             <input
               type="password"
               className="form-control"
-              onBlur={(e) => setUser({ ...user, password: e.target.value })}
+              value={user.password ?? ''}
+              onChange={(e) => setUser({ ...user, password: e.target.value })}
+              onBlur={handleBlur}
             />
           </div>
           <div className="mt-3 ">
@@ -233,9 +236,11 @@ function User() {
             <input
               type="password"
               className="form-control"
-              onBlur={(e) =>
+              value={user.passwordConfirm ?? ''}
+              onChange={(e) =>
                 setUser({ ...user, passwordConfirm: e.target.value })
               }
+              onBlur={handleBlur}
             />
           </div>
           <div className="mt-3 ">
@@ -244,8 +249,12 @@ function User() {
               name=""
               id=""
               className="form-control"
+              value={user.level ?? ''}
               onChange={(e) => setUser({ ...user, level: e.target.value })}
             >
+              <option value="" disabled>
+                Select
+              </option>
               <option value="user">User</option>
               <option value="admin">Admin</option>
             </select>

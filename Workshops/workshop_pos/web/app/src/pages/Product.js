@@ -390,7 +390,7 @@ function Product() {
               <label>barcode</label>
               <input
                 className="form-control"
-                value={product.barcode}
+                value={product.barcode ?? ''}
                 onChange={(e) =>
                   setProduct({
                     ...product,
@@ -403,7 +403,7 @@ function Product() {
               <label>ชื่อสินค้า</label>
               <input
                 className="form-control"
-                value={product.name}
+                value={product.name ?? ''}
                 onChange={(e) =>
                   setProduct({
                     ...product,
@@ -416,7 +416,7 @@ function Product() {
               <label>ราคาจำหน่าย</label>
               <input
                 className="form-control"
-                value={product.price}
+                value={product.price ?? ''}
                 onChange={(e) =>
                   setProduct({
                     ...product,
@@ -429,7 +429,7 @@ function Product() {
               <label>ราคาทุน</label>
               <input
                 className="form-control"
-                value={product.cost}
+                value={product.cost ?? ''}
                 onChange={(e) =>
                   setProduct({
                     ...product,
@@ -442,7 +442,7 @@ function Product() {
               <label>รายละเอียด</label>
               <input
                 className="form-control"
-                value={product.detail}
+                value={product.detail ?? ''}
                 onChange={(e) =>
                   setProduct({
                     ...product,
