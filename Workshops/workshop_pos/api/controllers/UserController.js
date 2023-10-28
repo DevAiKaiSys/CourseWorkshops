@@ -3,14 +3,14 @@ const app = express();
 const { isLogin } = require('./Service');
 const UserModel = require('../models/UserModel');
 
-// app.get('/user/list', isLogin, async (req, res) => {
-//   try {
-//     const results = await UserModel.findAll({ order: [['id', 'DESC']] });
-//     res.status(200).send({ results: results });
-//   } catch (error) {
-//     res.status(500).send({ message: error.message });
-//   }
-// });
+app.get('/user/list', isLogin, async (req, res) => {
+  try {
+    const results = await UserModel.findAll({ order: [['id', 'DESC']] });
+    res.status(200).send({ results: results });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+});
 
 app.post('/user/insert', isLogin, async (req, res) => {
   try {

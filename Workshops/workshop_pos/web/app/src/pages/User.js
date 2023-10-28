@@ -9,6 +9,29 @@ function User() {
   const [user, setUser] = useState({});
   const [users, setUsers] = useState([]);
 
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      await axios
+        .get(config.api_path + '/user/list', config.headers())
+        .then((res) => {
+          if (res.status === 200) {
+            setUsers(res.data.results);
+          }
+        });
+    } catch (error) {
+      Swal.fire({
+        title: 'error',
+        text: error.message,
+        icon: 'warning',
+        timer: 2000,
+      });
+    }
+  };
+
   const handleSave = async (e) => {
     e.preventDefault();
 
@@ -32,7 +55,7 @@ function User() {
         setUser({});
 
         // Fetch data after successful save
-        // fetchData();
+        fetchData();
 
         handleCloseModal();
       }
@@ -102,64 +125,44 @@ function User() {
             <table className="mt-3 table table-bordered table-striped">
               <thead>
                 <tr>
-                  {/* <th>barcode</th>
-                <th>ชื่อสินค้า</th>
-                <th className="text-right">ราคาทุน</th>
-                <th className="text-right">ราคาจำหน่าย</th>
-                <th>รายละเอียด</th>
-                <th width="170px">action</th> */}
+                  <th>ชื่อสินค้า</th>
+                  <th>user</th>
+                  <th>ระดับ</th>
+                  <th width="170px">action</th>
                 </tr>
               </thead>
               <tbody>
-                {/* {products.length > 0 ? (
-                products.map((item, index) => (
-                  <tr key={index}>
-                    <td>{item.barcode}</td>
-                    <td>{item.name}</td>
-                    <td className="text-right">
-                      {parseInt(item.cost).toLocaleString('th-TH')}
-                    </td>
-                    <td className="text-right">
-                      {parseInt(item.price).toLocaleString('th-TH')}
-                    </td>
-                    <td>{item.detail}</td>
-                    <td className="text-center">
-                      <button
-                        className="btn btn-primary mr-2"
-                        // onClick={(e) => {
-                        //   setProduct(item);
-                        //   // fetchDataProductImage();
-                        // }}
-                        onClick={(e) => handleChooseProduct(item)}
-                        data-toggle="modal"
-                        data-target="#modalProductImage"
-                      >
-                        <i className="fa fa-image"></i>
-                      </button>
-                      <button
-                        className="btn btn-info mr-2"
-                        onClick={(e) => setProduct(item)}
-                        data-toggle="modal"
-                        data-target="#modalProduct"
-                      >
-                        <i className="fa fa-pencil-alt"></i>
-                      </button>
-                      <button
-                        className="btn btn-danger"
-                        onClick={(e) => handleDelete(item)}
-                      >
-                        <i className="fa fa-times"></i>
-                      </button>
+                {users.length > 0 ? (
+                  users.map((item, index) => (
+                    <tr key={index}>
+                      <td>{item.name}</td>
+                      <td>{item.usr}</td>
+                      <td>{item.level}</td>
+                      <td className="text-center">
+                        <button
+                          className="btn btn-info mr-2"
+                          // onClick={(e) => setUser(item)}
+                          // data-toggle="modal"
+                          // data-target="#modalUser"
+                        >
+                          <i className="fa fa-pencil-alt"></i>
+                        </button>
+                        <button
+                          className="btn btn-danger"
+                          // onClick={(e) => handleDelete(item)}
+                        >
+                          <i className="fa fa-times"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="6" className="text-center">
+                      No User available.
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="6" className="text-center">
-                    No products available.
-                  </td>
-                </tr>
-              )} */}
+                )}
               </tbody>
             </table>
           </div>
@@ -179,7 +182,7 @@ function User() {
             <label>username</label>
             <input
               className="form-control"
-              onChange={(e) => setUser({ ...user, user: e.target.value })}
+              onChange={(e) => setUser({ ...user, usr: e.target.value })}
             />
           </div>
           <div className="mt-3 ">
