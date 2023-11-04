@@ -6,10 +6,31 @@ import config from '../config';
 
 const Sale = () => {
   const [products, setProducts] = useState([]);
+  const [billSale, setBillSale] = useState({});
 
   useEffect(() => {
     fetchData();
+    openBill();
   }, []);
+
+  const openBill = async () => {
+    try {
+      await axios
+        .get(`${config.api_path}/billSale/openBill`, config.headers())
+        .then((res) => {
+          if (res.status === 200) {
+            setBillSale(res.data.result);
+          }
+        });
+    } catch (error) {
+      Swal.fire({
+        title: 'error',
+        text: error.message,
+        icon: 'error',
+        timer: 2000,
+      });
+    }
+  };
 
   const fetchData = async () => {
     try {

@@ -11,9 +11,12 @@ const BillSaleModel = sequelize.define('billSale', {
     type: DataTypes.DATE,
   },
   status: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
+    type: DataTypes.STRING,
+    defaultValue: 'open',
     allowNull: false,
+  },
+  userId: {
+    type: DataTypes.BIGINT,
   },
 });
 

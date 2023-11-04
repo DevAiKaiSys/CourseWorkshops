@@ -3,8 +3,24 @@ const app = express();
 const jwt = require('jsonwebtoken');
 const BillSaleModel = require('../models/BillSaleModel');
 const BillSaleDetailModel = require('../models/BillSaleDetailModel');
+const { getMemberId, isLogin } = require('./Service');
 
 require('dotenv').config();
+
+app.get('/billSale/openBill', isLogin, async (req, res) => {
+  try {
+    const payload = {
+      userId: getMemberId(req),
+      status: 'open',
+    };
+    const result = await BillSaleModel.findOrCreate({
+      where: payload,
+    });
+    res.status(200).send({ result: result });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+});
 
 // app.post('/member/signin', async (req, res) => {
 //   try {

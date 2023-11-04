@@ -22,6 +22,9 @@ const BillSaleDetailModel = sequelize.define('billSaleDetail', {
   price: {
     type: DataTypes.BIGINT,
   },
+  userId: {
+    type: DataTypes.BIGINT,
+  },
 });
 
 // เปิดใช้เฉพาะตอนอัพเดทไม่แนะนำให้เปิดตลอด
