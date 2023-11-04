@@ -1,14 +1,45 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Template from '../components/Template';
+import axios from 'axios';
+import Swal from 'sweetalert2';
+import config from '../config';
 
 const Sale = () => {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      await axios
+        .get(`${config.api_path}/product/listForSale`, config.headers())
+        .then((res) => {
+          if (res.status === 200) {
+            setProducts(res.data.results);
+          }
+        })
+        .catch((err) => {
+          throw err.response.data;
+        });
+    } catch (error) {
+      Swal.fire({
+        title: 'error',
+        text: error.message,
+        icon: 'error',
+        timer: 2000,
+      });
+    }
+  };
+
   return (
     <div>
       <Template>
         <div className="card">
           <h5 className="card-header">
-            <div class="float-left">ขายสินค้า</div>
-            <div class="float-right">
+            <div className="float-left">ขายสินค้า</div>
+            <div className="float-right">
               <button className="btn btn-success mr-2">
                 <i className="fa fa-check mr-2"></i>จบการขาย
               </button>

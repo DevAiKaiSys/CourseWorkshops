@@ -41,4 +41,23 @@ app.post('/product/update', isLogin, async (req, res) => {
   }
 });
 
+app.get('/product/listForSale', isLogin, async (req, res) => {
+  const ProductImageModel = require('../models/ProductImageModel');
+  ProductModel.hasMany(ProductImageModel);
+  try {
+    const results = await ProductModel.findAll({
+      order: [['id', 'DESC']],
+      include: {
+        model: ProductImageModel,
+        where: {
+          isMain: true,
+        },
+      },
+    });
+    res.status(200).send({ results: results });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+});
+
 module.exports = app;
