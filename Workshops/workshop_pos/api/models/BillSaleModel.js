@@ -18,6 +18,6 @@ const BillSaleModel = sequelize.define('billSale', {
 });
 
 // เปิดใช้เฉพาะตอนอัพเดทไม่แนะนำให้เปิดตลอด
-BillSaleModel.sync({ alter: true });
+// BillSaleModel.sync({ alter: true });
 
 module.exports = BillSaleModel;

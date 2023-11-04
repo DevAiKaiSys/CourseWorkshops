@@ -12,8 +12,6 @@ const BillSaleDetailModel = sequelize.define('billSaleDetail', {
   },
   productId: {
     type: DataTypes.BIGINT,
-    defaultValue: false,
-    allowNull: false,
   },
   qty: {
     type: DataTypes.BIGINT,
@@ -27,6 +25,6 @@ const BillSaleDetailModel = sequelize.define('billSaleDetail', {
 });
 
 // เปิดใช้เฉพาะตอนอัพเดทไม่แนะนำให้เปิดตลอด
-BillSaleDetailModel.sync({ alter: true });
+// BillSaleDetailModel.sync({ alter: true });
 
 module.exports = BillSaleDetailModel;

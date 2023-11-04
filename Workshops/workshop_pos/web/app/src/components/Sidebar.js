@@ -132,6 +132,12 @@ function Sidebar() {
               </Link>
             </li>
             <li className="nav-item">
+              <Link to="/sale" className="nav-link">
+                <i className="nav-icon fas fa-dollar-sign"></i>
+                <p>ขายสินค้า</p>
+              </Link>
+            </li>
+            <li className="nav-item">
               <Link to="/product" className="nav-link">
                 <i className="nav-icon fas fa-box"></i>
                 <p>สินค้า</p>
