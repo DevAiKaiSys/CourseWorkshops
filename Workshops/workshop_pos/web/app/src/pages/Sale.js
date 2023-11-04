@@ -54,8 +54,16 @@ const Sale = () => {
     }
   };
 
-  const handleSave = async (req, res) => {
+  const handleSave = async (item) => {
     try {
+      await axios
+        .post(`${config.api_path}/billSale/sale`, item, config.headers())
+        .then((res) => {
+          console.log(res.data);
+          if (res.data.message === 'success') {
+            // fetchDataSale();
+          }
+        });
     } catch (error) {
       Swal.fire({
         title: 'error',
@@ -97,12 +105,16 @@ const Sale = () => {
               <div className="col-9">
                 <div className="row">
                   {products.length > 0
-                    ? products.map((item) => (
-                        <div className="col-3">
+                    ? products.map((item, index) => (
+                        <div
+                          className="col-3"
+                          key={index}
+                          onClick={() => handleSave(item)}
+                        >
                           <div className="card">
                             <img
                               src={`${config.api_path}/uploads/${item.productImages[0].imageName}`}
-                              class="card-img-top"
+                              className="card-img-top"
                               alt=""
                               // width="100px"
                               height="150px"
