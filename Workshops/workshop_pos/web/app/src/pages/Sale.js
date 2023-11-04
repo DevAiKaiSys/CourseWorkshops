@@ -8,6 +8,7 @@ const Sale = () => {
   const [products, setProducts] = useState([]);
   const [billSale, setBillSale] = useState({});
   const [currentBill, setCurrentBill] = useState({});
+  const [totalPrice, setTotalPrice] = useState(0);
 
   useEffect(() => {
     fetchData();
@@ -22,6 +23,7 @@ const Sale = () => {
         .then((res) => {
           if (res.status === 200) {
             setCurrentBill(res.data.result);
+            sumTotalPrice(res.data.result);
           }
         });
     } catch (error) {
@@ -31,6 +33,21 @@ const Sale = () => {
         icon: 'error',
         timer: 2000,
       });
+    }
+  };
+
+  const sumTotalPrice = (currentBill) => {
+    let sum = 0;
+    if (currentBill?.billSaleDetails?.length > 0) {
+      for (let i = 0; i < currentBill.billSaleDetails.length; i++) {
+        const item = currentBill.billSaleDetails[i];
+        const qty = parseInt(item.qty);
+        const price = parseInt(item.price);
+
+        sum += qty * price;
+      }
+
+      setTotalPrice(sum);
     }
   };
 
@@ -80,7 +97,6 @@ const Sale = () => {
       await axios
         .post(`${config.api_path}/billSale/sale`, item, config.headers())
         .then((res) => {
-          console.log(res.data);
           if (res.data.message === 'success') {
             fetchBillSaleDetail();
           }
@@ -143,7 +159,9 @@ const Sale = () => {
                             />
                             <div className="card-body text-center">
                               <div className="text-primary">{item.name}</div>
-                              <h3 className="mt-3">{item.price}</h3>
+                              <h3 className="mt-3">
+                                {parseInt(item.price).toLocaleString('th-TH')}
+                              </h3>
                             </div>
                           </div>
                         </div>
@@ -158,7 +176,7 @@ const Sale = () => {
                     className="h1 px-3 text-right py-3"
                     style={{ color: '#70FE3F', backgroundColor: 'black' }}
                   >
-                    0.00
+                    {totalPrice.toLocaleString('th-TH')}
                   </div>
                   {currentBill?.billSaleDetails?.length > 0 &&
                     currentBill.billSaleDetails.map((item, index) => (
@@ -166,7 +184,11 @@ const Sale = () => {
                         <div className="card-body">
                           <div>{item.product.name}</div>
                           <div>
-                            {item.qty} x {item.price} = {item.qty * item.price}
+                            {item.qty} x
+                            {parseInt(item.price).toLocaleString('th-TH')} =
+                            {parseInt(item.qty * item.price).toLocaleString(
+                              'th-TH'
+                            )}
                           </div>
                         </div>
                       </div>
