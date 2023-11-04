@@ -28,16 +28,27 @@ app.post('/billSale/sale', async (req, res) => {
       userId: getMemberId(req),
       status: 'open',
     };
-    console.log(payload);
-    const currentBill = await BillSaleModel.findOne(payload);
+    const currentBill = await BillSaleModel.findOne({
+      where: payload,
+    });
     const item = {
       price: req.body.price,
       productId: req.body.id,
       billSaleId: currentBill.id,
-      qty: 1,
       userId: payload.userId,
     };
-    await BillSaleDetailModel.create(item);
+    const billSaleDetail = await BillSaleDetailModel.findOne({
+      where: item,
+    });
+    if (billSaleDetail == null) {
+      item.qty = 1;
+      await BillSaleDetailModel.create(item);
+    } else {
+      item.qty = parseInt(billSaleDetail.qty) + 1;
+      await BillSaleDetailModel.update(item, {
+        where: { id: billSaleDetail.id },
+      });
+    }
 
     res.status(200).send({ message: 'success' });
   } catch (error) {
