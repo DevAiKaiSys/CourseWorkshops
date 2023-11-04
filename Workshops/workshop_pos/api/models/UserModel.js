@@ -19,6 +19,7 @@ const UserModel = sequelize.define('user', {
   level: {
     type: DataTypes.STRING,
   },
+  userId: { type: DataTypes.BIGINT },
 });
 
 // เปิดใช้เฉพาะตอนอัพเดทไม่แนะนำให้เปิดตลอด

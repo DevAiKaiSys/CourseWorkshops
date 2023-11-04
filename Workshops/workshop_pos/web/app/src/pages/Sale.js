@@ -54,6 +54,18 @@ const Sale = () => {
     }
   };
 
+  const handleSave = async (req, res) => {
+    try {
+    } catch (error) {
+      Swal.fire({
+        title: 'error',
+        text: error.message,
+        icon: 'error',
+        timer: 2000,
+      });
+    }
+  };
+
   return (
     <div>
       <Template>

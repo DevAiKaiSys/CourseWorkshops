@@ -22,6 +22,9 @@ const ProductModel = sequelize.define('product', {
   detail: {
     type: DataTypes.STRING,
   },
+  userId: {
+    type: DataTypes.BIGINT,
+  },
 });
 
 // เปิดใช้เฉพาะตอนอัพเดทไม่แนะนำให้เปิดตลอด
