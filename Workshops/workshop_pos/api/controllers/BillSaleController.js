@@ -56,4 +56,29 @@ app.post('/billSale/sale', async (req, res) => {
   }
 });
 
+app.get('/billSale/currentBillInfo', isLogin, async (req, res) => {
+  try {
+    const ProductModel = require('../models/ProductModel');
+
+    BillSaleModel.hasMany(BillSaleDetailModel);
+    BillSaleDetailModel.belongsTo(ProductModel);
+
+    const result = await BillSaleModel.findOne({
+      where: { status: 'open', userId: getMemberId(req) },
+      include: {
+        model: BillSaleDetailModel,
+        order: [['id', 'DESC']],
+        include: {
+          model: ProductModel,
+          attributes: ['name'],
+        },
+      },
+    });
+
+    res.status(200).send({ result: result });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+});
+
 module.exports = app;

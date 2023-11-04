@@ -7,11 +7,32 @@ import config from '../config';
 const Sale = () => {
   const [products, setProducts] = useState([]);
   const [billSale, setBillSale] = useState({});
+  const [currentBill, setCurrentBill] = useState({});
 
   useEffect(() => {
     fetchData();
     openBill();
+    fetchBillSaleDetail();
   }, []);
+
+  const fetchBillSaleDetail = async () => {
+    try {
+      await axios
+        .get(`${config.api_path}/billSale/currentBillInfo`, config.headers())
+        .then((res) => {
+          if (res.status === 200) {
+            setCurrentBill(res.data.result);
+          }
+        });
+    } catch (error) {
+      Swal.fire({
+        title: 'error',
+        text: error.message,
+        icon: 'error',
+        timer: 2000,
+      });
+    }
+  };
 
   const openBill = async () => {
     try {
@@ -61,7 +82,7 @@ const Sale = () => {
         .then((res) => {
           console.log(res.data);
           if (res.data.message === 'success') {
-            // fetchDataSale();
+            fetchBillSaleDetail();
           }
         });
     } catch (error) {
@@ -131,14 +152,25 @@ const Sale = () => {
                 </div>
               </div>
               <div className="col-3">
-                <div className="text-right">
+                <div className="">
                   {/* <span className="bg-dark text-success h1 px-3">0.00</span> */}
                   <div
-                    className="h1 px-3"
+                    className="h1 px-3 text-right py-3"
                     style={{ color: '#70FE3F', backgroundColor: 'black' }}
                   >
                     0.00
                   </div>
+                  {currentBill?.billSaleDetails?.length > 0 &&
+                    currentBill.billSaleDetails.map((item, index) => (
+                      <div className="card" key={index}>
+                        <div className="card-body">
+                          <div>{item.product.name}</div>
+                          <div>
+                            {item.qty} x {item.price} = {item.qty * item.price}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                 </div>
               </div>
             </div>
