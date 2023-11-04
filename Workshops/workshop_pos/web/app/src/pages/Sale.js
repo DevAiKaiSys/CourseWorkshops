@@ -73,87 +73,51 @@ const Sale = () => {
             </div>
           </h5>
           <div className="card-body">
-            <div className="text-right">
-              {/* <span className="bg-dark text-success h1 px-3">0.00</span> */}
-              <span
-                className="h1 px-3"
-                style={{ color: '#70FE3F', backgroundColor: 'black' }}
-              >
-                0.00
-              </span>
-            </div>
-
-            <div className="input-group mt-3">
+            {/* <div className="input-group mt-3">
               <span className="input-group-text">Barcode</span>
               <input type="text" className="form-control" />
               <button className="btn btn-primary">
                 <i className="fa fa-check mr-2"></i>บันทึก
               </button>
-            </div>
+            </div> */}
 
-            <table className="mt-3 table table-bordered table-striped mt-3">
-              <thead className="thead-dark">
-                <tr>
-                  <th>#</th>
-                  <th>barcode</th>
-                  <th>รายการ</th>
-                  <th className="text-right">ราคา</th>
-                  <th className="text-right">จำนวน</th>
-                  <th width="100px">action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {/* {products.length > 0 ? (
-                  products.map((item, index) => (
-                    <tr key={index}>
-                      <td>{item.barcode}</td>
-                      <td>{item.name}</td>
-                      <td className="text-right">
-                        {parseInt(item.cost).toLocaleString('th-TH')}
-                      </td>
-                      <td className="text-right">
-                        {parseInt(item.price).toLocaleString('th-TH')}
-                      </td>
-                      <td>{item.detail}</td>
-                      <td className="text-center">
-                        <button
-                          className="btn btn-primary mr-2"
-                          // onClick={(e) => {
-                          //   setProduct(item);
-                          //   // fetchDataProductImage();
-                          // }}
-                          onClick={(e) => handleChooseProduct(item)}
-                          data-toggle="modal"
-                          data-target="#modalProductImage"
-                        >
-                          <i className="fa fa-image"></i>
-                        </button>
-                        <button
-                          className="btn btn-info mr-2"
-                          onClick={(e) => setProduct(item)}
-                          data-toggle="modal"
-                          data-target="#modalProduct"
-                        >
-                          <i className="fa fa-pencil-alt"></i>
-                        </button>
-                        <button
-                          className="btn btn-danger"
-                          onClick={(e) => handleDelete(item)}
-                        >
-                          <i className="fa fa-times"></i>
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="6" className="text-center">
-                      No products available.
-                    </td>
-                  </tr>
-                )} */}
-              </tbody>
-            </table>
+            <div className="row">
+              <div className="col-9">
+                <div className="row">
+                  {products.length > 0
+                    ? products.map((item) => (
+                        <div className="col-3">
+                          <div className="card">
+                            <img
+                              src={`${config.api_path}/uploads/${item.productImages[0].imageName}`}
+                              class="card-img-top"
+                              alt=""
+                              // width="100px"
+                              height="150px"
+                              // style={{ width: '100px', height: '100px' }}
+                            />
+                            <div className="card-body text-center">
+                              <div className="text-primary">{item.name}</div>
+                              <h3 className="mt-3">{item.price}</h3>
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                    : ''}
+                </div>
+              </div>
+              <div className="col-3">
+                <div className="text-right">
+                  {/* <span className="bg-dark text-success h1 px-3">0.00</span> */}
+                  <div
+                    className="h1 px-3"
+                    style={{ color: '#70FE3F', backgroundColor: 'black' }}
+                  >
+                    0.00
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </Template>
