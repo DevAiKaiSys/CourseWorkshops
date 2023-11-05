@@ -81,4 +81,33 @@ app.get('/billSale/currentBillInfo', isLogin, async (req, res) => {
   }
 });
 
+app.delete('/billSale/deleteItem/:id', isLogin, async (req, res) => {
+  try {
+    await BillSaleDetailModel.destroy({
+      where: {
+        id: req.params.id,
+      },
+    });
+    res.status(200).send({ message: 'success' });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+});
+
+app.post('/billSale/updateQty', isLogin, async (req, res) => {
+  try {
+    await BillSaleDetailModel.update(
+      { qty: req.body.qty },
+      {
+        where: {
+          id: req.body.id,
+        },
+      }
+    );
+    res.status(200).send({ message: 'success' });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+});
+
 module.exports = app;

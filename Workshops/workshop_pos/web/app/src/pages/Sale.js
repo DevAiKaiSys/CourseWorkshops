@@ -3,12 +3,14 @@ import Template from '../components/Template';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import config from '../config';
+import Modal from '../components/Modal';
 
 const Sale = () => {
   const [products, setProducts] = useState([]);
   const [billSale, setBillSale] = useState({});
   const [currentBill, setCurrentBill] = useState({});
   const [totalPrice, setTotalPrice] = useState(0);
+  const [item, setItem] = useState(0);
 
   useEffect(() => {
     fetchData();
@@ -97,7 +99,7 @@ const Sale = () => {
       await axios
         .post(`${config.api_path}/billSale/sale`, item, config.headers())
         .then((res) => {
-          if (res.data.message === 'success') {
+          if (res.status === 200) {
             fetchBillSaleDetail();
           }
         });
@@ -108,6 +110,80 @@ const Sale = () => {
         icon: 'error',
         timer: 2000,
       });
+    }
+  };
+
+  const handleDelete = (item) => {
+    Swal.fire({
+      title: 'ยืนยันการลบ',
+      text: 'คุณต้องการลบรายการนี้ใช่หรือไม่',
+      icon: 'question',
+      showCancelButton: true,
+      showConfirmButton: true,
+    }).then(async (res) => {
+      if (res.isConfirmed) {
+        try {
+          await axios
+            .delete(
+              `${config.api_path}/billSale/deleteItem/${item.id}`,
+              config.headers()
+            )
+            .then((res) => {
+              if (res.status === 200) {
+                fetchBillSaleDetail();
+              }
+            });
+        } catch (error) {
+          Swal.fire({
+            title: 'error',
+            text: error.message,
+            icon: 'error',
+            timer: 2000,
+          });
+        }
+      }
+    });
+  };
+
+  const handleUpdateQty = async (item) => {
+    try {
+      await axios
+        .post(`${config.api_path}/billSale/updateQty`, item, config.headers())
+        .then((res) => {
+          if (res.status === 200) {
+            fetchBillSaleDetail();
+            handleCloseModal();
+          }
+        })
+        .catch((err) => {
+          throw err.response.data;
+        });
+    } catch (error) {
+      Swal.fire({
+        title: 'error',
+        text: error.message,
+        icon: 'error',
+        timer: 2000,
+      });
+    }
+  };
+
+  const handleCloseModal = () => {
+    const modalElement = document.querySelector('.modal.show');
+
+    // Step 2: Find all elements and child elements with id="btnModalClose" inside the modal element
+    if (modalElement) {
+      const elementsWithIdClose =
+        modalElement.querySelectorAll('#btnModalClose');
+
+      // Step 3: Loop through all elements and child elements with id="btnModalClose"
+      elementsWithIdClose.forEach((element) => {
+        element.click();
+      });
+
+      // You can perform further operations on elementsWithIdClose if needed
+    } else {
+      console.log('Modal element with class "modal fade show" not found.');
     }
   };
 
@@ -184,11 +260,38 @@ const Sale = () => {
                         <div className="card-body">
                           <div>{item.product.name}</div>
                           <div>
-                            {item.qty} x
-                            {parseInt(item.price).toLocaleString('th-TH')} =
-                            {parseInt(item.qty * item.price).toLocaleString(
-                              'th-TH'
-                            )}
+                            <span
+                              className="text-danger font-weight-bolder mr-3"
+                              style={{ fontSize: '30px' }}
+                            >
+                              {item.qty}
+                            </span>{' '}
+                            x{' '}
+                            <span className="mx-2">
+                              {parseInt(item.price).toLocaleString('th-TH')}
+                            </span>{' '}
+                            ={' '}
+                            <span className="ml-2">
+                              {parseInt(item.qty * item.price).toLocaleString(
+                                'th-TH'
+                              )}
+                            </span>
+                            <div className="text-center">
+                              <button
+                                className="btn btn-primary"
+                                onClick={() => setItem(item)}
+                                data-toggle="modal"
+                                data-target="#modalQty"
+                              >
+                                <i className="fa fa-pencil-alt"></i>
+                              </button>
+                              <button
+                                className="btn btn-danger"
+                                onClick={() => handleDelete(item)}
+                              >
+                                <i className="fa fa-times"></i>
+                              </button>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -199,6 +302,28 @@ const Sale = () => {
           </div>
         </div>
       </Template>
+
+      <Modal id="modalQty" title="ปรับจำนวน">
+        <div>
+          <label>จำนวน</label>
+          <input
+            type="text"
+            className="form-control"
+            value={item.qty}
+            onChange={(e) => setItem({ ...item, qty: e.target.value })}
+          />
+
+          <div className="mt-3">
+            <button
+              className="btn btn-primary"
+              onClick={() => handleUpdateQty(item)}
+            >
+              <i className="fa fa-check mr-2"></i>
+              Save
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };
