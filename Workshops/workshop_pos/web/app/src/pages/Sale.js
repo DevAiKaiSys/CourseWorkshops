@@ -10,7 +10,8 @@ const Sale = () => {
   const [billSale, setBillSale] = useState({});
   const [currentBill, setCurrentBill] = useState({});
   const [totalPrice, setTotalPrice] = useState(0);
-  const [item, setItem] = useState(0);
+  const [item, setItem] = useState({});
+  const [inputMoney, setInputMoney] = useState(0);
 
   useEffect(() => {
     fetchData();
@@ -194,7 +195,11 @@ const Sale = () => {
           <h5 className="card-header">
             <div className="float-left">ขายสินค้า</div>
             <div className="float-right">
-              <button className="btn btn-success mr-2">
+              <button
+                className="btn btn-success mr-2"
+                data-toggle="modal"
+                data-target="#modelEndSale"
+              >
                 <i className="fa fa-check mr-2"></i>จบการขาย
               </button>
               <button className="btn btn-info mr-2">
@@ -320,6 +325,54 @@ const Sale = () => {
             >
               <i className="fa fa-check mr-2"></i>
               Save
+            </button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal id="modelEndSale" title="จบการขาย">
+        <div>
+          <div>
+            <label>ยอดเงินทั้งหมด</label>
+          </div>
+          <div>
+            <input
+              className="form-control text-right"
+              value={totalPrice.toLocaleString('th-TH')}
+              disabled
+            />
+          </div>
+          <div className="mt-3">
+            <label>รับเงิน</label>
+          </div>
+          <div>
+            <input
+              className="form-control text-right"
+              value={inputMoney}
+              onChange={(e) => setInputMoney(e.target.value)}
+            />
+          </div>
+          <div className="mt-3">
+            <label>เงินทอน</label>
+          </div>
+          <div>
+            <input
+              className="form-control text-right"
+              value={(inputMoney - totalPrice).toLocaleString('th-TH')}
+              disabled
+            />
+          </div>
+          <div className="text-center mt-3">
+            <button
+              className="btn btn-primary"
+              onClick={() => setInputMoney(totalPrice)}
+            >
+              <i className="fa fa-check mr-2"></i>
+              จ่ายพอดี
+            </button>
+            <button className="btn btn-success">
+              <i className="fa fa-check mr-2"></i>
+              จ่ายพอดี
             </button>
           </div>
         </div>
