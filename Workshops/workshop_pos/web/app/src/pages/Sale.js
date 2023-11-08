@@ -12,6 +12,7 @@ const Sale = () => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [item, setItem] = useState({});
   const [inputMoney, setInputMoney] = useState(0);
+  const [lastBill, setLastBill] = useState({});
 
   useEffect(() => {
     fetchData();
@@ -226,6 +227,28 @@ const Sale = () => {
     });
   };
 
+  const handleLastBill = async () => {
+    try {
+      await axios
+        .get(`${config.api_path}/billSale/lastBill`, config.headers())
+        .then((res) => {
+          if (res.status === 200) {
+            setLastBill(res.data.result);
+          }
+        })
+        .catch((err) => {
+          throw err.response.data;
+        });
+    } catch (error) {
+      Swal.fire({
+        title: 'error',
+        text: error.message,
+        icon: 'error',
+        timer: 2000,
+      });
+    }
+  };
+
   return (
     <div>
       <Template>
@@ -243,7 +266,7 @@ const Sale = () => {
               <button className="btn btn-info mr-2">
                 <i className="fa fa-file mr-2"></i>บิลวันนี้
               </button>
-              <button className="btn btn-secondary">
+              <button className="btn btn-secondary" onClick={handleLastBill}>
                 <i className="fa fa-file-alt mr-2"></i>บิลล่าสุด
               </button>
             </div>

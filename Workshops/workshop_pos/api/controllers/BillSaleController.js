@@ -3,6 +3,7 @@ const app = express();
 const jwt = require('jsonwebtoken');
 const BillSaleModel = require('../models/BillSaleModel');
 const BillSaleDetailModel = require('../models/BillSaleDetailModel');
+const ProductModel = require('../models/ProductModel');
 const { getMemberId, isLogin } = require('./Service');
 
 require('dotenv').config();
@@ -58,8 +59,6 @@ app.post('/billSale/sale', async (req, res) => {
 
 app.get('/billSale/currentBillInfo', isLogin, async (req, res) => {
   try {
-    const ProductModel = require('../models/ProductModel');
-
     BillSaleModel.hasMany(BillSaleDetailModel);
     BillSaleDetailModel.belongsTo(ProductModel);
 
@@ -122,6 +121,33 @@ app.get('/billSale/endSale', isLogin, async (req, res) => {
       }
     );
     res.status(200).send({ message: 'success' });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+});
+
+app.get('/billSale/lastBill', isLogin, async (req, res) => {
+  try {
+    BillSaleModel.hasMany(BillSaleDetailModel);
+    BillSaleDetailModel.belongsTo(ProductModel);
+
+    const result = await BillSaleModel.findAll({
+      where: {
+        status: 'pay',
+        userId: getMemberId(req),
+      },
+      order: [['id', 'DESC']],
+      limit: 1,
+      include: {
+        model: BillSaleDetailModel,
+        attributes: ['qty', 'price'],
+        include: {
+          model: ProductModel,
+          attributes: ['barcode', 'name'],
+        },
+      },
+    });
+    res.status(200).send({ message: 'success', result: result });
   } catch (error) {
     res.status(500).send({ message: error.message });
   }
