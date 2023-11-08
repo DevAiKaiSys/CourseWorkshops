@@ -110,4 +110,21 @@ app.post('/billSale/updateQty', isLogin, async (req, res) => {
   }
 });
 
+app.get('/billSale/endSale', isLogin, async (req, res) => {
+  try {
+    await BillSaleModel.update(
+      { status: 'pay' },
+      {
+        where: {
+          status: 'open',
+          userId: getMemberId(req),
+        },
+      }
+    );
+    res.status(200).send({ message: 'success' });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+});
+
 module.exports = app;

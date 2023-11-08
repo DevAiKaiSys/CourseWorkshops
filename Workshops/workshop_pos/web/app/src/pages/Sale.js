@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Children, useEffect, useState } from 'react';
 import Template from '../components/Template';
 import axios from 'axios';
 import Swal from 'sweetalert2';
@@ -49,9 +49,9 @@ const Sale = () => {
 
         sum += qty * price;
       }
-
-      setTotalPrice(sum);
     }
+
+    setTotalPrice(sum);
   };
 
   const openBill = async () => {
@@ -186,6 +186,44 @@ const Sale = () => {
     } else {
       console.log('Modal element with class "modal fade show" not found.');
     }
+  };
+
+  const handleEndSale = () => {
+    Swal.fire({
+      title: 'จบการขาย',
+      text: 'ยืนยันจบการขาย',
+      icon: 'question',
+      showCancelButton: true,
+      showConfirmButton: true,
+    }).then(async (res) => {
+      if (res.isConfirmed) {
+        try {
+          await axios
+            .get(`${config.api_path}/billSale/endSale`, config.headers())
+            .then((res) => {
+              if (res.status === 200) {
+                Swal.fire({
+                  title: 'จบการขาย',
+                  text: 'จบการขายสำเร็วแล้ว',
+                  timer: 1000,
+                });
+
+                openBill();
+                fetchBillSaleDetail();
+
+                handleCloseModal();
+              }
+            });
+        } catch (error) {
+          Swal.fire({
+            title: 'error',
+            text: error.message,
+            icon: 'error',
+            timer: 2000,
+          });
+        }
+      }
+    });
   };
 
   return (
@@ -370,9 +408,9 @@ const Sale = () => {
               <i className="fa fa-check mr-2"></i>
               จ่ายพอดี
             </button>
-            <button className="btn btn-success">
+            <button className="btn btn-success" onClick={handleEndSale}>
               <i className="fa fa-check mr-2"></i>
-              จ่ายพอดี
+              จบการขาย
             </button>
           </div>
         </div>
