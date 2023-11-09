@@ -233,7 +233,7 @@ const Sale = () => {
         .get(`${config.api_path}/billSale/lastBill`, config.headers())
         .then((res) => {
           if (res.status === 200) {
-            setLastBill(res.data.result);
+            setLastBill(res.data.result[0]);
           }
         })
         .catch((err) => {
@@ -266,7 +266,12 @@ const Sale = () => {
               <button className="btn btn-info mr-2">
                 <i className="fa fa-file mr-2"></i>บิลวันนี้
               </button>
-              <button className="btn btn-secondary" onClick={handleLastBill}>
+              <button
+                className="btn btn-secondary"
+                onClick={handleLastBill}
+                data-toggle="modal"
+                data-target="#modalLastBill"
+              >
                 <i className="fa fa-file-alt mr-2"></i>บิลล่าสุด
               </button>
             </div>
@@ -437,6 +442,32 @@ const Sale = () => {
             </button>
           </div>
         </div>
+      </Modal>
+
+      <Modal id="modalLastBill" title="บิลล่าสุด">
+        <table className="table table-cordered table-striped">
+          <thead>
+            <tr>
+              <th>barcode</th>
+              <th>รายการ</th>
+              <th className="text-right">ราคา</th>
+              <th className="text-right">จำนวน</th>
+              <th className="text-right">ยอดรวม</th>
+            </tr>
+          </thead>
+          <tbody>
+            {lastBill?.billSaleDetails &&
+              lastBill.billSaleDetails.map((item, index) => (
+                <tr key={index}>
+                  <td>{item.product.barcode}</td>
+                  <td>{item.product.name}</td>
+                  <td className="text-right">{item.price}</td>
+                  <td className="text-right">{item.qty}</td>
+                  <td className="text-right">{item.price * item.qty}</td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
       </Modal>
     </div>
   );
