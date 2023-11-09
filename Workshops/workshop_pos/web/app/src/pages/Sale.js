@@ -15,6 +15,7 @@ const Sale = () => {
   const [inputMoney, setInputMoney] = useState(0);
   const [lastBill, setLastBill] = useState({});
   const [billToday, setBillToday] = useState([]);
+  const [selectedBill, setSelectedBill] = useState({});
 
   useEffect(() => {
     fetchData();
@@ -513,12 +514,47 @@ const Sale = () => {
               billToday.map((item, index) => (
                 <tr key={index}>
                   <td>
-                    <button className="btn btn-primary">
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => setSelectedBill(item)}
+                      data-toggle="modal"
+                      data-target="#modalBillSaleDetail"
+                    >
                       <i className="fa fa-eye mr-2"></i>ดูรายการ
                     </button>
                   </td>
                   <td>{item.id}</td>
                   <td>{dayjs(item.createdAt).format('DD/MM/YYYY HH:mm:ss')}</td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </Modal>
+
+      <Modal
+        id="modalBillSaleDetail"
+        title="รายละเอียดในบิล"
+        modalSize="modal-lg"
+      >
+        <table className="table table-cordered table-striped">
+          <thead>
+            <tr>
+              <th>barcode</th>
+              <th>รายการ</th>
+              <th className="text-right">ราคา</th>
+              <th className="text-right">จำนวน</th>
+              <th className="text-right">ยอดรวม</th>
+            </tr>
+          </thead>
+          <tbody>
+            {selectedBill?.billSaleDetails &&
+              selectedBill.billSaleDetails.map((item, index) => (
+                <tr key={index}>
+                  <td>{item.product.barcode}</td>
+                  <td>{item.product.name}</td>
+                  <td className="text-right">{item.price}</td>
+                  <td className="text-right">{item.qty}</td>
+                  <td className="text-right">{item.price * item.qty}</td>
                 </tr>
               ))}
           </tbody>
