@@ -4,6 +4,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import config from '../config';
 import Modal from '../components/Modal';
+import dayjs from 'dayjs';
 
 const Sale = () => {
   const [products, setProducts] = useState([]);
@@ -13,6 +14,7 @@ const Sale = () => {
   const [item, setItem] = useState({});
   const [inputMoney, setInputMoney] = useState(0);
   const [lastBill, setLastBill] = useState({});
+  const [billToday, setBillToday] = useState([]);
 
   useEffect(() => {
     fetchData();
@@ -249,6 +251,28 @@ const Sale = () => {
     }
   };
 
+  const handleBillToday = async () => {
+    try {
+      await axios
+        .get(`${config.api_path}/billSale/billToday`, config.headers())
+        .then((res) => {
+          if (res.status === 200) {
+            setBillToday(res.data.results);
+          }
+        })
+        .catch((err) => {
+          throw err.response.data;
+        });
+    } catch (error) {
+      Swal.fire({
+        title: 'error',
+        text: error.message,
+        icon: 'error',
+        timer: 2000,
+      });
+    }
+  };
+
   return (
     <div>
       <Template>
@@ -263,7 +287,12 @@ const Sale = () => {
               >
                 <i className="fa fa-check mr-2"></i>จบการขาย
               </button>
-              <button className="btn btn-info mr-2">
+              <button
+                className="btn btn-info mr-2"
+                onClick={handleBillToday}
+                data-toggle="modal"
+                data-target="#modalBillToday"
+              >
                 <i className="fa fa-file mr-2"></i>บิลวันนี้
               </button>
               <button
@@ -464,6 +493,32 @@ const Sale = () => {
                   <td className="text-right">{item.price}</td>
                   <td className="text-right">{item.qty}</td>
                   <td className="text-right">{item.price * item.qty}</td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </Modal>
+
+      <Modal id="modalBillToday" title="บิลวันนี้" modalSize="modal-lg">
+        <table className="table table-cordered table-striped">
+          <thead>
+            <tr>
+              <th width="140px">Action</th>
+              <th>เลขบิล</th>
+              <th>วัน เวลาที่ขาย</th>
+            </tr>
+          </thead>
+          <tbody>
+            {billToday &&
+              billToday.map((item, index) => (
+                <tr key={index}>
+                  <td>
+                    <button className="btn btn-primary">
+                      <i className="fa fa-eye mr-2"></i>ดูรายการ
+                    </button>
+                  </td>
+                  <td>{item.id}</td>
+                  <td>{dayjs(item.createdAt).format('DD/MM/YYYY HH:mm:ss')}</td>
                 </tr>
               ))}
           </tbody>

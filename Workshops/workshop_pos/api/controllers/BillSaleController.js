@@ -5,6 +5,7 @@ const BillSaleModel = require('../models/BillSaleModel');
 const BillSaleDetailModel = require('../models/BillSaleDetailModel');
 const ProductModel = require('../models/ProductModel');
 const { getMemberId, isLogin } = require('./Service');
+const { Sequelize } = require('sequelize');
 
 require('dotenv').config();
 
@@ -148,6 +149,42 @@ app.get('/billSale/lastBill', isLogin, async (req, res) => {
       },
     });
     res.status(200).send({ message: 'success', result: result });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+});
+
+app.get('/billSale/billToday', isLogin, async (req, res) => {
+  try {
+    BillSaleModel.hasMany(BillSaleDetailModel);
+    BillSaleDetailModel.belongsTo(ProductModel);
+
+    const startDate = new Date();
+    startDate.setHours(0, 0, 0, 0);
+    const now = new Date();
+    console.log(startDate);
+    console.log(now);
+    const Op = Sequelize.Op;
+
+    const results = await BillSaleModel.findAll({
+      where: {
+        status: 'pay',
+        userId: getMemberId(req),
+        createdAt: {
+          [Op.between]: [startDate.toString(), now.toString()],
+        },
+      },
+      order: [['id', 'DESC']],
+      include: {
+        model: BillSaleDetailModel,
+        attributes: ['qty', 'price'],
+        include: {
+          model: ProductModel,
+          attributes: ['barcode', 'name'],
+        },
+      },
+    });
+    res.status(200).send({ message: 'success', results: results });
   } catch (error) {
     res.status(500).send({ message: error.message });
   }

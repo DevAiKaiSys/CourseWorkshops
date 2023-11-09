@@ -33,3 +33,5 @@ find & replace with regex
 <img(?!.*\/>)((?:[\s\S\n]*?))>  replace  <img$1/>
 class=  replace  className=
 ```
+
+npm install dayjs
