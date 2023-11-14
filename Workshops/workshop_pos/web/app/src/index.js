@@ -10,6 +10,7 @@ import Home from './pages/Home';
 import Product from './pages/Product';
 import User from './pages/User';
 import Sale from './pages/Sale';
+import BillSales from './pages/BillSales';
 
 const router = createBrowserRouter([
   {
@@ -36,6 +37,18 @@ const router = createBrowserRouter([
     path: '/sale',
     element: <Sale />,
   },
+  {
+    path: '/billSale',
+    element: <BillSales />,
+  },
+  // {
+  //   path: '/sale',
+  //   element: <Sale />,
+  // },
+  // {
+  //   path: '/sale',
+  //   element: <Sale />,
+  // },
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

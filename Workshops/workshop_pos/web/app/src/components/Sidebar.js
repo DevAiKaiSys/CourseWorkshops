@@ -149,6 +149,24 @@ function Sidebar() {
                 <p>ผู้ใช้งานระบบ</p>
               </Link>
             </li>
+            <li className="nav-item">
+              <Link to="/sumSalePerDay" className="nav-link">
+                <i className="nav-icon fas fa-file-alt"></i>
+                <p>สรุปยอดขายรายวัน</p>
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/billSales" className="nav-link">
+                <i className="nav-icon fas fa-list-alt"></i>
+                <p>รายงานบิลขาย</p>
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/stock" className="nav-link">
+                <i className="nav-icon fas fa-home"></i>
+                <p>รับสินค้าเข้า Stock</p>
+              </Link>
+            </li>
             {/* <li className="nav-item">
               <a href="#" className="nav-link">
                 <i className="nav-icon fas fa-copy"></i>

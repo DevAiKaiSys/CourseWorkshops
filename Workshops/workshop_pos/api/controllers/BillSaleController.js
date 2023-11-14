@@ -190,4 +190,18 @@ app.get('/billSale/billToday', isLogin, async (req, res) => {
   }
 });
 
+app.get('/billSale/list', isLogin, async (req, res) => {
+  try {
+    // BillSaleModel.hasMany(BillSaleDetailModel);
+    // BillSaleDetailModel.belongsTo(ProductModel);
+
+    const results = await BillSaleModel.findAll({
+      order: [['id', 'DESC']],
+    });
+    res.status(200).send({ message: 'success', results: results });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+});
+
 module.exports = app;
