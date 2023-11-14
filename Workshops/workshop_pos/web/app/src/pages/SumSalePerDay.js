@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Template from '../components/Template';
 import Swal from 'sweetalert2';
 import axios from 'axios';
@@ -37,6 +37,11 @@ function SumSalePerDay() {
     { value: 11, label: 'พฤศจิกายน' },
     { value: 12, label: 'ธันวาคม' },
   ]);
+  const [billSales, setBillSales] = useState([]);
+
+  useEffect(() => {
+    handleShowReport();
+  }, []);
 
   const handleShowReport = async (report) => {
     try {
@@ -47,7 +52,7 @@ function SumSalePerDay() {
         )
         .then((res) => {
           if (res.status === 200) {
-            console.log(res.data.results);
+            setBillSales(res.data.results);
           }
         })
         .catch((err) => {
@@ -125,7 +130,33 @@ function SumSalePerDay() {
               </div>
             </div>
 
-            <table className="table table-bordered table-striped"></table>
+            <table className="table table-bordered table-striped mt-3">
+              <thead>
+                <tr>
+                  <th width="180px"></th>
+                  <th width="100px" className="text-right">
+                    วันที่
+                  </th>
+                  <th className="text-right">ยอดขาย</th>
+                </tr>
+              </thead>
+              <tbody>
+                {billSales?.length > 0 &&
+                  billSales.map((item, index) => (
+                    <tr key={index}>
+                      <td>
+                        <button className="btn btn-primary">
+                          <i className="fa fa-file-alt mr-2"></i>แสดงรายการ
+                        </button>
+                      </td>
+                      <td className="text-right">{item.day}</td>
+                      <td className="text-right">
+                        {parseInt(item.sum).toLocaleString('th-TH')}
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </Template>
