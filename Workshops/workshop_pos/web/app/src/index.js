@@ -11,6 +11,7 @@ import Product from './pages/Product';
 import User from './pages/User';
 import Sale from './pages/Sale';
 import BillSales from './pages/BillSales';
+import SumSalePerDay from './pages/SumSalePerDay';
 
 const router = createBrowserRouter([
   {
@@ -41,10 +42,10 @@ const router = createBrowserRouter([
     path: '/billSales',
     element: <BillSales />,
   },
-  // {
-  //   path: '/sale',
-  //   element: <Sale />,
-  // },
+  {
+    path: '/sumSalePerDay',
+    element: <SumSalePerDay />,
+  },
   // {
   //   path: '/sale',
   //   element: <Sale />,
