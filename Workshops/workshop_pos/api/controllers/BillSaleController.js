@@ -162,8 +162,6 @@ app.get('/billSale/billToday', isLogin, async (req, res) => {
     const startDate = new Date();
     startDate.setHours(0, 0, 0, 0);
     const now = new Date();
-    console.log(startDate);
-    console.log(now);
     const Op = Sequelize.Op;
 
     const results = await BillSaleModel.findAll({
@@ -192,11 +190,23 @@ app.get('/billSale/billToday', isLogin, async (req, res) => {
 
 app.get('/billSale/list', isLogin, async (req, res) => {
   try {
-    // BillSaleModel.hasMany(BillSaleDetailModel);
+    BillSaleModel.hasMany(BillSaleDetailModel);
     // BillSaleDetailModel.belongsTo(ProductModel);
 
     const results = await BillSaleModel.findAll({
+      where: {
+        status: 'pay',
+        userId: getMemberId(req),
+      },
       order: [['id', 'DESC']],
+      include: {
+        model: BillSaleDetailModel,
+        attributes: ['qty', 'price'],
+        // include: {
+        //   model: ProductModel,
+        //   attributes: ['barcode', 'name'],
+        // },
+      },
     });
     res.status(200).send({ message: 'success', results: results });
   } catch (error) {
