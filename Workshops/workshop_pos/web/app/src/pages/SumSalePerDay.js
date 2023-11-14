@@ -124,6 +124,8 @@ function SumSalePerDay() {
                 </button>
               </div>
             </div>
+
+            <table className="table table-bordered table-striped"></table>
           </div>
         </div>
       </Template>

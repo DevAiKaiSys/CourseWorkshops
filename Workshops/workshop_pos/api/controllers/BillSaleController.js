@@ -299,10 +299,20 @@ app.get(
         const day = item.createdAt.getDate();
 
         if (!acc[day]) {
-          acc[day] = { day, results: [] };
+          acc[day] = { day, results: [], sum: 0 };
         }
 
         acc[day].results.push(item);
+
+        for (let i = 0; i < acc[day].results.length; i++) {
+          const result = acc[day].results[i];
+
+          for (let j = 0; j < result.billSaleDetails.length; j++) {
+            const item = result.billSaleDetails[j];
+
+            acc[day].sum += parseInt(item.qty) * parseInt(item.price);
+          }
+        }
 
         return acc;
       }, {});
