@@ -245,6 +245,9 @@ app.get(
     // console.log(lastMonthEnd);
 
     try {
+      BillSaleModel.hasMany(BillSaleDetailModel);
+      BillSaleDetailModel.belongsTo(ProductModel);
+
       const results = await BillSaleModel.findAll({
         where: {
           status: 'pay',
@@ -252,6 +255,14 @@ app.get(
           createdAt: {
             [Op.gte]: daysInMonth_start,
             [Op.lt]: daysInMonth_end,
+          },
+        },
+        include: {
+          model: BillSaleDetailModel,
+          // attributes: ['qty', 'price'],
+          include: {
+            model: ProductModel,
+            // attributes: ['barcode', 'name'],
           },
         },
         // order: [['id', 'DESC']],
@@ -274,16 +285,32 @@ app.get(
       });
 
       // Organize results by day
-      const resultsByDay = {};
-      results.forEach((result) => {
-        const day = result.createdAt.getDate();
-        if (!resultsByDay[day]) {
-          resultsByDay[day] = [];
-        }
-        resultsByDay[day].push(result);
-      });
+      // const resultsByDay = {};
+      // results.forEach((result) => {
+      //   const day = result.createdAt.getDate();
+      //   if (!resultsByDay[day]) {
+      //     resultsByDay[day] = [];
+      //   }
+      //   resultsByDay[day].push(result);
+      // });
 
-      res.status(200).send({ message: 'success', results: resultsByDay });
+      // Group results by day
+      const resultsByDay = results.reduce((acc, item) => {
+        const day = item.createdAt.getDate();
+
+        if (!acc[day]) {
+          acc[day] = { day, results: [] };
+        }
+
+        acc[day].results.push(item);
+
+        return acc;
+      }, {});
+
+      // Convert resultsByDay object to an array of objects
+      const finalResults = Object.values(resultsByDay);
+
+      res.status(200).send({ message: 'success', results: finalResults });
     } catch (error) {
       res.status(500).send({ message: error.message });
     }
