@@ -191,7 +191,7 @@ app.get('/billSale/billToday', isLogin, async (req, res) => {
 app.get('/billSale/list', isLogin, async (req, res) => {
   try {
     BillSaleModel.hasMany(BillSaleDetailModel);
-    // BillSaleDetailModel.belongsTo(ProductModel);
+    BillSaleDetailModel.belongsTo(ProductModel);
 
     const results = await BillSaleModel.findAll({
       where: {
@@ -202,10 +202,10 @@ app.get('/billSale/list', isLogin, async (req, res) => {
       include: {
         model: BillSaleDetailModel,
         attributes: ['qty', 'price'],
-        // include: {
-        //   model: ProductModel,
-        //   attributes: ['barcode', 'name'],
-        // },
+        include: {
+          model: ProductModel,
+          attributes: ['barcode', 'name'],
+        },
       },
     });
     res.status(200).send({ message: 'success', results: results });
