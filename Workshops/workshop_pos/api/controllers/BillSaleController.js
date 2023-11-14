@@ -5,7 +5,7 @@ const BillSaleModel = require('../models/BillSaleModel');
 const BillSaleDetailModel = require('../models/BillSaleDetailModel');
 const ProductModel = require('../models/ProductModel');
 const { getMemberId, isLogin } = require('./Service');
-const { Sequelize } = require('sequelize');
+const { Sequelize, Op } = require('sequelize');
 
 require('dotenv').config();
 
@@ -213,5 +213,81 @@ app.get('/billSale/list', isLogin, async (req, res) => {
     res.status(500).send({ message: error.message });
   }
 });
+
+app.get(
+  '/billSale/listByYearAndMonth/:year/:month',
+  isLogin,
+  async (req, res) => {
+    // let arr = [];
+    let y = req.params.year;
+    let m = req.params.month - 1;
+    let daysInMonth_start = new Date(y, m, 1);
+    let daysInMonth_end = new Date(y, m, 1);
+    daysInMonth_end.setMonth(daysInMonth_end.getMonth() + 1);
+
+    // console.log(y);
+    // console.log(m);
+    // console.log(daysInMonth_start);
+    // console.log(daysInMonth_end);
+
+    // const year = parseInt(req.params.year, 10);
+    // const month = parseInt(req.params.month, 10);
+
+    // const lastMonth = month === 1 ? 12 : month - 1;
+    // const lastMonthYear = month === 1 ? year - 1 : year;
+
+    // const lastMonthStart = new Date(lastMonthYear, lastMonth - 1, 1);
+    // const lastMonthEnd = new Date(year, month - 1, 0);
+
+    // console.log(year);
+    // console.log(month);
+    // console.log(lastMonthStart);
+    // console.log(lastMonthEnd);
+
+    try {
+      const results = await BillSaleModel.findAll({
+        where: {
+          status: 'pay',
+          userId: getMemberId(req),
+          createdAt: {
+            [Op.gte]: daysInMonth_start,
+            [Op.lt]: daysInMonth_end,
+          },
+        },
+        // order: [['id', 'DESC']],
+        // attributes: [
+        //   // [Sequelize.fn('DAY', Sequelize.col('createdAt')), 'day'], // error
+        //   [
+        //     Sequelize.fn('DATE_TRUNC', 'day', Sequelize.col('createdAt')),
+        //     'day',
+        //   ],
+        //   [Sequelize.literal('COUNT(*)'), 'results'],
+        // ],
+        // where: {
+        //   createdAt: {
+        //     // [Op.between]: [daysInMonth_start, daysInMonth_end],
+        //     [Op.gte]: daysInMonth_start,
+        //     [Op.lt]: daysInMonth_end,
+        //   },
+        // },
+        // group: ['day'],
+      });
+
+      // Organize results by day
+      const resultsByDay = {};
+      results.forEach((result) => {
+        const day = result.createdAt.getDate();
+        if (!resultsByDay[day]) {
+          resultsByDay[day] = [];
+        }
+        resultsByDay[day].push(result);
+      });
+
+      res.status(200).send({ message: 'success', results: resultsByDay });
+    } catch (error) {
+      res.status(500).send({ message: error.message });
+    }
+  }
+);
 
 module.exports = app;

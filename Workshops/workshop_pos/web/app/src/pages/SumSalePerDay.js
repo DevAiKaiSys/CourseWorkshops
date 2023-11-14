@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import Template from '../components/Template';
+import Swal from 'sweetalert2';
+import axios from 'axios';
+import config from '../config';
 
 function SumSalePerDay() {
   const [currentYear, setCurrentYear] = useState(0);
@@ -35,6 +38,31 @@ function SumSalePerDay() {
     { value: 12, label: 'ธันวาคม' },
   ]);
 
+  const handleShowReport = async (report) => {
+    try {
+      await axios
+        .get(
+          `${config.api_path}/billSale/listByYearAndMonth/${currentYear}/${currentMonth}`,
+          config.headers()
+        )
+        .then((res) => {
+          if (res.status === 200) {
+            console.log(res.data.results);
+          }
+        })
+        .catch((err) => {
+          throw err.response.data;
+        });
+    } catch (error) {
+      Swal.fire({
+        title: 'error',
+        text: error.message,
+        icon: 'error',
+        timer: 2000,
+      });
+    }
+  };
+
   return (
     <div>
       <Template>
@@ -56,6 +84,7 @@ function SumSalePerDay() {
                     className="form-control"
                     id="inputGroupSelectYear"
                     value={currentYear}
+                    onChange={(e) => setCurrentYear(e.target.value)}
                   >
                     {arrYear.map((item, index) => (
                       <option value={item} key={index}>
@@ -75,7 +104,12 @@ function SumSalePerDay() {
                       เดือน
                     </label>
                   </div>
-                  <select className="form-control" id="inputGroupSelectMonth">
+                  <select
+                    className="form-control"
+                    id="inputGroupSelectMonth"
+                    value={currentMonth}
+                    onChange={(e) => setCurrentMonth(e.target.value)}
+                  >
                     {arrMonth.map((item, index) => (
                       <option value={item.value} key={index}>
                         {item.label}
@@ -85,7 +119,7 @@ function SumSalePerDay() {
                 </div>
               </div>
               <div className="col-6">
-                <button className="btn btn-primary">
+                <button className="btn btn-primary" onClick={handleShowReport}>
                   <i className="fa fa-check mr-2"></i>แสดงรายการ
                 </button>
               </div>
