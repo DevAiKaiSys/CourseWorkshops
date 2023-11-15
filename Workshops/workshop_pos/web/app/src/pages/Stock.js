@@ -8,6 +8,8 @@ import Modal from '../components/Modal';
 function Stock() {
   const [products, setProducts] = useState([]);
   const [productName, setProductName] = useState('');
+  const [productId, setProductId] = useState(0);
+  const [qty, setQty] = useState(0);
 
   // useEffect(() => {
   //   fetchData();
@@ -37,6 +39,7 @@ function Stock() {
 
   const handleChooseProduct = (item) => {
     setProductName(item.name);
+    setProductId(item.id);
 
     handleCloseModal();
   };
@@ -57,6 +60,33 @@ function Stock() {
       // You can perform further operations on elementsWithIdClose if needed
     } else {
       console.log('Modal element with class "modal fade show" not found.');
+    }
+  };
+
+  const handleSave = async () => {
+    try {
+      const payload = { qty: qty, productId: productId };
+      const response = await axios
+        .post(`${config.api_path}/stock/save`, payload, config.headers())
+        .catch((err) => {
+          throw err.response.data;
+        });
+
+      if (response.status === 201 || response.status === 200) {
+        Swal.fire({
+          title: 'บันทึกข้อมูล',
+          text: 'รับสินค้าเข้าสต๊อกแล้ว',
+          icon: 'success',
+          timer: 1000,
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        title: 'error',
+        text: error.message,
+        icon: 'warning',
+        timer: 2000,
+      });
     }
   };
 
@@ -93,11 +123,15 @@ function Stock() {
                   <div className="input-group-prepend">
                     <label className="input-group-text">จำนวน</label>
                   </div>
-                  <input type="number" className="form-control" />
+                  <input
+                    type="number"
+                    className="form-control"
+                    onChange={(e) => setQty(e.target.value)}
+                  />
                 </div>
               </div>
               <div className="col-7">
-                <button className="btn btn-primary">
+                <button className="btn btn-primary" onClick={handleSave}>
                   <i className="fa fa-check mr-2"></i>
                   บันทึก
                 </button>
