@@ -38,7 +38,41 @@ function ReportStock() {
       <Template>
         <div className="card">
           <h5 className="card-header">รายงาน Stock</h5>
-          <div className="card-body"></div>
+          <div className="card-body">
+            <table className="table table-bordered table-triped mt-3">
+              <thead>
+                <tr>
+                  <th>barcode</th>
+                  <th>รายการ</th>
+                  <th>รับเข้า</th>
+                  <th>ขายออก</th>
+                  <th>คงเหลือ</th>
+                </tr>
+              </thead>
+              <tbody>
+                {stocks?.length > 0 &&
+                  stocks.map((item, index) => (
+                    <tr key={index}>
+                      <td>{item.result.barcode}</td>
+                      <td>{item.result.name}</td>
+                      <td className="text-right">
+                        <a href="" className="btn btn-link text-success">
+                          {parseInt(item.stockIn).toLocaleString('th-TH')}
+                        </a>
+                      </td>
+                      <td className="text-right">
+                        <a href="" className="btn btn-link text-danger">
+                          {parseInt(item.stockOut).toLocaleString('th-TH')}
+                        </a>
+                      </td>
+                      <td className="text-right">
+                        {(item.stockIn - item.stockOut).toLocaleString('th-TH')}
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </Template>
     </div>

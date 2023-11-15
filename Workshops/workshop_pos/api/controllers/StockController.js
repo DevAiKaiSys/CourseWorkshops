@@ -71,12 +71,12 @@ app.get('/stock/report', isLogin, async (req, res) => {
       let stockIn = 0;
       let stockOut = 0;
 
-      for (let j = 0; j < stocks; j++) {
+      for (let j = 0; j < stocks.length; j++) {
         const item = stocks[j];
         stockIn += parseInt(item.qty);
       }
 
-      for (let j = 0; j < billSaleDetails; j++) {
+      for (let j = 0; j < billSaleDetails.length; j++) {
         const item = billSaleDetails[j];
         stockOut += parseInt(item.qty);
       }
