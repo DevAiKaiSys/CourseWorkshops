@@ -31,4 +31,13 @@ app.get('/stock/list', isLogin, async (req, res) => {
   }
 });
 
+app.delete('/stock/delete/:id', isLogin, async (req, res) => {
+  try {
+    const result = await StockModel.destroy({ where: { id: req.params.id } });
+    res.status(200).send({ message: 'success', result: result });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+});
+
 module.exports = app;

@@ -118,6 +118,47 @@ function Stock() {
     }
   };
 
+  const handleDelete = (item) => {
+    Swal.fire({
+      title: 'ยืนยันการลบ',
+      text: 'คุณต้องการลบรายการนี้ใช่หรือไม่',
+      icon: 'question',
+      showCancelButton: true,
+      showConfirmButton: true,
+    }).then(async (res) => {
+      if (res.isConfirmed) {
+        try {
+          const response = await axios
+            .delete(
+              `${config.api_path}/stock/delete/${item.id}`,
+              config.headers()
+            )
+            .catch((err) => {
+              throw err.response.data;
+            });
+
+          if (response.status === 200) {
+            Swal.fire({
+              title: 'ลบข้อมูล',
+              text: 'ลบข้อมูลแล้ว',
+              icon: 'success',
+              timer: 1000,
+            });
+
+            fetchDataStock();
+          }
+        } catch (error) {
+          Swal.fire({
+            title: 'error',
+            text: error.message,
+            icon: 'warning',
+            timer: 2000,
+          });
+        }
+      }
+    });
+  };
+
   return (
     <div>
       <Template>
@@ -190,7 +231,10 @@ function Stock() {
                         {dayjs(item.createdAt).format('DD/MM/YYYY HH:mm:ss')}
                       </td>
                       <td>
-                        <button className="btn btn-danger">
+                        <button
+                          className="btn btn-danger"
+                          onClick={() => handleDelete(item)}
+                        >
                           <i className="fa fa-times mr-2"></i>ลบ
                         </button>
                       </td>
