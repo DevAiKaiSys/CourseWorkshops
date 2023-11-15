@@ -74,7 +74,17 @@ function ReportStock() {
                         </a>
                       </td>
                       <td className="text-right">
-                        <a href="" className="btn btn-link text-danger">
+                        <a
+                          href=""
+                          className="btn btn-link text-danger"
+                          onClick={() => {
+                            // setCurrentStock(item.result.billSaleDetails);
+                            setCurrentStock(item.result);
+                            // console.log(item);
+                          }}
+                          data-toggle="modal"
+                          data-target="#modalStockOut"
+                        >
                           {parseInt(item.stockOut).toLocaleString('th-TH')}
                         </a>
                       </td>
@@ -109,6 +119,41 @@ function ReportStock() {
           <tbody>
             {currentStock?.stocks?.length > 0 &&
               currentStock.stocks.map((item, index) => (
+                <tr key={index}>
+                  <td>{currentStock.barcode}</td>
+                  <td>{currentStock.name}</td>
+                  <td className="text-right">{item.qty}</td>
+                  <td>{dayjs(item.createdAt).format('DD/MM/YYYY HH:mm:ss')}</td>
+                  {/* <td>
+                    <button
+                      className="btn btn-danger"
+                      onClick={() => handleDelete(item)}
+                    >
+                      <i className="fa fa-times mr-2"></i>ลบ
+                    </button>
+                  </td> */}
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </Modal>
+
+      <Modal id="modalStockOut" title="ข้อมูลการขาย" modalSize="modal-lg">
+        <table className="table table-bordered table-triped mt-3">
+          <thead>
+            <tr>
+              <th width="150px">barcode</th>
+              <th>รายการ</th>
+              <th width="100px" className="text-right">
+                จำนวน
+              </th>
+              <th width="180px">วันที่</th>
+              {/* <th width="100px"></th> */}
+            </tr>
+          </thead>
+          <tbody>
+            {currentStock?.billSaleDetails?.length > 0 &&
+              currentStock.billSaleDetails.map((item, index) => (
                 <tr key={index}>
                   <td>{currentStock.barcode}</td>
                   <td>{currentStock.name}</td>
