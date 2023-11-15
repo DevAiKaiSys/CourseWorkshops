@@ -46,17 +46,22 @@ app.get('/stock/report', isLogin, async (req, res) => {
     ProductModel.hasMany(StockModel);
     ProductModel.hasMany(BillSaleDetailModel);
 
+    // StockModel.belongsTo(ProductModel);
+
     let arr = [];
     const results = await ProductModel.findAll({
       include: [
-        // {
-        //   model: StockModel,
-        // },
-        // {
-        //   model: BillSaleDetailModel,
-        // },
-        StockModel,
-        BillSaleDetailModel,
+        {
+          model: StockModel,
+          // include: {
+          //   model: ProductModel,
+          // },
+        },
+        {
+          model: BillSaleDetailModel,
+        },
+        // StockModel,
+        // BillSaleDetailModel,
       ],
       where: {
         userId: getMemberId(req),
