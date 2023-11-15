@@ -4,16 +4,40 @@ import Swal from 'sweetalert2';
 import axios from 'axios';
 import config from '../config';
 import Modal from '../components/Modal';
+import dayjs from 'dayjs';
 
 function Stock() {
   const [products, setProducts] = useState([]);
   const [productName, setProductName] = useState('');
   const [productId, setProductId] = useState(0);
   const [qty, setQty] = useState(0);
+  const [stocks, setStocks] = useState([]);
 
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
+  useEffect(() => {
+    fetchDataStock();
+  }, []);
+
+  const fetchDataStock = async () => {
+    try {
+      await axios
+        .get(`${config.api_path}/stock/list`, config.headers())
+        .then((res) => {
+          if (res.status === 200) {
+            setStocks(res.data.results);
+          }
+        })
+        .catch((err) => {
+          throw err.response.data;
+        });
+    } catch (error) {
+      Swal.fire({
+        title: 'error',
+        text: error.message,
+        icon: 'error',
+        timer: 2000,
+      });
+    }
+  };
 
   const fetchData = async () => {
     try {
@@ -79,6 +103,10 @@ function Stock() {
           icon: 'success',
           timer: 1000,
         });
+
+        fetchDataStock();
+        setQty(0);
+        setProductName('');
       }
     } catch (error) {
       Swal.fire({
@@ -126,6 +154,7 @@ function Stock() {
                   <input
                     type="number"
                     className="form-control"
+                    value={qty}
                     onChange={(e) => setQty(e.target.value)}
                   />
                 </div>
@@ -137,6 +166,38 @@ function Stock() {
                 </button>
               </div>
             </div>
+
+            <table className="table table-bordered table-triped mt-3">
+              <thead>
+                <tr>
+                  <th width="150px">barcode</th>
+                  <th>รายการ</th>
+                  <th width="100px" className="text-right">
+                    จำนวน
+                  </th>
+                  <th width="180px">วันที่</th>
+                  <th width="100px"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {stocks?.length > 0 &&
+                  stocks.map((item, index) => (
+                    <tr key={index}>
+                      <td>{item.product.barcode}</td>
+                      <td>{item.product.name}</td>
+                      <td className="text-right">{item.qty}</td>
+                      <td>
+                        {dayjs(item.createdAt).format('DD/MM/YYYY HH:mm:ss')}
+                      </td>
+                      <td>
+                        <button className="btn btn-danger">
+                          <i className="fa fa-times mr-2"></i>ลบ
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </Template>
