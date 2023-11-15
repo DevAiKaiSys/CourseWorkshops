@@ -40,6 +40,7 @@ function SumSalePerDay() {
   ]);
   const [billSales, setBillSales] = useState([]);
   const [currntBillSale, setCurrntBillSale] = useState({});
+  const [billSaleDetails, setBillSaleDetails] = useState({});
 
   useEffect(() => {
     handleShowReport();
@@ -185,13 +186,50 @@ function SumSalePerDay() {
               currntBillSale.map((item, index) => (
                 <tr key={index}>
                   <td>
-                    <button className="btn btn-primary">
+                    <button
+                      className="btn btn-primary"
+                      data-toggle="modal"
+                      data-target="#modalBillSaleDetail"
+                      onClick={() => setBillSaleDetails(item.billSaleDetails)}
+                    >
                       <i className="fa fa-file alt mr-2"></i>
                       แสดงรายการ
                     </button>
                   </td>
                   <td className="text-right">{item.id}</td>
                   <td>{item.createdAt}</td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </Modal>
+
+      <Modal
+        id="modalBillSaleDetail"
+        title="รายละเอียดบิลขาย"
+        modalSize="modal-lg"
+      >
+        <table className="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th>รายการ</th>
+              <th className="text-right">ราคา</th>
+              <th className="text-right">จำนวน</th>
+              <th className="text-right">ยอดรวม</th>
+            </tr>
+          </thead>
+          <tbody>
+            {billSaleDetails?.length > 0 &&
+              billSaleDetails.map((item, index) => (
+                <tr key={index}>
+                  <td>{item.product.name}</td>
+                  <td className="text-right">
+                    {parseInt(item.price).toLocaleString('th-TH')}
+                  </td>
+                  <td className="text-right">{item.qty}</td>
+                  <td className="text-right">
+                    {parseInt(item.price * item.qty).toLocaleString('th-TH')}
+                  </td>
                 </tr>
               ))}
           </tbody>
