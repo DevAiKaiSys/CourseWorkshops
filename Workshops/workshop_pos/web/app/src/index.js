@@ -12,6 +12,7 @@ import User from './pages/User';
 import Sale from './pages/Sale';
 import BillSales from './pages/BillSales';
 import SumSalePerDay from './pages/SumSalePerDay';
+import Stock from './pages/Stock';
 
 const router = createBrowserRouter([
   {
@@ -46,10 +47,10 @@ const router = createBrowserRouter([
     path: '/sumSalePerDay',
     element: <SumSalePerDay />,
   },
-  // {
-  //   path: '/sale',
-  //   element: <Sale />,
-  // },
+  {
+    path: '/stock',
+    element: <Stock />,
+  },
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
