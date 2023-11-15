@@ -167,6 +167,12 @@ function Sidebar() {
                 <p>รับสินค้าเข้า Stock</p>
               </Link>
             </li>
+            <li className="nav-item">
+              <Link to="/reportStock" className="nav-link">
+                <i className="nav-icon fas fa-file"></i>
+                <p>รายงาน Stock</p>
+              </Link>
+            </li>
             {/* <li className="nav-item">
               <a href="#" className="nav-link">
                 <i className="nav-icon fas fa-copy"></i>

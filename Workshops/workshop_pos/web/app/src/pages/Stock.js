@@ -163,7 +163,7 @@ function Stock() {
     <div>
       <Template>
         <div className="card">
-          <h5 className="card-header">รับสินค้าเข้า stock</h5>
+          <h5 className="card-header">รับสินค้าเข้า Stock</h5>
           <div className="card-body">
             <div className="row">
               <div className="col-3">

@@ -13,6 +13,7 @@ import Sale from './pages/Sale';
 import BillSales from './pages/BillSales';
 import SumSalePerDay from './pages/SumSalePerDay';
 import Stock from './pages/Stock';
+import ReportStock from './pages/ReportStock';
 
 const router = createBrowserRouter([
   {
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
   {
     path: '/stock',
     element: <Stock />,
+  },
+  {
+    path: '/reportStock',
+    element: <ReportStock />,
   },
 ]);
 
