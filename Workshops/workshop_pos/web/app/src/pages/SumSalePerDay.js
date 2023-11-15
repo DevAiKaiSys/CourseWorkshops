@@ -3,6 +3,7 @@ import Template from '../components/Template';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 import config from '../config';
+import Modal from '../components/Modal';
 
 function SumSalePerDay() {
   const [currentYear, setCurrentYear] = useState(0);
@@ -38,6 +39,7 @@ function SumSalePerDay() {
     { value: 12, label: 'ธันวาคม' },
   ]);
   const [billSales, setBillSales] = useState([]);
+  const [currntBillSale, setCurrntBillSale] = useState({});
 
   useEffect(() => {
     handleShowReport();
@@ -145,7 +147,15 @@ function SumSalePerDay() {
                   billSales.map((item, index) => (
                     <tr key={index}>
                       <td>
-                        <button className="btn btn-primary">
+                        <button
+                          className="btn btn-primary"
+                          data-toggle="modal"
+                          data-target="#modalBillSale"
+                          onClick={() => {
+                            setCurrntBillSale(item.results);
+                            // console.log(item);
+                          }}
+                        >
                           <i className="fa fa-file-alt mr-2"></i>แสดงรายการ
                         </button>
                       </td>
@@ -160,6 +170,33 @@ function SumSalePerDay() {
           </div>
         </div>
       </Template>
+
+      <Modal id="modalBillSale" title="บิลขาย">
+        <table className="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th width="180px"></th>
+              <th>เลขบิล</th>
+              <th>วันที่</th>
+            </tr>
+          </thead>
+          <tbody>
+            {currntBillSale?.length > 0 &&
+              currntBillSale.map((item, index) => (
+                <tr key={index}>
+                  <td>
+                    <button className="btn btn-primary">
+                      <i className="fa fa-file alt mr-2"></i>
+                      แสดงรายการ
+                    </button>
+                  </td>
+                  <td className="text-right">{item.id}</td>
+                  <td>{item.createdAt}</td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </Modal>
     </div>
   );
 }
