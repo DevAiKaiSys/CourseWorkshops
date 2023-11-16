@@ -10,6 +10,7 @@ function Sidebar() {
   const [packageName, setPackageName] = useState();
   const [packages, setPackages] = useState([]);
   const [totalBill, setTotalBill] = useState(0);
+  const [billAmount, setBillAmount] = useState(0);
 
   useEffect(() => {
     fetchData();
@@ -24,6 +25,7 @@ function Sidebar() {
           if (res.data.message === 'success') {
             setMemberName(res.data.result.name);
             setPackageName(res.data.result.package.name);
+            setBillAmount(res.data.result.package.bill_amount);
           }
         })
         .catch((err) => {
@@ -97,6 +99,10 @@ function Sidebar() {
     }
   };
 
+  const computePercent = (totalBill, billAmount) => {
+    return (totalBill * 100) / billAmount;
+  };
+
   return (
     <>
       <aside className="main-sidebar sidebar-dark-primary elevation-4">
@@ -140,17 +146,28 @@ function Sidebar() {
           </div>
 
           <div>
+            <div className="mx-2 text-white">
+              <div className="float-left">
+                {totalBill} / {parseInt(billAmount).toLocaleString('th-TH')}
+              </div>
+              <div className="float-right">
+                {computePercent(totalBill, billAmount)}
+              </div>
+              <div class="clearfix"></div>
+            </div>
             <div className="progress mx-2">
               <div
                 className="progress-bar"
                 role="progressbar"
-                style={{ width: '25%;' }}
-                aria-valuenow="25"
-                aria-valuemin="0"
-                aria-valuemax="100"
-              >
-                25%
-              </div>
+                // style={{ width: '25%;' }}
+                // aria-valuenow="25"
+                // aria-valuemin="0"
+                // aria-valuemax="100"
+                style={{ width: computePercent(totalBill, billAmount) + '%;' }}
+                aria-valuenow={totalBill}
+                aria-valuemin={0}
+                aria-valuemax={billAmount}
+              ></div>
             </div>
           </div>
 
@@ -919,7 +936,10 @@ function Sidebar() {
                   <div className="card-body">
                     <h3>{item.name}</h3>
                     <h4 className="mt-3 text-primary">
-                      <strong>{item.price} .-</strong> / เดือน
+                      <strong>
+                        {parseInt(item.price).toLocaleString('th-TH')} .-
+                      </strong>{' '}
+                      / เดือน
                     </h4>
                     <div className="mt-3">
                       จำนวนบิล

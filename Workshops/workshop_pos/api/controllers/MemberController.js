@@ -34,7 +34,7 @@ app.get('/member/info', isLogin, async (req, res) => {
     // console.log(memberId);
     const member = await MemberModel.findByPk(memberId, {
       attributes: ['id', 'name'],
-      include: [{ model: PackageModel, attributes: ['name'] }],
+      include: [{ model: PackageModel, attributes: ['name', 'bill_amount'] }],
     });
     res.send({ result: member, message: 'success' });
   } catch (error) {
