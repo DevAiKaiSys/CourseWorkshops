@@ -2,6 +2,8 @@ const express = require('express');
 const app = express();
 const PackageModel = require('../models/PackageModel');
 const MemberModel = require('../models/MemberModel');
+const { isLogin, getMemberId } = require('./Service');
+const BillSaleModel = require('../models/BillSaleModel');
 
 app.get('/package/list', async (req, res) => {
   //   res.send('test');
@@ -17,6 +19,20 @@ app.post('/package/memberRegister', async (req, res) => {
   try {
     const result = await MemberModel.create(req.body);
     res.send({ message: 'success', result: result });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+});
+
+app.get('/package/countBill', isLogin, async (req, res) => {
+  try {
+    const results = await BillSaleModel.findAll({
+      where: {
+        userId: getMemberId(req),
+      },
+    });
+
+    res.status(200).send({ totalBill: results.length });
   } catch (error) {
     res.status(500).send({ message: error.message });
   }

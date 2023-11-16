@@ -9,9 +9,11 @@ function Sidebar() {
   const [memberName, setMemberName] = useState();
   const [packageName, setPackageName] = useState();
   const [packages, setPackages] = useState([]);
+  const [totalBill, setTotalBill] = useState(0);
 
   useEffect(() => {
     fetchData();
+    fetchDataTotalBill();
   }, []);
 
   const fetchData = async () => {
@@ -57,6 +59,44 @@ function Sidebar() {
     }
   };
 
+  const fetchDataTotalBill = async () => {
+    try {
+      axios
+        .get(`${config.api_path}/package/countBill`, config.headers())
+        .then((res) => {
+          if (res.status === 200) {
+            setTotalBill(res.data.totalBill);
+          }
+        })
+        .catch((err) => {
+          throw err.response.data;
+        });
+    } catch (error) {
+      Swal.fire({
+        title: 'error',
+        text: error.message,
+        icon: 'error',
+      });
+    }
+  };
+  const readerButton = (item) => {
+    if (packageName == item.name) {
+      return (
+        <button className="btn btn-primary btn-lg" disabled>
+          <i className="fa fa-check mr-2"></i>
+          เลือกแพคเกจ
+        </button>
+      );
+    } else {
+      return (
+        <button className="btn btn-primary btn-lg">
+          <i className="fa fa-check mr-2"></i>
+          เลือกแพคเกจ
+        </button>
+      );
+    }
+  };
+
   return (
     <>
       <aside className="main-sidebar sidebar-dark-primary elevation-4">
@@ -95,6 +135,21 @@ function Sidebar() {
                   <i className="fa fa-arrow-up mr-2"></i>
                   Upgrade
                 </button>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div className="progress mx-2">
+              <div
+                className="progress-bar"
+                role="progressbar"
+                style={{ width: '25%;' }}
+                aria-valuenow="25"
+                aria-valuemin="0"
+                aria-valuemax="100"
+              >
+                25%
               </div>
             </div>
           </div>
@@ -876,10 +931,11 @@ function Sidebar() {
                       ต่อเดือน
                     </div>
                     <div className="mt-3 text-center">
-                      <button className="btn btn-primary btn-lg">
+                      {/* <button className="btn btn-primary btn-lg">
                         <i className="fa fa-check mr-2"></i>
                         เลือกแพคเกจ
-                      </button>
+                      </button> */}
+                      {readerButton(item)}
                     </div>
                   </div>
                 </div>
