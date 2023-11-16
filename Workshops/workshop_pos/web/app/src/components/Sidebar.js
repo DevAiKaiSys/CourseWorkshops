@@ -3,10 +3,12 @@ import React, { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import config from '../config';
 import { Link } from 'react-router-dom';
+import Modal from './Modal';
 
 function Sidebar() {
   const [memberName, setMemberName] = useState();
   const [packageName, setPackageName] = useState();
+  const [packages, setPackages] = useState([]);
 
   useEffect(() => {
     fetchData();
@@ -34,37 +36,70 @@ function Sidebar() {
     }
   };
 
-  return (
-    <aside className="main-sidebar sidebar-dark-primary elevation-4">
-      <a href="index3.html" className="brand-link">
-        <img
-          src="dist/img/AdminLTELogo.png"
-          alt="AdminLTE Logo"
-          className="brand-image img-circle elevation-3"
-          style={{ opacity: 0.8 }}
-        />
-        <span className="brand-text font-weight-light">POS on Cloud</span>
-      </a>
+  const fetchPackage = async () => {
+    try {
+      axios
+        .get(`${config.api_path}/package/list`)
+        .then((res) => {
+          if (res.status === 200) {
+            setPackages(res.data.results);
+          }
+        })
+        .catch((err) => {
+          throw err.response.data;
+        });
+    } catch (error) {
+      Swal.fire({
+        title: 'error',
+        text: error.message,
+        icon: 'error',
+      });
+    }
+  };
 
-      <div className="sidebar">
-        <div className="user-panel mt-3 pb-3 mb-3 d-flex">
-          <div className="image">
-            <img
-              src="dist/img/user2-160x160.jpg"
-              className="img-circle elevation-2"
-              alt="User Image"
-            />
-          </div>
-          <div className="info text-white">
-            {/* <a href="#" className="d-block">
+  return (
+    <>
+      <aside className="main-sidebar sidebar-dark-primary elevation-4">
+        <a href="index3.html" className="brand-link">
+          <img
+            src="dist/img/AdminLTELogo.png"
+            alt="AdminLTE Logo"
+            className="brand-image img-circle elevation-3"
+            style={{ opacity: 0.8 }}
+          />
+          <span className="brand-text font-weight-light">POS on Cloud</span>
+        </a>
+
+        <div className="sidebar">
+          <div className="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div className="image">
+              <img
+                src="dist/img/user2-160x160.jpg"
+                className="img-circle elevation-2"
+                alt="User Image"
+              />
+            </div>
+            <div className="info text-white">
+              {/* <a href="#" className="d-block">
               Alexander Pierce
             </a> */}
-            <div>{memberName}</div>
-            <div>Package: {packageName}</div>
+              <div>{memberName}</div>
+              <div>Package: {packageName}</div>
+              <div className="d-grid">
+                <button
+                  className="btn btn-warning mt-2"
+                  data-toggle="modal"
+                  data-target="#modalPackage"
+                  onClick={fetchPackage}
+                >
+                  <i className="fa fa-arrow-up mr-2"></i>
+                  Upgrade
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
 
-        {/* <div className="form-inline">
+          {/* <div className="form-inline">
           <div className="input-group" data-widget="sidebar-search">
             <input
               className="form-control form-control-sidebar"
@@ -80,14 +115,14 @@ function Sidebar() {
           </div>
         </div> */}
 
-        <nav className="mt-2">
-          <ul
-            className="nav nav-pills nav-sidebar flex-column"
-            data-widget="treeview"
-            role="menu"
-            data-accordion="false"
-          >
-            {/* <li className="nav-item menu-open">
+          <nav className="mt-2">
+            <ul
+              className="nav nav-pills nav-sidebar flex-column"
+              data-widget="treeview"
+              role="menu"
+              data-accordion="false"
+            >
+              {/* <li className="nav-item menu-open">
               <a href="#" className="nav-link active">
                 <i className="nav-icon fas fa-tachometer-alt"></i>
                 <p>
@@ -116,7 +151,7 @@ function Sidebar() {
                 </li>
               </ul>
             </li> */}
-            {/* <li className="nav-item">
+              {/* <li className="nav-item">
               <a href="pages/widgets.html" className="nav-link">
                 <i className="nav-icon fas fa-th"></i>
                 <p>
@@ -125,55 +160,55 @@ function Sidebar() {
                 </p>
               </a>
             </li> */}
-            <li className="nav-item">
-              <Link to="/dashboard" className="nav-link">
-                <i className="nav-icon fas fa-th"></i>
-                <p>Dashboard</p>
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/sale" className="nav-link">
-                <i className="nav-icon fas fa-dollar-sign"></i>
-                <p>ขายสินค้า</p>
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/product" className="nav-link">
-                <i className="nav-icon fas fa-box"></i>
-                <p>สินค้า</p>
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/user" className="nav-link">
-                <i className="nav-icon fas fa-users"></i>
-                <p>ผู้ใช้งานระบบ</p>
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/sumSalePerDay" className="nav-link">
-                <i className="nav-icon fas fa-file-alt"></i>
-                <p>สรุปยอดขายรายวัน</p>
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/billSales" className="nav-link">
-                <i className="nav-icon fas fa-list-alt"></i>
-                <p>รายงานบิลขาย</p>
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/stock" className="nav-link">
-                <i className="nav-icon fas fa-home"></i>
-                <p>รับสินค้าเข้า Stock</p>
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/reportStock" className="nav-link">
-                <i className="nav-icon fas fa-file"></i>
-                <p>รายงาน Stock</p>
-              </Link>
-            </li>
-            {/* <li className="nav-item">
+              <li className="nav-item">
+                <Link to="/dashboard" className="nav-link">
+                  <i className="nav-icon fas fa-th"></i>
+                  <p>Dashboard</p>
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/sale" className="nav-link">
+                  <i className="nav-icon fas fa-dollar-sign"></i>
+                  <p>ขายสินค้า</p>
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/product" className="nav-link">
+                  <i className="nav-icon fas fa-box"></i>
+                  <p>สินค้า</p>
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/user" className="nav-link">
+                  <i className="nav-icon fas fa-users"></i>
+                  <p>ผู้ใช้งานระบบ</p>
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/sumSalePerDay" className="nav-link">
+                  <i className="nav-icon fas fa-file-alt"></i>
+                  <p>สรุปยอดขายรายวัน</p>
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/billSales" className="nav-link">
+                  <i className="nav-icon fas fa-list-alt"></i>
+                  <p>รายงานบิลขาย</p>
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/stock" className="nav-link">
+                  <i className="nav-icon fas fa-home"></i>
+                  <p>รับสินค้าเข้า Stock</p>
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/reportStock" className="nav-link">
+                  <i className="nav-icon fas fa-file"></i>
+                  <p>รายงาน Stock</p>
+                </Link>
+              </li>
+              {/* <li className="nav-item">
               <a href="#" className="nav-link">
                 <i className="nav-icon fas fa-copy"></i>
                 <p>
@@ -810,10 +845,49 @@ function Sidebar() {
                 <p>Informational</p>
               </a>
             </li> */}
-          </ul>
-        </nav>
-      </div>
-    </aside>
+            </ul>
+          </nav>
+        </div>
+      </aside>
+
+      <Modal
+        id="modalPackage"
+        title="เลือกแพคเกจที่ต้องการ"
+        modalSize="modal-lg"
+      >
+        <div className="row">
+          {packages?.length > 0 &&
+            packages.map((item, index) => (
+              <div className="col-4" key={index}>
+                <div className="card">
+                  <h5 className="card-header"></h5>
+                  <div className="card-body">
+                    <h3>{item.name}</h3>
+                    <h4 className="mt-3 text-primary">
+                      <strong>{item.price} .-</strong> / เดือน
+                    </h4>
+                    <div className="mt-3">
+                      จำนวนบิล
+                      <span className="text-danger mx-2">
+                        <strong>
+                          {parseInt(item.bill_amount).toLocaleString('th-TH')}
+                        </strong>
+                      </span>
+                      ต่อเดือน
+                    </div>
+                    <div className="mt-3 text-center">
+                      <button className="btn btn-primary btn-lg">
+                        <i className="fa fa-check mr-2"></i>
+                        เลือกแพคเกจ
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+        </div>
+      </Modal>
+    </>
   );
 }
 
