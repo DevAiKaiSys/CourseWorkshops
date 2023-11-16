@@ -9,7 +9,7 @@ function Sidebar() {
   const [memberName, setMemberName] = useState();
   const [packageName, setPackageName] = useState();
   const [packages, setPackages] = useState([]);
-  const [totalBill, setTotalBill] = useState(0);
+  const [totalBill, setTotalBill] = useState(100);
   const [billAmount, setBillAmount] = useState(0);
 
   useEffect(() => {
@@ -153,7 +153,7 @@ function Sidebar() {
               <div className="float-right">
                 {computePercent(totalBill, billAmount)}
               </div>
-              <div class="clearfix"></div>
+              <div className="clearfix"></div>
             </div>
             <div className="progress mx-2">
               <div
@@ -163,7 +163,7 @@ function Sidebar() {
                 // aria-valuenow="25"
                 // aria-valuemin="0"
                 // aria-valuemax="100"
-                style={{ width: computePercent(totalBill, billAmount) + '%;' }}
+                style={{ width: computePercent(totalBill, billAmount) + '%' }}
                 aria-valuenow={totalBill}
                 aria-valuemin={0}
                 aria-valuemax={billAmount}
