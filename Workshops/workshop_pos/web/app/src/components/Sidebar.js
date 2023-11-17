@@ -11,6 +11,8 @@ function Sidebar() {
   const [packages, setPackages] = useState([]);
   const [totalBill, setTotalBill] = useState(100);
   const [billAmount, setBillAmount] = useState(0);
+  const [banks, setBanks] = useState([]);
+  const [choosePackage, setChoosePackage] = useState({});
 
   useEffect(() => {
     fetchData();
@@ -91,11 +93,44 @@ function Sidebar() {
       );
     } else {
       return (
-        <button className="btn btn-primary btn-lg">
+        <button
+          className="btn btn-primary btn-lg"
+          data-toggle="modal"
+          data-target="#modalBank"
+          onClick={() => handleChoosePackage(item)}
+        >
           <i className="fa fa-check mr-2"></i>
           เลือกแพคเกจ
         </button>
       );
+    }
+  };
+
+  const handleChoosePackage = (item) => {
+    setChoosePackage(item);
+    fetchDataBank();
+  };
+
+  const fetchDataBank = async () => {
+    if (!(banks?.length > 0)) {
+      try {
+        axios
+          .get(`${config.api_path}/bank/list`, config.headers())
+          .then((res) => {
+            if (res.status === 200) {
+              setBanks(res.data.results);
+            }
+          })
+          .catch((err) => {
+            throw err.response.data;
+          });
+      } catch (error) {
+        Swal.fire({
+          title: 'error',
+          text: error.message,
+          icon: 'error',
+        });
+      }
     }
   };
 
@@ -961,6 +996,52 @@ function Sidebar() {
                 </div>
               </div>
             ))}
+        </div>
+      </Modal>
+
+      <Modal id="modalBank" title="ช่องทางชำระเงิน" modalSize="modal-lg">
+        <h4 className="text-secondary">
+          Package ที่เลือกคือ{' '}
+          <span className="text-primary">{choosePackage.name}</span>
+        </h4>
+        <h5 className="mt-3">
+          ราคา{' '}
+          <span className="text-danger">
+            {parseInt(choosePackage.price).toLocaleString('th-TH')} บาท/เดือน
+          </span>
+        </h5>
+        <table className="mt-3 table table-bordered table-striped mt-3">
+          <thead>
+            <tr>
+              <th>ธนาคาร</th>
+              <th>เลขบัญชี</th>
+              <th>เจ้าของบัญชี</th>
+              <th>สาขา</th>
+            </tr>
+          </thead>
+          <tbody>
+            {banks?.length > 0 &&
+              banks.map((item) => (
+                <tr>
+                  <td>{item.bankType}</td>
+                  <td>{item.bankCode}</td>
+                  <td>{item.bankName}</td>
+                  <td>{item.bankBranch}</td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+
+        <div className="alert mt-3 alert-warning">
+          <i className="fa fa-info-circle mr-2"></i>
+          เมื่อโอนชำระเงินแล้ว ให้แจ้งที่ไลน์ ID = aikaisys
+        </div>
+
+        <div className="mt-3 text-center">
+          <button className="btn btn-primary">
+            <i className="fa fa-check mr-2"></i>
+            ยืนยันการสมัคร
+          </button>
         </div>
       </Modal>
     </>
