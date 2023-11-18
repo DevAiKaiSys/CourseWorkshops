@@ -1,15 +1,21 @@
 const express = require('express');
 const app = express();
+const jwt = require('jsonwebtoken');
 const AdminModel = require('../models/AdminModel');
 
-app.get('/user/list', async (req, res) => {
+app.post('/admin/signin', async (req, res) => {
   try {
-    const results = await AdminModel.findAll({
-      where: { userId: getMemberId(req) },
-      attributes: ['id', 'level', 'name', 'usr'],
-      order: [['id', 'DESC']],
+    const admin = await AdminModel.findOne({
+      where: {
+        usr: req.body.usr,
+        pwd: req.body.pwd,
+      },
     });
-    res.status(200).send({ results: results });
+    if (admin) {
+      let token = jwt.sign({ id: admin.id }, process.env.secret);
+      return res.send({ token: token, message: 'success' });
+    }
+    res.status(401).send({ message: 'not found' });
   } catch (error) {
     res.status(500).send({ message: error.message });
   }
