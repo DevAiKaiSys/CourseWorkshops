@@ -138,6 +138,50 @@ function Sidebar() {
     return (totalBill * 100) / billAmount;
   };
 
+  const handleChangePackage = async () => {
+    try {
+      axios
+        .get(
+          `${config.api_path}/package/changePackage/${choosePackage.id}`,
+          config.headers()
+        )
+        .then((res) => {
+          if (res.status === 200) {
+            Swal.fire({
+              title: 'ส่งข้อมูล',
+              text: 'ส่งข้อมูลการขอเปลี่ยน แพคเกจ ของคุณแล้ว',
+              icon: 'success',
+              timer: 2000,
+            });
+
+            handleCloseModal();
+          }
+        })
+        .catch((err) => {
+          throw err.response.data;
+        });
+    } catch (error) {
+      Swal.fire({
+        title: 'error',
+        text: error.message,
+        icon: 'error',
+      });
+    }
+  };
+
+  const handleCloseModal = () => {
+    const modalElements = document.querySelectorAll('.modal.show');
+
+    modalElements.forEach((element) => {
+      const elementsWithIdClose = element.querySelectorAll('#btnModalClose');
+
+      // Step 3: Loop through all elements and child elements with id="btnModalClose"
+      elementsWithIdClose.forEach((element) => {
+        element.click();
+      });
+    });
+  };
+
   return (
     <>
       <aside className="main-sidebar sidebar-dark-primary elevation-4">
@@ -1021,8 +1065,8 @@ function Sidebar() {
           </thead>
           <tbody>
             {banks?.length > 0 &&
-              banks.map((item) => (
-                <tr>
+              banks.map((item, index) => (
+                <tr key={index}>
                   <td>{item.bankType}</td>
                   <td>{item.bankCode}</td>
                   <td>{item.bankName}</td>
@@ -1038,7 +1082,7 @@ function Sidebar() {
         </div>
 
         <div className="mt-3 text-center">
-          <button className="btn btn-primary">
+          <button className="btn btn-primary" onClick={handleChangePackage}>
             <i className="fa fa-check mr-2"></i>
             ยืนยันการสมัคร
           </button>

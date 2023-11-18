@@ -5,6 +5,8 @@ const MemberModel = require('../models/MemberModel');
 const { isLogin, getMemberId } = require('./Service');
 const BillSaleModel = require('../models/BillSaleModel');
 const { Op, Sequelize } = require('sequelize');
+const ChangePackageModel = require('../models/ChangePackageModel');
+const { get } = require('./BankController');
 // const BankModel = require('../models/BankModel');
 
 app.get('/package/list', async (req, res) => {
@@ -64,6 +66,19 @@ app.get('/package/countBill', isLogin, async (req, res) => {
     });
 
     res.status(200).send({ totalBill: results.length });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+});
+
+app.get('/package/changePackage/:id', isLogin, async (req, res) => {
+  try {
+    const payload = {
+      userId: getMemberId(req),
+      packageId: req.params.id,
+    };
+    const result = await ChangePackageModel.create(payload);
+    res.status(200).send({ result: result });
   } catch (error) {
     res.status(500).send({ message: error.message });
   }
