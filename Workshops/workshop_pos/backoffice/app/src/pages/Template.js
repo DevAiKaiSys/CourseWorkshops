@@ -48,12 +48,12 @@ function Template(props) {
 
   return (
     <div>
-      <div className="row">
-        <div className="col-xxl-2 col-xl-4 bg-dark vh-100 px-4 pt-2">
-          <div className="text-white">
-            <div>
+      <div className="d-flex">
+        <div className="bg-dark vh-100 px-3 pt-2" style={{ width: '350px' }}>
+          <div className="text-white ms-2">
+            <h5 className="text-warning">
               {admin.name} : {admin.level}
-            </div>
+            </h5>
             <div className="mt-3">
               <button
                 className="btn btn-outline-warning btn-lg"
@@ -62,60 +62,61 @@ function Template(props) {
                 Sign Out
               </button>
             </div>
+            <hr className="mt-4" />
           </div>
-          <div className="d-grid gap-3 mt-5">
+          <div className="d-grid gap-3 mt-2">
             <Link
               to="/home"
-              className="btn btn-default text-white btn-lg text-start my-menu"
+              className="btn btn-default text-white text-start my-menu"
             >
               <i className="fa fa-dashboard me-3"></i>
               Dashboard
             </Link>
             <Link
               to="/reportMember"
-              className="btn btn-default text-white btn-lg text-start my-menu"
+              className="btn btn-default text-white text-start my-menu"
             >
               <i className="fa fa-file-alt me-3"></i>
               รายงานคนที่สมัครใช้บริการ
             </Link>
             <Link
               to="/"
-              className="btn btn-default text-white btn-lg text-start my-menu"
+              className="btn btn-default text-white text-start my-menu"
             >
               <i className="fa fa-file-alt me-3"></i>
               รายงานคนที่ขอเปลี่ยน แพคเกจ
             </Link>
             <Link
               to="/"
-              className="btn btn-default text-white btn-lg text-start my-menu"
+              className="btn btn-default text-white text-start my-menu"
             >
               <i className="fa fa-file-alt me-3"></i>
               รายงานรายได้รายวัน
             </Link>
             <Link
               to="/"
-              className="btn btn-default text-white btn-lg text-start my-menu"
+              className="btn btn-default text-white text-start my-menu"
             >
               <i className="fa fa-file-alt me-3"></i>
               รายงานรายได้รายเดือน
             </Link>
             <Link
               to="/"
-              className="btn btn-default text-white btn-lg text-start my-menu"
+              className="btn btn-default text-white text-start my-menu"
             >
               <i className="fa fa-file-alt me-3"></i>
               รายงานรายได้รายปี
             </Link>
             <Link
               to="/"
-              className="btn btn-default text-white btn-lg text-start my-menu"
+              className="btn btn-default text-white text-start my-menu"
             >
               <i className="fa fa-user me-3"></i>
               ผู้ใช้ระบบ
             </Link>
           </div>
         </div>
-        <div className="col-xxl-10 col-xl-8">{props.children}</div>
+        <div className="p-3 w-100">{props.children}</div>
       </div>
     </div>
   );
