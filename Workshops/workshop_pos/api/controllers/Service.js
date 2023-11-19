@@ -45,6 +45,14 @@ const Service = {
     const payload = jwt.decode(token);
     return payload.id;
   },
+
+  getAdminId: (req) => {
+    const jwt = require('jsonwebtoken');
+
+    const token = getToken(req);
+    const payload = jwt.decode(token);
+    return payload.id;
+  },
 };
 
 // module.exports = { getToken, isLogin, getMemberId };

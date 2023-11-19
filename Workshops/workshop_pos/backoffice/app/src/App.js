@@ -10,9 +10,7 @@ function App() {
 
   const navigate = useNavigate();
 
-  const handleSignIn = async (e) => {
-    e.preventDefault();
-
+  const handleSignIn = async () => {
     try {
       const payload = {
         usr: usr,
@@ -37,7 +35,7 @@ function App() {
       //   throw err.response;
       // });
     } catch (error) {
-      if (error.response.status == 401) {
+      if (error.response.status === 401) {
         Swal.fire({
           title: 'Sign In',
           text: 'username หรือ password ไม่ถูกต้อง',
@@ -60,9 +58,7 @@ function App() {
         <h5 className="card-header">Sign in to BackOffice</h5>
         <div className="card-body">
           <div className="row mb-3">
-            <label for="inputEmail3" className="col-sm-2 col-form-label">
-              Username
-            </label>
+            <label className="col-sm-2 col-form-label">Username</label>
             <div className="col-sm-10">
               <input
                 type="email"
@@ -73,9 +69,7 @@ function App() {
             </div>
           </div>
           <div className="row mb-3">
-            <label for="inputPassword3" className="col-sm-2 col-form-label">
-              Password
-            </label>
+            <label className="col-sm-2 col-form-label">Password</label>
             <div className="col-sm-10">
               <input
                 type="password"
