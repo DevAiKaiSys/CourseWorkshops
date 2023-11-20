@@ -57,4 +57,24 @@ app.put('/member/changeProfile', isLogin, async (req, res) => {
   }
 });
 
+app.get('/member/list', isLogin, async (req, res) => {
+  try {
+    MemberModel.belongsTo(PackageModel);
+
+    const results = await MemberModel.findAll({
+      order: [['id', 'DESC']],
+      attributes: ['id', 'name', 'phone', 'createdAt'],
+      include: [
+        {
+          model: PackageModel,
+          // attributes: ['name', 'bill_amount']
+        },
+      ],
+    });
+    res.send({ results: results, message: 'success' });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+});
+
 module.exports = app;

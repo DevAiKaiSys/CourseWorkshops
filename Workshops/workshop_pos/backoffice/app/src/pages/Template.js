@@ -67,49 +67,49 @@ function Template(props) {
           <div className="d-grid gap-3 mt-2">
             <Link
               to="/home"
-              className="btn btn-default text-white text-start my-menu"
+              className="btn btn-default text-secondary text-start my-menu"
             >
               <i className="fa fa-dashboard me-3"></i>
               Dashboard
             </Link>
             <Link
               to="/reportMember"
-              className="btn btn-default text-white text-start my-menu"
+              className="btn btn-default text-secondary text-start my-menu"
             >
               <i className="fa fa-file-alt me-3"></i>
               รายงานคนที่สมัครใช้บริการ
             </Link>
             <Link
               to="/"
-              className="btn btn-default text-white text-start my-menu"
+              className="btn btn-default text-secondary text-start my-menu"
             >
               <i className="fa fa-file-alt me-3"></i>
               รายงานคนที่ขอเปลี่ยน แพคเกจ
             </Link>
             <Link
               to="/"
-              className="btn btn-default text-white text-start my-menu"
+              className="btn btn-default text-secondary text-start my-menu"
             >
               <i className="fa fa-file-alt me-3"></i>
               รายงานรายได้รายวัน
             </Link>
             <Link
               to="/"
-              className="btn btn-default text-white text-start my-menu"
+              className="btn btn-default text-secondary text-start my-menu"
             >
               <i className="fa fa-file-alt me-3"></i>
               รายงานรายได้รายเดือน
             </Link>
             <Link
               to="/"
-              className="btn btn-default text-white text-start my-menu"
+              className="btn btn-default text-secondary text-start my-menu"
             >
               <i className="fa fa-file-alt me-3"></i>
               รายงานรายได้รายปี
             </Link>
             <Link
               to="/"
-              className="btn btn-default text-white text-start my-menu"
+              className="btn btn-default text-secondary text-start my-menu"
             >
               <i className="fa fa-user me-3"></i>
               ผู้ใช้ระบบ
