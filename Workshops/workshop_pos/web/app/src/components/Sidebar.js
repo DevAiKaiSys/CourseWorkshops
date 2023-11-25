@@ -1,11 +1,23 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from 'react';
 import Swal from 'sweetalert2';
 import config from '../config';
 import { Link } from 'react-router-dom';
 import Modal from './Modal';
 
-function Sidebar() {
+// function Sidebar() {
+const Sidebar = forwardRef((props, sidebarRef) => {
+  useImperativeHandle(sidebarRef, () => ({
+    refreshCountBill() {
+      fetchDataTotalBill();
+    },
+  }));
+
   const [memberName, setMemberName] = useState();
   const [packageName, setPackageName] = useState();
   const [packages, setPackages] = useState([]);
@@ -1090,6 +1102,7 @@ function Sidebar() {
       </Modal>
     </>
   );
-}
+});
+// }
 
 export default Sidebar;

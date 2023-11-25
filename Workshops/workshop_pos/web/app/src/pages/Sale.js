@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Template from '../components/Template';
 import axios from 'axios';
 import Swal from 'sweetalert2';
@@ -16,6 +16,8 @@ const Sale = () => {
   const [lastBill, setLastBill] = useState({});
   const [billToday, setBillToday] = useState([]);
   const [selectedBill, setSelectedBill] = useState({});
+
+  const saleRef = useRef();
 
   useEffect(() => {
     fetchData();
@@ -216,6 +218,8 @@ const Sale = () => {
                 fetchBillSaleDetail();
 
                 handleCloseModal();
+
+                saleRef.current?.refreshCountBill();
               }
             });
         } catch (error) {
@@ -276,7 +280,7 @@ const Sale = () => {
 
   return (
     <div>
-      <Template>
+      <Template ref={saleRef}>
         <div className="card">
           <h5 className="card-header">
             <div className="float-left">ขายสินค้า</div>

@@ -1,8 +1,18 @@
-import React from 'react';
+import React, { forwardRef, useImperativeHandle, useRef } from 'react';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 
-function Template(props) {
+// function Template(props) {
+const Template = forwardRef((props, ref) => {
+  const templateRef = useRef();
+  useImperativeHandle(ref, () => ({
+    refreshCountBill() {
+      if (templateRef.current) {
+        templateRef.current.refreshCountBill();
+      }
+    },
+  }));
+
   return (
     <div>
       <div className="wrapper">
@@ -18,7 +28,7 @@ function Template(props) {
 
         <Navbar />
 
-        <Sidebar />
+        <Sidebar ref={templateRef} />
 
         <div className="content-wrapper pt-3">
           <section className="content">{props.children}</section>
@@ -864,6 +874,7 @@ function Template(props) {
       </div>
     </div>
   );
-}
+});
+// }
 
 export default Template;
