@@ -22,6 +22,23 @@ function ReportChangePackage() {
     }
     return arr;
   });
+  const [remark, setRemark] = useState('');
+  const [payDate, setPayDate] = useState(() => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = (today.getMonth() + 1).toString().padStart(2, '0');
+    const day = today.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  });
+  const [payHour, setPayHour] = useState(() => {
+    const d = new Date();
+    return d.getHours();
+  });
+  const [payMinute, setPayMinute] = useState(() => {
+    const d = new Date();
+    return d.getMinutes();
+  });
+  const [changePackage, setChangePackage] = useState({});
 
   useEffect(() => {
     fetchData();
@@ -44,6 +61,57 @@ function ReportChangePackage() {
         timer: 2000,
       });
     }
+  };
+
+  const handleSave = async () => {
+    try {
+      let payload = {
+        payDate: payDate,
+        payHour: payHour,
+        payMinute: payMinute,
+        remark: remark,
+        id: changePackage.id,
+      };
+      await axios
+        .post(
+          `${config.api_path}/changePackage/saveChange`,
+          payload,
+          config.headers()
+        )
+        .then((res) => {
+          if (res.status === 200) {
+            Swal.fire({
+              title: 'บันทึก',
+              text: 'บันทึกข้อมูลแล้ว',
+              icon: 'success',
+              timer: 2000,
+            });
+
+            fetchData();
+            handleCloseModal();
+          }
+        });
+    } catch (error) {
+      Swal.fire({
+        title: 'error',
+        text: error.message,
+        icon: 'error',
+        timer: 2000,
+      });
+    }
+  };
+
+  const handleCloseModal = () => {
+    const modalElements = document.querySelectorAll('.modal.show');
+
+    modalElements.forEach((element) => {
+      const elementsWithIdClose = element.querySelectorAll('#btnModalClose');
+
+      // Step 3: Loop through all elements and child elements with id="btnModalClose"
+      elementsWithIdClose.forEach((element) => {
+        element.click();
+      });
+    });
   };
 
   return (
@@ -79,6 +147,7 @@ function ReportChangePackage() {
                           className="btn btn-success"
                           data-bs-toggle="modal"
                           data-bs-target="#modalPay"
+                          onClick={() => setChangePackage(item)}
                         >
                           <i className="fa fa-check me-2"></i>ได้รับเงินแล้ว
                         </button>
@@ -94,7 +163,12 @@ function ReportChangePackage() {
       <Modal id="modalPay" title="">
         <div>
           <label>วันที่ชำระเงิน</label>
-          <input type="date" className="form-control" />
+          <input
+            type="date"
+            className="form-control"
+            value={payDate}
+            onChange={(e) => setPayDate(e.target.value)}
+          />
         </div>
         <div className="mt-3">
           <label>เวลา่</label>
@@ -102,9 +176,17 @@ function ReportChangePackage() {
             <div className="col-6">
               <div className="input-group">
                 <div className="input-group-text">ชั่วโมง</div>
-                <select name="" id="" className="form-control">
+                <select
+                  name=""
+                  id=""
+                  className="form-control"
+                  value={payHour}
+                  onChange={(e) => setPayHour(e.target.value)}
+                >
                   {hour.map((item) => (
-                    <option value={item}>{item}</option>
+                    <option value={item} key={item}>
+                      {item}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -112,9 +194,17 @@ function ReportChangePackage() {
             <div className="col-6">
               <div className="input-group">
                 <div className="input-group-text">นาที</div>
-                <select name="" id="" className="form-control">
+                <select
+                  name=""
+                  id=""
+                  className="form-control"
+                  value={payMinute}
+                  onChange={(e) => setPayMinute(e.target.value)}
+                >
                   {minute.map((item) => (
-                    <option value={item}>{item}</option>
+                    <option value={item} key={item}>
+                      {item}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -123,10 +213,14 @@ function ReportChangePackage() {
         </div>
         <div className="mt-3">
           <label>หมายเหตุ</label>
-          <input type="text" className="form-control" />
+          <input
+            type="text"
+            className="form-control"
+            onChange={(e) => setRemark(e.target.value)}
+          />
         </div>
         <div className="mt-3">
-          <button className="btn btn-primary">
+          <button className="btn btn-primary" onClick={handleSave}>
             <i className="fa fa-check me-2"></i>บันทึก
           </button>
         </div>

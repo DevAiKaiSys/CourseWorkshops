@@ -31,4 +31,15 @@ app.get('/changePackage/list', isLogin, async (req, res) => {
   }
 });
 
+app.post('/changePackage/saveChange', isLogin, async (req, res) => {
+  try {
+    await ChangePackageModel.update(req.body, {
+      where: { id: req.body.id },
+    });
+    res.status(200).send({ message: 'success' });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+});
+
 module.exports = app;
