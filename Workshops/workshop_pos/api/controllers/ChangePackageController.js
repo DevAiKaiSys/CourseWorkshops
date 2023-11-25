@@ -15,6 +15,9 @@ app.get('/changePackage/list', isLogin, async (req, res) => {
     });
 
     const results = await ChangePackageModel.findAll({
+      where: {
+        payDate: null,
+      },
       order: [['id', 'DESC']],
       include: [
         {
