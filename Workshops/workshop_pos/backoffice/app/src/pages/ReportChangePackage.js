@@ -4,9 +4,24 @@ import axios from 'axios';
 import config from '../config';
 import Swal from 'sweetalert2';
 import dayjs from 'dayjs';
+import Modal from '../components/modal';
 
 function ReportChangePackage() {
   const [members, setMembers] = useState([]);
+  const [hour, setHour] = useState(() => {
+    let arr = [];
+    for (let i = 0; i < 24; i++) {
+      arr.push(i);
+    }
+    return arr;
+  });
+  const [minute, setMinute] = useState(() => {
+    let arr = [];
+    for (let i = 0; i < 60; i++) {
+      arr.push(i);
+    }
+    return arr;
+  });
 
   useEffect(() => {
     fetchData();
@@ -60,7 +75,11 @@ function ReportChangePackage() {
                       <td>{item.package.name}</td>
                       <td>{item.package.price}</td>
                       <td>
-                        <button className="btn btn-success">
+                        <button
+                          className="btn btn-success"
+                          data-bs-toggle="modal"
+                          data-bs-target="#modalPay"
+                        >
                           <i className="fa fa-check me-2"></i>ได้รับเงินแล้ว
                         </button>
                       </td>
@@ -71,6 +90,47 @@ function ReportChangePackage() {
           </div>
         </div>
       </Template>
+
+      <Modal id="modalPay" title="">
+        <div>
+          <label>วันที่ชำระเงิน</label>
+          <input type="date" className="form-control" />
+        </div>
+        <div className="mt-3">
+          <label>เวลา่</label>
+          <div className="row">
+            <div className="col-6">
+              <div className="input-group">
+                <div className="input-group-text">ชั่วโมง</div>
+                <select name="" id="" className="form-control">
+                  {hour.map((item) => (
+                    <option value={item}>{item}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <div className="col-6">
+              <div className="input-group">
+                <div className="input-group-text">นาที</div>
+                <select name="" id="" className="form-control">
+                  {minute.map((item) => (
+                    <option value={item}>{item}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="mt-3">
+          <label>หมายเหตุ</label>
+          <input type="text" className="form-control" />
+        </div>
+        <div className="mt-3">
+          <button className="btn btn-primary">
+            <i className="fa fa-check me-2"></i>บันทึก
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 }
