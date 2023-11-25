@@ -80,7 +80,7 @@ function Template(props) {
               รายงานคนที่สมัครใช้บริการ
             </Link>
             <Link
-              to="/"
+              to="/reportChangePackage"
               className="btn btn-default text-secondary text-start my-menu"
             >
               <i className="fa fa-file-alt me-3"></i>

@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Home from './pages/Home';
 import ReportMember from './pages/ReportMember';
+import ReportChangePackage from './pages/ReportChangePackage';
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
   {
     path: '/reportMember',
     element: <ReportMember />,
+  },
+  {
+    path: '/reportChangePackage',
+    element: <ReportChangePackage />,
   },
 ]);
 

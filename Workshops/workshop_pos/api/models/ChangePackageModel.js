@@ -10,8 +10,17 @@ const ChangePackageModel = sequelize.define('changePackage', {
   packageId: {
     type: DataTypes.BIGINT,
   },
-  userId: {
+  memberId: {
     type: DataTypes.BIGINT,
+  },
+  payDate: {
+    type: DataTypes.DATE,
+  },
+  payMinute: {
+    type: DataTypes.BIGINT,
+  },
+  payRemark: {
+    type: DataTypes.STRING,
   },
 });
 
