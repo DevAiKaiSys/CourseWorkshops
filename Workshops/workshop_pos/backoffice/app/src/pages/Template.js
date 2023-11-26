@@ -49,7 +49,10 @@ function Template(props) {
   return (
     <div>
       <div className="d-flex">
-        <div className="bg-dark vh-100 px-3 pt-2" style={{ width: '350px' }}>
+        <div
+          className="bg-dark vh-100 px-3 pt-2 position-fixed"
+          style={{ width: '300px' }}
+        >
           <div className="text-white ms-2">
             <h5 className="text-warning">
               {admin.name} : {admin.level}
@@ -116,7 +119,12 @@ function Template(props) {
             </Link>
           </div>
         </div>
-        <div className="p-3 w-100">{props.children}</div>
+        <div
+          className="p-3 w-100 overflow-auto"
+          style={{ marginLeft: '300px' }}
+        >
+          {props.children}
+        </div>
       </div>
     </div>
   );
