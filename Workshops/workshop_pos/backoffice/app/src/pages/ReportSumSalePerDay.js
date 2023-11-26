@@ -3,6 +3,8 @@ import Template from './Template';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 import config from '../config';
+import dayjs from 'dayjs';
+import Modal from '../components/Modal';
 
 function ReportSumSalePerDay() {
   const [years, setYears] = useState(() => {
@@ -38,6 +40,7 @@ function ReportSumSalePerDay() {
     return new Date().getMonth() + 1;
   });
   const [results, setResults] = useState([]);
+  const [selectedDay, setSelectedDay] = useState([]);
 
   const handleShowReport = async () => {
     try {
@@ -120,6 +123,7 @@ function ReportSumSalePerDay() {
                 <tr>
                   <th width="200px">วันที่</th>
                   <th className="text-end">ยอดรวมรายได้</th>
+                  <th width="200px"></th>
                 </tr>
               </thead>
               <tbody>
@@ -130,6 +134,16 @@ function ReportSumSalePerDay() {
                       <td className="text-end">
                         {parseInt(item.sum).toLocaleString('th-TH')}
                       </td>
+                      <td className="text-center">
+                        <button
+                          className="btn btn-success"
+                          data-bs-toggle="modal"
+                          data-bs-target="#modalInfo"
+                          onClick={() => setSelectedDay(item)}
+                        >
+                          <i className="fa fa-file-alt me-2"></i>แสดงรายการ
+                        </button>
+                      </td>
                     </tr>
                   ))}
               </tbody>
@@ -137,6 +151,37 @@ function ReportSumSalePerDay() {
           </div>
         </div>
       </Template>
+
+      <Modal id="modalInfo" title="แสดงรายการ" modalSize="modal-lg">
+        <table className="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th>วันที่สมัคร</th>
+              <th>วันที่ชำระเงิน</th>
+              <th>ผู้สมัคร</th>
+              <th>package</th>
+              <th>ค่าบริการรายเดือน</th>
+            </tr>
+          </thead>
+          <tbody>
+            {selectedDay?.results?.length > 0 &&
+              selectedDay.results.map((item, index) => (
+                <tr key={index}>
+                  <td>{dayjs(item.createdAt).format('DD/MM/YYYY HH:mm:ss')}</td>
+                  <td>
+                    {dayjs(item.payDate).format('DD/MM/YYYY')} {item.payHour}:
+                    {item.payMinute}
+                  </td>
+                  <td>{item.member.name}</td>
+                  <td>{item.package.name}</td>
+                  <td className="text-end">
+                    {parseInt(item.package.price).toLocaleString('th-TH')}
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </Modal>
     </>
   );
 }

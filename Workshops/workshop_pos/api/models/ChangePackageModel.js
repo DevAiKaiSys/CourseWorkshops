@@ -16,6 +16,9 @@ const ChangePackageModel = sequelize.define('changePackage', {
   payDate: {
     type: DataTypes.DATE,
   },
+  payHour: {
+    type: DataTypes.BIGINT,
+  },
   payMinute: {
     type: DataTypes.BIGINT,
   },

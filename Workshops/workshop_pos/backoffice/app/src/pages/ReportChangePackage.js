@@ -4,7 +4,7 @@ import axios from 'axios';
 import config from '../config';
 import Swal from 'sweetalert2';
 import dayjs from 'dayjs';
-import Modal from '../components/modal';
+import Modal from '../components/Modal';
 
 function ReportChangePackage() {
   const [members, setMembers] = useState([]);
