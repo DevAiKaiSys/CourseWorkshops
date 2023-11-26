@@ -57,6 +57,10 @@ app.post('/changePackage/reportSumSalePerDay', isLogin, async (req, res) => {
 
     const results = await ChangePackageModel.findAll({
       where: {
+        // [Op.not]: [{ payDate: null }],
+        payDate: {
+          [Op.not]: null,
+        },
         [Op.and]: [
           Sequelize.where(
             Sequelize.fn(
