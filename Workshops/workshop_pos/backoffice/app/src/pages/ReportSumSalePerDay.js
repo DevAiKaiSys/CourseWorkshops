@@ -54,6 +54,7 @@ function ReportSumSalePerDay() {
         .then((res) => {
           if (res.status === 200) {
             setResults(res.data.results);
+            console.log(res.data.results);
           }
         });
     } catch (error) {
@@ -113,6 +114,26 @@ function ReportSumSalePerDay() {
                 </button>
               </div>
             </div>
+
+            <table className="mt-3 table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th width="200px">วันที่</th>
+                  <th className="text-end">ยอดรวมรายได้</th>
+                </tr>
+              </thead>
+              <tbody>
+                {results.length > 0 &&
+                  results.map((item, index) => (
+                    <tr key={index}>
+                      <td>{item.day}</td>
+                      <td className="text-end">
+                        {parseInt(item.sum).toLocaleString('th-TH')}
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </Template>

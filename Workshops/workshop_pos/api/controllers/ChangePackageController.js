@@ -88,7 +88,7 @@ app.post('/changePackage/reportSumSalePerDay', isLogin, async (req, res) => {
 
     // Calculate sum for each day
     const sumPerDay = results.reduce((acc, result) => {
-      const day = result.createdAt.getDate();
+      const day = result.createdAt.getDate() - 1;
       if (!acc[day]) {
         acc[day] = {
           day: day,
@@ -99,23 +99,20 @@ app.post('/changePackage/reportSumSalePerDay', isLogin, async (req, res) => {
       acc[day].results.push(result);
       acc[day].sum += result.package.price; // Assuming the field name is 'price'
       return acc;
-    }, {});
+    }, []);
 
     const lastDayOfMonth = new Date(y, m, 0).getDate(); // Get the last day of the month
 
     // Initialize days that have no results
-    for (let i = 1; i <= lastDayOfMonth; i++) {
+    for (let i = 0; i < lastDayOfMonth; i++) {
       if (!sumPerDay[i]) {
         sumPerDay[i] = {
-          day: i,
+          day: i + 1,
           results: [],
           sum: 0,
         };
       }
     }
-
-    // Convert the object to an array
-    const sumPerDayArray = Object.values(sumPerDay);
 
     res.status(200).send({ message: 'success', results: sumPerDay });
   } catch (error) {
