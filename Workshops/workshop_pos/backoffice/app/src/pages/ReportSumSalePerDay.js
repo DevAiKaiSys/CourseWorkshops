@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import Template from './Template';
+import Swal from 'sweetalert2';
+import axios from 'axios';
+import config from '../config';
 
 function ReportSumSalePerDay() {
   const [years, setYears] = useState(() => {
@@ -34,6 +37,34 @@ function ReportSumSalePerDay() {
   const [selectedMonth, setSelectedMonth] = useState(() => {
     return new Date().getMonth() + 1;
   });
+  const [results, setResults] = useState([]);
+
+  const handleShowReport = async () => {
+    try {
+      const payload = {
+        month: selectedMonth,
+        year: selectedYear,
+      };
+      await axios
+        .post(
+          `${config.api_path}/changePackage/reportSumSalePerDay`,
+          payload,
+          config.headers()
+        )
+        .then((res) => {
+          if (res.status === 200) {
+            setResults(res.data.results);
+          }
+        });
+    } catch (error) {
+      Swal.fire({
+        title: 'error',
+        text: error.message,
+        icon: 'error',
+        timer: 2000,
+      });
+    }
+  };
 
   return (
     <>
@@ -77,7 +108,7 @@ function ReportSumSalePerDay() {
                 </div>
               </div>
               <div className="col-8">
-                <button className="btn btn-primary">
+                <button className="btn btn-primary" onClick={handleShowReport}>
                   <i className="fa fa-check me-2"></i>แสดงรายการ
                 </button>
               </div>
