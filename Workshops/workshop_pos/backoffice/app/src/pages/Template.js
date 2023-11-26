@@ -87,7 +87,7 @@ function Template(props) {
               รายงานคนที่ขอเปลี่ยน แพคเกจ
             </Link>
             <Link
-              to="/"
+              to="/reportSumSalePerDay"
               className="btn btn-default text-secondary text-start my-menu"
             >
               <i className="fa fa-file-alt me-3"></i>

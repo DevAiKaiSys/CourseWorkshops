@@ -7,6 +7,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Home from './pages/Home';
 import ReportMember from './pages/ReportMember';
 import ReportChangePackage from './pages/ReportChangePackage';
+import ReportSumSalePerDay from './pages/ReportSumSalePerDay';
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
   {
     path: '/reportChangePackage',
     element: <ReportChangePackage />,
+  },
+  {
+    path: '/reportSumSalePerDay',
+    element: <ReportSumSalePerDay />,
   },
 ]);
 
