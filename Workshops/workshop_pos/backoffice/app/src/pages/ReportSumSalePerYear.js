@@ -8,7 +8,7 @@ import Modal from '../components/Modal';
 
 function ReportSumSalePerYear() {
   const [results, setResults] = useState([]);
-  const [selectedํYear, setSelectedYear] = useState({});
+  const [selectedํResult, setSelectedResult] = useState({});
 
   useEffect(() => {
     fetchData();
@@ -64,7 +64,7 @@ function ReportSumSalePerYear() {
               <thead>
                 <tr>
                   <th width="200px">ปี</th>
-                  <th className="text-end">ยอดขาย</th>
+                  <th className="text-end">รายได้</th>
                   <th width="200px"></th>
                 </tr>
               </thead>
@@ -81,9 +81,9 @@ function ReportSumSalePerYear() {
                           className="btn btn-success"
                           data-bs-toggle="modal"
                           data-bs-target="#modalInfo"
-                          onClick={() => setSelectedYear(item)}
+                          onClick={() => setSelectedResult(item.results)}
                         >
-                          <i className="fa fa-file-alt me-2"></i>แสดงรายการ
+                          <i className="fa fa-file-alt me-2"></i>ดูรายการ
                         </button>
                       </td>
                     </tr>
@@ -106,8 +106,8 @@ function ReportSumSalePerYear() {
             </tr>
           </thead>
           <tbody>
-            {selectedํYear?.results?.length > 0 &&
-              selectedํYear.results.map((item, index) => (
+            {selectedํResult?.length > 0 &&
+              selectedํResult.map((item, index) => (
                 <tr key={index}>
                   <td>{dayjs(item.createdAt).format('DD/MM/YYYY HH:mm:ss')}</td>
                   <td>

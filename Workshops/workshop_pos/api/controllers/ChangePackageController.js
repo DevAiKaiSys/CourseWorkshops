@@ -101,7 +101,7 @@ app.post('/changePackage/reportSumSalePerDay', isLogin, async (req, res) => {
         };
       }
       acc[day].results.push(result);
-      acc[day].sum += result.package.price; // Assuming the field name is 'price'
+      acc[day].sum += parseFloat(result.package.price);
       return acc;
     }, []);
 
@@ -172,7 +172,7 @@ app.post('/changePackage/reportSumSalePerMonth', isLogin, async (req, res) => {
         };
       }
       acc[month].results.push(result);
-      acc[month].sum += result.package.price; // Assuming the field name is 'price'
+      acc[month].sum += parseFloat(result.package.price);
       return acc;
     }, []);
 
@@ -230,7 +230,7 @@ app.get('/changePackage/reportSumSalePerYear', isLogin, async (req, res) => {
     // Calculate sum for each month
     const sumPerYear = results.reduce((acc, result) => {
       const year = result.createdAt.getFullYear();
-      const index = 10 - (y - year); // 0-10
+      const index = y - year; // 10-0
       if (!acc[index]) {
         acc[index] = {
           year: year,
@@ -239,15 +239,15 @@ app.get('/changePackage/reportSumSalePerYear', isLogin, async (req, res) => {
         };
       }
       acc[index].results.push(result);
-      acc[index].sum += result.package.price; // Assuming the field name is 'price'
+      acc[index].sum += parseFloat(result.package.price);
       return acc;
     }, []);
 
     // Initialize months that have no results
-    for (let i = 0; i <= 10; i++) {
+    for (let i = 10; i >= 0; i--) {
       if (!sumPerYear[i]) {
         sumPerYear[i] = {
-          year: startYear + i,
+          year: y - i,
           results: [],
           sum: 0,
         };
