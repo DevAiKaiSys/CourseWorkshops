@@ -26,7 +26,7 @@ app.get('/admin/info', isLogin, async (req, res) => {
   try {
     const adminId = getAdminId(req);
     const admin = await AdminModel.findByPk(adminId, {
-      attributes: ['id', 'name', 'level'],
+      attributes: ['id', 'name', 'level', 'usr'],
     });
     res.send({ result: admin, message: 'success' });
   } catch (error) {
@@ -72,6 +72,19 @@ app.post('/admin/edit/:id', isLogin, async (req, res) => {
     await AdminModel.update(req.body, {
       where: {
         id: req.params.id,
+      },
+    });
+    res.status(200).send({ message: 'success' });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+});
+
+app.post('/admin/changeProfile', isLogin, async (req, res) => {
+  try {
+    await AdminModel.update(req.body, {
+      where: {
+        id: req.body.id,
       },
     });
     res.status(200).send({ message: 'success' });

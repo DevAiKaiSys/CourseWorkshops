@@ -20,12 +20,12 @@ function App() {
         .post(config.api_path + '/admin/signin', payload)
         .then((res) => {
           if (res.data.message === 'success') {
-            Swal.fire({
-              title: 'Sign In',
-              text: 'เข้าสู่ระบบแล้ว',
-              icon: 'success',
-              timer: 2000,
-            });
+            // Swal.fire({
+            //   title: 'Sign In',
+            //   text: 'เข้าสู่ระบบแล้ว',
+            //   icon: 'success',
+            //   timer: 2000,
+            // });
 
             localStorage.setItem(config.token_name, res.data.token);
             navigate('/home');

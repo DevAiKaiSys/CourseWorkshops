@@ -3,10 +3,14 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import config from '../config';
+import Modal from '../components/Modal';
 
 function Template(props) {
   const [admin, setAdmin] = useState({});
   const navigate = useNavigate();
+
+  const [usr, setUsr] = useState('');
+  const [pwd, setUPwd] = useState('');
 
   useEffect(() => {
     fetchData();
@@ -46,8 +50,68 @@ function Template(props) {
     });
   };
 
+  const handleChangeProfile = async () => {
+    Swal.fire({
+      title: 'เปลี่ยนข้อมูลส่วนตัว',
+      text: 'ยืนยันการเปลี่ยนแปลงข้อมูล',
+      icon: 'question',
+      showCancelButton: true,
+      showConfirmButton: true,
+    }).then(async (res) => {
+      if (res.isConfirmed) {
+        try {
+          const payload = { usr: usr, id: admin.id };
+          if (pwd != '') {
+            payload.pwd = pwd;
+          }
+          await axios
+            .post(
+              `${config.api_path}/admin/changeProfile`,
+              payload,
+              config.headers()
+            )
+            .then((res) => {
+              if (res.status === 200) {
+                Swal.fire({
+                  title: 'บันทึกข้อมูล',
+                  text: 'บันทึกข้อมูลแล้ว',
+                  icon: 'success',
+                  timer: 1000,
+                }).then((res) => {
+                  handleCloseModal();
+
+                  localStorage.removeItem(config.token_name);
+                  navigate('/');
+                });
+              }
+            });
+        } catch (error) {
+          Swal.fire({
+            title: 'error',
+            text: error.message,
+            icon: 'error',
+            timer: 2000,
+          });
+        }
+      }
+    });
+  };
+
+  const handleCloseModal = () => {
+    const modalElements = document.querySelectorAll('.modal.show');
+
+    modalElements.forEach((element) => {
+      const elementsWithIdClose = element.querySelectorAll('#btnModalClose');
+
+      // Step 3: Loop through all elements and child elements with id="btnModalClose"
+      elementsWithIdClose.forEach((element) => {
+        element.click();
+      });
+    });
+  };
+
   return (
-    <div>
+    <>
       <div className="d-flex">
         <div
           className="bg-dark vh-100 px-3 pt-2 position-fixed"
@@ -59,10 +123,20 @@ function Template(props) {
             </h5>
             <div className="mt-3">
               <button
-                className="btn btn-outline-warning btn-lg"
+                className="btn btn-outline-warning me-2"
                 onClick={handleSignOut}
               >
+                <i className="fa fa-times me-2"></i>
                 Sign Out
+              </button>
+              <button
+                className="btn btn-outline-info"
+                data-bs-toggle="modal"
+                data-bs-target="#modalMyInfo"
+                onClick={() => setUsr(admin.usr)}
+              >
+                <i className="fa fa-pencil me-2"></i>
+                Edit Info
               </button>
             </div>
             <hr className="mt-4" />
@@ -126,7 +200,32 @@ function Template(props) {
           {props.children}
         </div>
       </div>
-    </div>
+
+      <Modal id="modalMyInfo" title="เปลี่ยนข้อมูลส่วนตัว">
+        <div>
+          <label>Username</label>
+          <input
+            type="text"
+            className="form-control"
+            value={usr}
+            onChange={(e) => setUsr(e.target.value)}
+          />
+        </div>
+        <div className="mt=3">
+          <label>password</label>
+          <input
+            type="password"
+            className="form-control"
+            onChange={(e) => setUPwd(e.target.value)}
+          />
+        </div>
+        <div className="mt-3">
+          <button className="btn btn-primary" onClick={handleChangeProfile}>
+            <i className="fa fa-check me-2"></i>บันทึก
+          </button>
+        </div>
+      </Modal>
+    </>
   );
 }
 
