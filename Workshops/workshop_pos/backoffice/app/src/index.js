@@ -8,6 +8,7 @@ import Home from './pages/Home';
 import ReportMember from './pages/ReportMember';
 import ReportChangePackage from './pages/ReportChangePackage';
 import ReportSumSalePerDay from './pages/ReportSumSalePerDay';
+import ReportSumSalePerMonth from './pages/ReportSumSalePerMonth';
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,14 @@ const router = createBrowserRouter([
     path: '/reportSumSalePerDay',
     element: <ReportSumSalePerDay />,
   },
+  {
+    path: '/reportSumSalePerMonth',
+    element: <ReportSumSalePerMonth />,
+  },
+  // {
+  //   path: '/reportSumSalePerDay',
+  //   element: <ReportSumSalePerDay />,
+  // },
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

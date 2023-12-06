@@ -59,7 +59,7 @@ app.post('/changePackage/reportSumSalePerDay', isLogin, async (req, res) => {
       where: {
         // [Op.not]: [{ payDate: null }],
         payDate: {
-          [Op.not]: null,
+          [Op.ne]: null,
         },
         [Op.and]: [
           Sequelize.where(
@@ -95,7 +95,7 @@ app.post('/changePackage/reportSumSalePerDay', isLogin, async (req, res) => {
       const day = result.createdAt.getDate() - 1;
       if (!acc[day]) {
         acc[day] = {
-          day: day,
+          day: day + 1,
           results: [],
           sum: 0,
         };
@@ -119,6 +119,75 @@ app.post('/changePackage/reportSumSalePerDay', isLogin, async (req, res) => {
     }
 
     res.status(200).send({ message: 'success', results: sumPerDay });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+});
+
+app.post('/changePackage/reportSumSalePerMonth', isLogin, async (req, res) => {
+  try {
+    let y = req.body.year;
+    // let m = req.body.month;
+    // let dayInMonth = new Date(y,m,0).getDate();
+
+    ChangePackageModel.belongsTo(PackageModel);
+    ChangePackageModel.belongsTo(MemberModel);
+
+    const results = await ChangePackageModel.findAll({
+      where: {
+        // [Op.not]: [{ payDate: null }],
+        payDate: {
+          [Op.ne]: null,
+        },
+        [Op.and]: [
+          Sequelize.where(
+            Sequelize.fn(
+              'EXTRACT',
+              Sequelize.literal('YEAR FROM "changePackage"."createdAt"')
+            ),
+            y
+          ),
+        ],
+      },
+      include: [
+        {
+          model: PackageModel,
+          attributes: ['name', 'price'],
+        },
+        {
+          model: MemberModel,
+          attributes: ['name', 'phone'],
+        },
+      ],
+    });
+
+    // Calculate sum for each month
+    const sumPerMonth = results.reduce((acc, result) => {
+      const month = result.createdAt.getMonth();
+      if (!acc[month]) {
+        acc[month] = {
+          month: month + 1,
+          results: [],
+          sum: 0,
+        };
+      }
+      acc[month].results.push(result);
+      acc[month].sum += result.package.price; // Assuming the field name is 'price'
+      return acc;
+    }, []);
+
+    // Initialize months that have no results
+    for (let i = 0; i < 12; i++) {
+      if (!sumPerMonth[i]) {
+        sumPerMonth[i] = {
+          month: i + 1,
+          results: [],
+          sum: 0,
+        };
+      }
+    }
+
+    res.status(200).send({ message: 'success', results: sumPerMonth });
   } catch (error) {
     res.status(500).send({ message: error.message });
   }

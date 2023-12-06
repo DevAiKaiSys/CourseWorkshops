@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Template from './Template';
 import Swal from 'sweetalert2';
 import axios from 'axios';
@@ -6,7 +6,7 @@ import config from '../config';
 import dayjs from 'dayjs';
 import Modal from '../components/Modal';
 
-function ReportSumSalePerDay() {
+function ReportSumSalePerMonth() {
   const [years, setYears] = useState(() => {
     let arr = [];
     let d = new Date();
@@ -22,7 +22,7 @@ function ReportSumSalePerDay() {
   const [selectedYear, setSelectedYear] = useState(() => {
     return new Date().getFullYear();
   });
-  const [months, setMonths] = useState([
+  const [arrMonths, setArrMonths] = useState([
     'มกราคม',
     'กุมภาพันธ์',
     'มีนาคม',
@@ -36,28 +36,27 @@ function ReportSumSalePerDay() {
     'พฤศจิกายน',
     'ธันวาคม',
   ]);
-  const [selectedMonth, setSelectedMonth] = useState(() => {
-    return new Date().getMonth() + 1;
-  });
   const [results, setResults] = useState([]);
-  const [selectedDay, setSelectedDay] = useState({});
+  const [selectedMonth, setSelectedMonth] = useState({});
 
-  const handleShowReport = async () => {
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
     try {
       const payload = {
-        month: selectedMonth,
         year: selectedYear,
       };
       await axios
         .post(
-          `${config.api_path}/changePackage/reportSumSalePerDay`,
+          `${config.api_path}/changePackage/reportSumSalePerMonth`,
           payload,
           config.headers()
         )
         .then((res) => {
           if (res.status === 200) {
             setResults(res.data.results);
-            console.log(res.data.results);
           }
         });
     } catch (error) {
@@ -74,65 +73,42 @@ function ReportSumSalePerDay() {
     <>
       <Template>
         <div className="card">
-          <h5 className="card-header">รายงานสรุปยอดขายรายวัน</h5>
+          <h5 className="card-header">รายงานสรุปยอดขายรายเดือน</h5>
           <div className="card-body">
-            <div className="row">
-              <div className="col-2">
-                <div className="input-group">
-                  <span className="input-group-text">ปี</span>
-                  <select
-                    name=""
-                    id=""
-                    className="form-control"
-                    value={selectedYear}
-                    onChange={(e) => setSelectedYear(e.target.value)}
-                  >
-                    {years.map((item) => (
-                      <option value={item} key={item}>
-                        {item}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-              <div className="col-2">
-                <div className="input-group">
-                  <span className="input-group-text">เดือน</span>
-                  <select
-                    name=""
-                    id=""
-                    className="form-control"
-                    value={selectedMonth}
-                    onChange={(e) => setSelectedMonth(e.target.value)}
-                  >
-                    {months.map((item, index) => (
-                      <option value={index + 1} key={index}>
-                        {item}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-              <div className="col-8">
-                <button className="btn btn-primary" onClick={handleShowReport}>
-                  <i className="fa fa-check me-2"></i>แสดงรายการ
-                </button>
-              </div>
+            <div className="input-group">
+              <span className="input-group-text">ปี</span>
+              <select
+                name=""
+                id=""
+                className="form-control"
+                value={selectedYear}
+                onChange={(e) => setSelectedYear(e.target.value)}
+              >
+                {years.map((item) => (
+                  <option value={item} key={item}>
+                    {item}
+                  </option>
+                ))}
+              </select>
+              <button className="btn btn-primary" onClick={fetchData}>
+                <i className="fa fa-check me-2"></i>แสดงรายการ
+              </button>
             </div>
 
             <table className="mt-3 table table-bordered table-striped">
               <thead>
                 <tr>
-                  <th width="200px">วันที่</th>
-                  <th className="text-end">ยอดรวมรายได้</th>
+                  <th width="200px">เดือน</th>
+                  <th className="text-end">ยอดขาย</th>
                   <th width="200px"></th>
                 </tr>
               </thead>
               <tbody>
                 {results.length > 0 &&
+                  arrMonths &&
                   results.map((item, index) => (
                     <tr key={index}>
-                      <td>{item.day}</td>
+                      <td>{arrMonths[item.month - 1]}</td>
                       <td className="text-end">
                         {parseInt(item.sum).toLocaleString('th-TH')}
                       </td>
@@ -141,7 +117,7 @@ function ReportSumSalePerDay() {
                           className="btn btn-success"
                           data-bs-toggle="modal"
                           data-bs-target="#modalInfo"
-                          onClick={() => setSelectedDay(item)}
+                          onClick={() => setSelectedMonth(item)}
                         >
                           <i className="fa fa-file-alt me-2"></i>แสดงรายการ
                         </button>
@@ -166,8 +142,8 @@ function ReportSumSalePerDay() {
             </tr>
           </thead>
           <tbody>
-            {selectedDay?.results?.length > 0 &&
-              selectedDay.results.map((item, index) => (
+            {selectedMonth?.results?.length > 0 &&
+              selectedMonth.results.map((item, index) => (
                 <tr key={index}>
                   <td>{dayjs(item.createdAt).format('DD/MM/YYYY HH:mm:ss')}</td>
                   <td>
@@ -188,4 +164,4 @@ function ReportSumSalePerDay() {
   );
 }
 
-export default ReportSumSalePerDay;
+export default ReportSumSalePerMonth;
