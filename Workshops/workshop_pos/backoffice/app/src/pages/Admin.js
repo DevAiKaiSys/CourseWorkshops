@@ -13,6 +13,7 @@ function Admin() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [email, setEmail] = useState('');
+  const [admins, setAdmins] = useState([]);
 
   useEffect(() => {
     fetchData();
@@ -20,6 +21,13 @@ function Admin() {
 
   const fetchData = async () => {
     try {
+      await axios
+        .get(`${config.api_path}/admin/list`, config.headers())
+        .then((res) => {
+          if (res.status === 200) {
+            setAdmins(res.data.results);
+          }
+        });
     } catch (error) {
       Swal.fire({
         title: 'error',
@@ -106,10 +114,28 @@ function Admin() {
                   <th>user</th>
                   <th>ระดับ</th>
                   <th>email</th>
-                  <th width="180px"></th>
+                  <th width="140px"></th>
                 </tr>
               </thead>
-              <tbody></tbody>
+              <tbody>
+                {admins.length > 0 &&
+                  admins.map((item) => (
+                    <tr>
+                      <td>{item.name}</td>
+                      <td>{item.usr}</td>
+                      <td>{item.level}</td>
+                      <td>{item.email}</td>
+                      <td>
+                        <button className="btn btn-primary me-2">
+                          <i className="fa fa-pencil"></i>
+                        </button>
+                        <button className="btn btn-danger">
+                          <i className="fa fa-times"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
             </table>
           </div>
         </div>

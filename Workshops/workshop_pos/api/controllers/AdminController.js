@@ -43,4 +43,15 @@ app.post('/admin/create', async (req, res) => {
   }
 });
 
+app.get('/admin/list', isLogin, async (req, res) => {
+  try {
+    const results = await AdminModel.findAll({
+      attributes: ['id', 'name', 'usr', 'level', 'email'],
+    });
+    res.send({ results: results, message: 'success' });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+});
+
 module.exports = app;
