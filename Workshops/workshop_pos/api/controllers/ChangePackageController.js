@@ -193,4 +193,71 @@ app.post('/changePackage/reportSumSalePerMonth', isLogin, async (req, res) => {
   }
 });
 
+app.get('/changePackage/reportSumSalePerYear', isLogin, async (req, res) => {
+  try {
+    const myDate = new Date();
+    const y = myDate.getFullYear();
+    const startYear = y - 10;
+    let year_start = new Date(startYear, 0, 1);
+    let year_end = new Date(y + 1, 0, 1);
+
+    ChangePackageModel.belongsTo(PackageModel);
+    ChangePackageModel.belongsTo(MemberModel);
+
+    const results = await ChangePackageModel.findAll({
+      where: {
+        // [Op.not]: [{ payDate: null }],
+        payDate: {
+          [Op.ne]: null,
+        },
+        createdAt: {
+          [Op.gte]: year_start,
+          [Op.lt]: year_end,
+        },
+      },
+      include: [
+        {
+          model: PackageModel,
+          attributes: ['name', 'price'],
+        },
+        {
+          model: MemberModel,
+          attributes: ['name', 'phone'],
+        },
+      ],
+    });
+
+    // Calculate sum for each month
+    const sumPerYear = results.reduce((acc, result) => {
+      const year = result.createdAt.getFullYear();
+      const index = 10 - (y - year); // 0-10
+      if (!acc[index]) {
+        acc[index] = {
+          year: year,
+          results: [],
+          sum: 0,
+        };
+      }
+      acc[index].results.push(result);
+      acc[index].sum += result.package.price; // Assuming the field name is 'price'
+      return acc;
+    }, []);
+
+    // Initialize months that have no results
+    for (let i = 0; i <= 10; i++) {
+      if (!sumPerYear[i]) {
+        sumPerYear[i] = {
+          year: startYear + i,
+          results: [],
+          sum: 0,
+        };
+      }
+    }
+
+    res.status(200).send({ message: 'success', results: sumPerYear });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+});
+
 module.exports = app;

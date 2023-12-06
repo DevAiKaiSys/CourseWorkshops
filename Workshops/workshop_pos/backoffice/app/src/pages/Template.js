@@ -104,7 +104,7 @@ function Template(props) {
               รายงานรายได้รายเดือน
             </Link>
             <Link
-              to="/"
+              to="/reportSumSalePerYear"
               className="btn btn-default text-secondary text-start my-menu"
             >
               <i className="fa fa-file-alt me-3"></i>
