@@ -14,6 +14,7 @@ function Admin() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [email, setEmail] = useState('');
   const [admins, setAdmins] = useState([]);
+  const [id, setId] = useState(0);
 
   useEffect(() => {
     fetchData();
@@ -50,12 +51,20 @@ function Admin() {
         const payload = {
           name: name,
           usr: user,
-          pwd: password,
           level: selectedLevel,
           email: email,
         };
+        if (password != '') {
+          payload.pwd = password;
+        }
+
+        let url = '/admin/create';
+        if (id > 0) {
+          url = '/admin/edit/' + id;
+        }
+
         await axios
-          .post(`${config.api_path}/admin/create`, payload, config.headers())
+          .post(`${config.api_path}${url}`, payload, config.headers())
           .then((res) => {
             if (res.status === 200) {
               Swal.fire({
@@ -64,6 +73,14 @@ function Admin() {
                 icon: 'success',
                 timer: 2000,
               });
+
+              setName('');
+              setUser('');
+              setPassword('');
+              setConfirmPassword('');
+              setSelectedLevel('');
+              setEmail('');
+              setId(0);
 
               handleCloseModal();
               fetchData();
@@ -131,19 +148,27 @@ function Admin() {
     });
   };
 
+  const handleSelectedAdmin = (item) => {
+    setSelectedLevel(item.level);
+    setName(item.name);
+    setUser(item.usr);
+    setEmail(item.email);
+    setId(item.id);
+  };
+
   return (
     <>
       <Template>
         <div className="card">
           <h5 className="card-header">ผู้ใช้ระบบ</h5>
           <div className="card-body">
-            <butoon
+            <button
               className="btn btn-primary"
               data-bs-toggle="modal"
               data-bs-target="#modalForm"
             >
               <i className="fa fa-plus me-2"></i>เพิ่มรายการ
-            </butoon>
+            </button>
 
             <table className="mt-3 table table-bordered table-striped">
               <thead>
@@ -157,14 +182,19 @@ function Admin() {
               </thead>
               <tbody>
                 {admins.length > 0 &&
-                  admins.map((item) => (
-                    <tr>
+                  admins.map((item, index) => (
+                    <tr key={index}>
                       <td>{item.name}</td>
                       <td>{item.usr}</td>
                       <td>{item.level}</td>
                       <td>{item.email}</td>
                       <td>
-                        <button className="btn btn-primary me-2">
+                        <button
+                          className="btn btn-primary me-2"
+                          onClick={() => handleSelectedAdmin(item)}
+                          data-bs-toggle="modal"
+                          data-bs-target="#modalForm"
+                        >
                           <i className="fa fa-pencil"></i>
                         </button>
                         <button
@@ -227,7 +257,9 @@ function Admin() {
             onChange={(e) => setSelectedLevel(e.target.value)}
           >
             {level.map((item) => (
-              <option value={item}>{item}</option>
+              <option value={item} key={item}>
+                {item}
+              </option>
             ))}
           </select>
         </div>

@@ -61,7 +61,20 @@ app.delete('/admin/delete/:id', isLogin, async (req, res) => {
         id: req.params.id,
       },
     });
-    res.send({ message: 'success' });
+    res.status(200).send({ message: 'success' });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+});
+
+app.post('/admin/edit/:id', isLogin, async (req, res) => {
+  try {
+    await AdminModel.update(req.body, {
+      where: {
+        id: req.params.id,
+      },
+    });
+    res.status(200).send({ message: 'success' });
   } catch (error) {
     res.status(500).send({ message: error.message });
   }
