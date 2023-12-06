@@ -54,4 +54,17 @@ app.get('/admin/list', isLogin, async (req, res) => {
   }
 });
 
+app.delete('/admin/delete/:id', isLogin, async (req, res) => {
+  try {
+    await AdminModel.destroy({
+      where: {
+        id: req.params.id,
+      },
+    });
+    res.send({ message: 'success' });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+});
+
 module.exports = app;

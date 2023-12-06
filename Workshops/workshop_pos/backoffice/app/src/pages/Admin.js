@@ -93,6 +93,44 @@ function Admin() {
     });
   };
 
+  const handleDelete = (item) => {
+    Swal.fire({
+      title: 'ลบข้อมูล',
+      text: 'ยืนยันการลบ',
+      icon: 'question',
+      showCancelButton: true,
+      showConfirmButton: true,
+    }).then(async (res) => {
+      if (res.isConfirmed) {
+        try {
+          await axios
+            .delete(
+              `${config.api_path}/admin/delete/${item.id}`,
+              config.headers()
+            )
+            .then((res) => {
+              if (res.status === 200) {
+                Swal.fire({
+                  title: 'ลบข้อมูล',
+                  text: 'ลบข้อมูลแล้ว',
+                  icon: 'success',
+                  timer: 1000,
+                });
+                fetchData();
+              }
+            });
+        } catch (error) {
+          Swal.fire({
+            title: 'error',
+            text: error.message,
+            icon: 'error',
+            timer: 2000,
+          });
+        }
+      }
+    });
+  };
+
   return (
     <>
       <Template>
@@ -129,7 +167,10 @@ function Admin() {
                         <button className="btn btn-primary me-2">
                           <i className="fa fa-pencil"></i>
                         </button>
-                        <button className="btn btn-danger">
+                        <button
+                          className="btn btn-danger"
+                          onClick={() => handleDelete(item)}
+                        >
                           <i className="fa fa-times"></i>
                         </button>
                       </td>
