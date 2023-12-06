@@ -10,6 +10,7 @@ import ReportChangePackage from './pages/ReportChangePackage';
 import ReportSumSalePerDay from './pages/ReportSumSalePerDay';
 import ReportSumSalePerMonth from './pages/ReportSumSalePerMonth';
 import ReportSumSalePerYear from './pages/ReportSumSalePerYear';
+import Admin from './pages/Admin';
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
   {
     path: '/reportSumSalePerYear',
     element: <ReportSumSalePerYear />,
+  },
+  {
+    path: '/admin',
+    element: <Admin />,
   },
 ]);
 
