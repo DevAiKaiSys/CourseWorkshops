@@ -1,10 +1,89 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Template from './Template';
 import Modal from '../components/Modal';
+import axios from 'axios';
+import config from '../config';
+import Swal from 'sweetalert2';
 
 function Admin() {
   const [level, setLevel] = useState(['admin', 'sub admin']);
   const [selectedLevel, setSelectedLevel] = useState('admin');
+  const [name, setName] = useState('');
+  const [user, setUser] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [email, setEmail] = useState('');
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+    } catch (error) {
+      Swal.fire({
+        title: 'error',
+        text: error.message,
+        icon: 'error',
+        timer: 2000,
+      });
+    }
+  };
+
+  const handleSave = async () => {
+    if (password != confirmPassword) {
+      Swal.fire({
+        title: 'ตรวจสอบข้อมูล',
+        text: 'password กับการยืนยันไม่ตรงกัน',
+        icon: 'error',
+      });
+    } else {
+      try {
+        const payload = {
+          name: name,
+          usr: user,
+          pwd: password,
+          level: selectedLevel,
+          email: email,
+        };
+        await axios
+          .post(`${config.api_path}/admin/create`, payload, config.headers())
+          .then((res) => {
+            if (res.status === 200) {
+              Swal.fire({
+                title: 'บันทึกข้อมูล',
+                text: 'บันทึกข้อมูลแล้ว',
+                icon: 'success',
+                timer: 2000,
+              });
+
+              handleCloseModal();
+              fetchData();
+            }
+          });
+      } catch (error) {
+        Swal.fire({
+          title: 'error',
+          text: error.message,
+          icon: 'error',
+          timer: 2000,
+        });
+      }
+    }
+  };
+
+  const handleCloseModal = () => {
+    const modalElements = document.querySelectorAll('.modal.show');
+
+    modalElements.forEach((element) => {
+      const elementsWithIdClose = element.querySelectorAll('#btnModalClose');
+
+      // Step 3: Loop through all elements and child elements with id="btnModalClose"
+      elementsWithIdClose.forEach((element) => {
+        element.click();
+      });
+    });
+  };
 
   return (
     <>
@@ -39,19 +118,37 @@ function Admin() {
       <Modal id="modalForm" title="ข้อมูล admin" modalSzie="modal-lg">
         <div>
           <label>ชื่อ</label>
-          <input type="text" className="form-control" />
+          <input
+            type="text"
+            className="form-control"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
         </div>
         <div className="mt=3">
           <label>username</label>
-          <input type="text" className="form-control" />
+          <input
+            type="text"
+            className="form-control"
+            value={user}
+            onChange={(e) => setUser(e.target.value)}
+          />
         </div>
         <div className="mt=3">
           <label>password</label>
-          <input type="password" className="form-control" />
+          <input
+            type="password"
+            className="form-control"
+            onChange={(e) => setPassword(e.target.value)}
+          />
         </div>
         <div className="mt=3">
           <label>confirm password</label>
-          <input type="password" className="form-control" />
+          <input
+            type="password"
+            className="form-control"
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
         </div>
         <div className="mt=3">
           <label>ระดับ</label>
@@ -69,10 +166,15 @@ function Admin() {
         </div>
         <div className="mt=3">
           <label>email</label>
-          <input type="text" className="form-control" />
+          <input
+            type="text"
+            className="form-control"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
         </div>
         <div className="my-3">
-          <button className="btn btn-primary">
+          <button className="btn btn-primary" onClick={handleSave}>
             <i className="fa fa-check me-2"></i>บันทึก
           </button>
         </div>

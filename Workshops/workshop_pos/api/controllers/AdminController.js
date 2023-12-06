@@ -34,4 +34,13 @@ app.get('/admin/info', isLogin, async (req, res) => {
   }
 });
 
+app.post('/admin/create', async (req, res) => {
+  try {
+    const admin = await AdminModel.create(req.body);
+    res.status(200).send({ message: 'success' });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+});
+
 module.exports = app;
