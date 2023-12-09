@@ -30,6 +30,9 @@ const Sale = () => {
 
   useEffect(() => {
     if (memberInfo?.name && lastBill?.billSaleDetails?.length > 0) {
+      let slip = document.getElementById('slip');
+      slip.style.display = 'block';
+
       printJS({
         printable: 'slip',
         maxWidth: 200,
@@ -38,6 +41,8 @@ const Sale = () => {
 
       // show only one time
       setMemberInfo({});
+
+      slip.style.display = 'none';
     }
   }, [memberInfo, lastBill]);
 
@@ -610,7 +615,7 @@ const Sale = () => {
         </table>
       </Modal>
 
-      <div id="slip">
+      <div id="slip" style={{ display: 'none' }}>
         <div>เลชบิล : {lastBill.id}</div>
         <center>ใบเสร็จรับเงิน</center>
         <center>
