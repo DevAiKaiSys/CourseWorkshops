@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import config from '../config';
 import Modal from '../components/Modal';
 import dayjs from 'dayjs';
+import printJS from 'print-js';
 
 const Sale = () => {
   const [products, setProducts] = useState([]);
@@ -16,6 +17,7 @@ const Sale = () => {
   const [lastBill, setLastBill] = useState({});
   const [billToday, setBillToday] = useState([]);
   const [selectedBill, setSelectedBill] = useState({});
+  const [memberInfo, setMemberInfo] = useState({});
 
   const saleRef = useRef();
 
@@ -278,6 +280,26 @@ const Sale = () => {
     }
   };
 
+  const handlePrint = async () => {
+    try {
+      await axios
+        .get(`${config.api_path}/member/info`, config.headers())
+        .then((res) => {
+          if (res.status === 200) {
+            setMemberInfo(res.data.result);
+          }
+        });
+
+      handleLastBill();
+
+      printJS({
+        printable: 'slip',
+        maxWidth: 200,
+        type: 'html',
+      });
+    } catch (error) {}
+  };
+
   return (
     <div>
       <Template ref={saleRef}>
@@ -307,6 +329,9 @@ const Sale = () => {
                 data-target="#modalLastBill"
               >
                 <i className="fa fa-file-alt mr-2"></i>บิลล่าสุด
+              </button>
+              <button className="btn btn-primary ml-2" onClick={handlePrint}>
+                <i className="fa fa-print mr-2"></i>พิมพ์บิลล่าสุด
               </button>
             </div>
           </h5>
@@ -564,6 +589,21 @@ const Sale = () => {
           </tbody>
         </table>
       </Modal>
+
+      <div id="slip">
+        <div>เลชบิล : {lastBill.id}</div>
+        <center>ใบเสร็จรับเงิน</center>
+        <center>
+          <strong>{memberInfo.name}</strong>
+        </center>
+        <br />
+
+        <div>xxx (2) 50 = 100</div>
+        <br />
+
+        <div>ยอดรวม : xxx บาท</div>
+        <div>xx/xx/xx xx:xx:xx</div>
+      </div>
     </div>
   );
 };

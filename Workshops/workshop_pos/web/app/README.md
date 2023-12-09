@@ -43,3 +43,11 @@ npm install dayjs
 ```
 npm install --save chart.js react-chartjs-2
 ```
+
+# Print Slip
+
+## [Print.js](https://printjs.crabbly.com/)
+
+```
+npm install print-js --save
+```
