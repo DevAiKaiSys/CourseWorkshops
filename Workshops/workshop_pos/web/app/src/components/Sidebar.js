@@ -242,7 +242,7 @@ const Sidebar = forwardRef((props, sidebarRef) => {
                 {totalBill} / {parseInt(billAmount).toLocaleString('th-TH')}
               </div>
               <div className="float-right">
-                {computePercent(totalBill, billAmount)}
+                {billAmount > 0 ? computePercent(totalBill, billAmount) : 0} %
               </div>
               <div className="clearfix"></div>
             </div>
