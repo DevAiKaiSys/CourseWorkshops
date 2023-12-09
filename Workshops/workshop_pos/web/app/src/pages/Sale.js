@@ -18,6 +18,7 @@ const Sale = () => {
   const [billToday, setBillToday] = useState([]);
   const [selectedBill, setSelectedBill] = useState({});
   const [memberInfo, setMemberInfo] = useState({});
+  const [sumTotal, setSumTotal] = useState(0);
 
   const saleRef = useRef();
 
@@ -256,6 +257,18 @@ const Sale = () => {
         .then((res) => {
           if (res.status === 200) {
             setLastBill(res.data.result[0]);
+
+            let sum = 0;
+            for (
+              let i = 0;
+              i < res.data.result[0].billSaleDetails.length;
+              i++
+            ) {
+              const item = res.data.result[0].billSaleDetails[i];
+              sum += parseFloat(item.qty) * parseFloat(item.price);
+            }
+
+            setSumTotal(sum);
           }
         })
         .catch((err) => {
@@ -611,17 +624,19 @@ const Sale = () => {
               lastBill.billSaleDetails.map((item, index) => (
                 <tr key={index}>
                   <td>{item.product.name}</td>
-                  <td>{item.qty}</td>
-                  <td>{item.price}</td>
-                  <td>{item.qty * item.price}</td>
+                  <td>{parseInt(item.qty).toLocaleString('th-TH')}</td>
+                  <td>{parseInt(item.price).toLocaleString('th-TH')}</td>
+                  <td>
+                    {parseInt(item.qty * item.price).toLocaleString('th-TH')}
+                  </td>
                 </tr>
               ))}
           </tbody>
         </table>
         <br />
 
-        <div>ยอดรวม : xxx บาท</div>
-        <div>xx/xx/xx xx:xx:xx</div>
+        <div>ยอดรวม : {parseInt(sumTotal).toLocaleString('th-TH')} บาท</div>
+        <div>เวลา : {dayjs(lastBill.createdAt).format('DD/MM/YY HH:mm')}</div>
       </div>
     </div>
   );
