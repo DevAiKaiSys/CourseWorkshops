@@ -27,6 +27,19 @@ const Sale = () => {
     fetchBillSaleDetail();
   }, []);
 
+  useEffect(() => {
+    if (memberInfo?.name && lastBill?.billSaleDetails?.length > 0) {
+      printJS({
+        printable: 'slip',
+        maxWidth: 200,
+        type: 'html',
+      });
+
+      // show only one time
+      setMemberInfo({});
+    }
+  }, [memberInfo, lastBill]);
+
   const fetchBillSaleDetail = async () => {
     try {
       await axios
@@ -291,12 +304,6 @@ const Sale = () => {
         });
 
       handleLastBill();
-
-      printJS({
-        printable: 'slip',
-        maxWidth: 200,
-        type: 'html',
-      });
     } catch (error) {}
   };
 
@@ -598,7 +605,19 @@ const Sale = () => {
         </center>
         <br />
 
-        <div>xxx (2) 50 = 100</div>
+        <table width="100%">
+          <tbody>
+            {lastBill?.billSaleDetails?.length > 0 &&
+              lastBill.billSaleDetails.map((item, index) => (
+                <tr key={index}>
+                  <td>{item.product.name}</td>
+                  <td>{item.qty}</td>
+                  <td>{item.price}</td>
+                  <td>{item.qty * item.price}</td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
         <br />
 
         <div>ยอดรวม : xxx บาท</div>
