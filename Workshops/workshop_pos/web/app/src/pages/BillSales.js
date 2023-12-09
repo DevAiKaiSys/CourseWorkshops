@@ -34,6 +34,7 @@ function BillSales() {
       });
     }
   };
+  
   return (
     <div>
       <Template>
