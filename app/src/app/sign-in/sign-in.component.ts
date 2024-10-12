@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { error } from 'console';
 import { catchError, of } from 'rxjs';
 import Swal from 'sweetalert2';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -14,6 +15,7 @@ import Swal from 'sweetalert2';
 })
 export class SignInComponent {
   private http = inject(HttpClient);
+  private authService = inject(AuthService);
 
   username: string = '';
   password: string = '';
@@ -47,6 +49,7 @@ export class SignInComponent {
             console.log('Response status:', res.status);
             console.log('Body:', res.body);
             if (res.status == 200) {
+              this.authService.login(this.username, res.token);
             } else {
               Swal.fire({
                 title: 'ตรวจสอบข้อมูล',

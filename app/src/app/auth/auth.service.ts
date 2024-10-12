@@ -4,34 +4,33 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class AuthService {
-  private token: string | undefined;
-  // Simulated users (you can replace this with a real API call)
-  private users: { [key: string]: string } = {
-    user1: 'password1',
-    user2: 'password2',
-  };
+  private tokenKey = 'angular_token';
+  private usernameKey = 'angular_username';
 
   // Simulate an authentication check
   isAuthenticated(): boolean {
-    return !!this.token;
+    return !!this.getToken();
   }
 
-  // Simulate logging in
-  login(username: string, password: string): boolean {
-    if (this.users[username] && this.users[username] === password) {
-      this.token = 'dummy-token'; // Assign a token (this could be a JWT in a real app)
-      return true; // Login successful
-    }
-    return false; // Login failed
+  // Log in the user and store the token and username
+  login(username: string, token: string): void {
+    localStorage.setItem(this.tokenKey, token);
+    localStorage.setItem(this.usernameKey, username);
   }
 
-  // Simulate logging out
-  logout() {
-    this.token = undefined;
+  // Log out the user by clearing the token and username
+  logout(): void {
+    localStorage.removeItem(this.tokenKey);
+    localStorage.removeItem(this.usernameKey);
   }
 
   // Get the stored token
-  getToken(): string | undefined {
-    return this.token;
+  getToken(): string | null {
+    return localStorage.getItem(this.tokenKey);
+  }
+
+  // Get the stored username
+  getUsername(): string | null {
+    return localStorage.getItem(this.usernameKey);
   }
 }
