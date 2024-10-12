@@ -14,3 +14,9 @@ npm install prisma typescript ts-node @types/node --save-dev
 npx tsc --init
 npx prisma init
 ```
+
+# [JWT](https://jwt.io/)
+
+```
+npm install jsonwebtoken
+```

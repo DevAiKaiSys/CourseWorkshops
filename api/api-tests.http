@@ -1,0 +1,26 @@
+### Sign in with valid credentials
+POST http://localhost:3000/users/signin
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin"
+}
+
+### Sign in with invalid credentials
+POST http://localhost:3000/users/signin
+Content-Type: application/json
+
+{
+  "username": "invalid_user",
+  "password": "wrong_password"
+}
+
+### Sign in with missing credentials
+POST http://localhost:3000/users/signin
+Content-Type: application/json
+
+{
+  "username": "your_username", 
+  "password": ""
+}
