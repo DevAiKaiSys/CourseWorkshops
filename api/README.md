@@ -4,4 +4,13 @@
 
 ```
 npx express-generator --no-view --git
+npm install --save @types/express
+```
+
+# [Prisma](https://www.prisma.io/)
+
+```
+npm install prisma typescript ts-node @types/node --save-dev
+npx tsc --init
+npx prisma init
 ```
