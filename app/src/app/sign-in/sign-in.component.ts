@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, inject } from '@angular/core';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -9,6 +10,8 @@ import Swal from 'sweetalert2';
   styleUrl: './sign-in.component.css',
 })
 export class SignInComponent {
+  private http = inject(HttpClient);
+
   username: string = '';
   password: string = '';
 
