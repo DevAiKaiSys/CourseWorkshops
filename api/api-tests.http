@@ -46,3 +46,6 @@ Content-Type: application/json
 
 ### Get all food types
 GET http://localhost:3000/api/foodtypes/list
+
+### Delete a food type
+PATCH  http://localhost:3000/api/foodtypes/remove/8

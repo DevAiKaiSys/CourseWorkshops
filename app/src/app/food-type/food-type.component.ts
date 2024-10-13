@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { catchError, of } from 'rxjs';
 import Swal from 'sweetalert2';
 import { environment } from '@environments/environment';
-import { MyModalComponent } from "../my-modal/my-modal.component";
+import { MyModalComponent } from '../my-modal/my-modal.component';
 
 @Component({
   selector: 'app-food-type',
@@ -81,5 +81,44 @@ export class FoodTypeComponent implements OnInit {
         }
         this.isLoading = false; // Set loading to false after fetching
       });
+  }
+
+  async remove(item: any) {
+    // Show confirmation dialog
+    const result = await Swal.fire({
+      title: 'ลบรายการ',
+      text: `คุณต้องการลบรายการ "${item.name}" ใช่หรือไม่`,
+      icon: 'question',
+      showCancelButton: true,
+      showConfirmButton: true,
+    });
+
+    // Check the user's response
+    if (result.isConfirmed) {
+      // If confirmed, update the status to "deleted"
+      this.http
+        .patch(
+          `${environment.apiServer}/foodtypes/remove/${item.id}`,
+          {},
+          {
+            observe: 'response',
+          }
+        )
+        .pipe(
+          catchError((error) => {
+            return of({
+              success: false,
+              message: 'Failed to delete food type. Please try again.',
+            });
+          })
+        )
+        .subscribe((res: any) => {
+          if (res.status === 200) {
+            this.fetchData(); // Refresh the list
+          } else {
+            Swal.fire('Error!', 'Failed to delete the food type.', 'error');
+          }
+        });
+    }
   }
 }
