@@ -1,0 +1,40 @@
+<div class="mt-3 card">
+  <div class="card-header">ขนาด</div>
+  <div class="card-body">
+    <button
+      class="btn btn-primary"
+      data-bs-toggle="modal"
+      data-bs-target="#modalFoodSize"
+    >
+      <i class="fa fa-plus me-2"></i>เพิ่มรายการ
+    </button>
+
+    <table class="table"></table>
+  </div>
+</div>
+
+<app-my-modal modalId="modalFoodSize" title="ขนาด">
+  <div>
+    <div>ประเภทอาหาร</div>
+    <select name="" id="" class="form-control"></select>
+  </div>
+
+  <div class="mt-3">
+    <div>ชื่อ</div>
+    <input type="text" class="form-control" />
+  </div>
+  <div class="mt-3">
+    <div>คิดเงินเพิ่ม (บาท)</div>
+    <input type="text" class="form-control" />
+  </div>
+  <div class="mt-3">
+    <div>หมายเหตุ</div>
+    <input type="text" class="form-control" />
+  </div>
+
+  <div class="mt-3">
+    <button class="btn btn-primary">
+      <i class="fa fa-check mr-2"></i>บันทึก
+    </button>
+  </div>
+</app-my-modal>

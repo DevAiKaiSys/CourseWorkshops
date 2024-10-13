@@ -3,6 +3,7 @@ import { SignInComponent } from './sign-in/sign-in.component';
 import { authGuard } from './auth/auth.guard';
 import { DashboardLayoutComponent } from './dashboard-layout/dashboard-layout.component';
 import { FoodTypeComponent } from './food-type/food-type.component';
+import { FoodSizeComponent } from './food-size/food-size.component';
 
 export const routes: Routes = [
   {
@@ -13,6 +14,10 @@ export const routes: Routes = [
       {
         path: 'foodtype',
         component: FoodTypeComponent,
+      },
+      {
+        path: 'foodsize',
+        component: FoodSizeComponent,
       },
     ],
   },
