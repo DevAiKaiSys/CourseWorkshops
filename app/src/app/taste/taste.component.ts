@@ -80,12 +80,37 @@ export class TasteComponent implements OnInit {
 
     document.getElementById('modalTaste_btnClose')?.click();
   }
-  remove(_t15: any) {
-    throw new Error('Method not implemented.');
+
+  async remove(item: any) {
+    // Show confirmation dialog
+    const result = await Swal.fire({
+      title: 'ลบรายการ',
+      text: `คุณต้องการลบรายการ "${item.FoodType.name} - ${item.name}" ใช่หรือไม่`,
+      icon: 'question',
+      showCancelButton: true,
+      showConfirmButton: true,
+    });
+
+    // Check the user's response
+    if (result.isConfirmed) {
+      // If confirmed, update the status to "deleted"
+      this.tasteService.remove(item.id).subscribe((res: any) => {
+        if (res.status === 200) {
+          this.fetchData(); // Refresh the list
+        } else {
+          Swal.fire('Error!', 'Failed to delete the taste.', 'error');
+        }
+      });
+    }
   }
-  edit(_t15: any) {
-    throw new Error('Method not implemented.');
+
+  edit(item: any) {
+    this.name = item.name;
+    this.remark = item.remark;
+    this.id = item.id;
+    this.foodTypeId = item.foodTypeId;
   }
+
   clearForm() {
     this.name = '';
     this.remark = '';
