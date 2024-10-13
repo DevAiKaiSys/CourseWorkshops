@@ -13,6 +13,11 @@ router.get("/list", async function (req, res) {
         status: "use",
       },
     });
+    // example
+    // Add a delay of 2 seconds (2000 milliseconds)
+    /* setTimeout(() => {
+      return res.status(200).json(foodTypes);
+    }, 2000); */ // Adjust the delay time as needed
     return res.status(200).json(foodTypes);
   } catch (error) {
     console.error("Error retrieving food types:", error);
