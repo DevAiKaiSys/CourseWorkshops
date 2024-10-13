@@ -4,6 +4,7 @@ import { authGuard } from './auth/auth.guard';
 import { DashboardLayoutComponent } from './dashboard-layout/dashboard-layout.component';
 import { FoodTypeComponent } from './food-type/food-type.component';
 import { FoodSizeComponent } from './food-size/food-size.component';
+import { TasteComponent } from './taste/taste.component';
 
 export const routes: Routes = [
   {
@@ -18,6 +19,10 @@ export const routes: Routes = [
       {
         path: 'foodsize',
         component: FoodSizeComponent,
+      },
+      {
+        path: 'taste',
+        component: TasteComponent,
       },
     ],
   },

@@ -24,7 +24,7 @@ export class FoodSizeComponent implements OnInit {
   name: string = '';
   price: number | undefined;
   remark: string = '';
-  foodTypeId: number = 0;
+  foodTypeId: number | undefined;
 
   ngOnInit() {
     this.fetchDataFoodType();
@@ -61,6 +61,7 @@ export class FoodSizeComponent implements OnInit {
     this.price = undefined;
     this.remark = '';
     this.id = undefined;
+    this.foodTypeId = undefined;
   }
 
   save() {
