@@ -59,3 +59,35 @@ Content-Type: application/json
   "name": "Citrus Fruit",
   "remark": "Includes oranges and lemons"
 }
+
+### Get All Food Sizes
+GET http://localhost:3000/api/foodsizes/list
+Accept: application/json
+
+### Create a New Food Size
+POST http://localhost:3000/api/foodsizes/create
+Content-Type: application/json
+
+{
+  "foodTypeId": 9,
+  "name": "Medium Pizza",
+  "price": 10.99,
+  "remark": "A medium cheese pizza."
+}
+
+### Update a Food Size
+PUT http://localhost:3000/api/foodsizes/update
+Content-Type: application/json
+
+{
+  "id": 1,
+  "name": "Updated Medium Pizza",
+  "price": 11.99,
+  "remark": "An updated medium cheese pizza."
+}
+
+### Mark a Food Size as Deleted
+PATCH http://localhost:3000/api/foodsizes/remove/1
+Content-Type: application/json
+
+{}

@@ -7,6 +7,7 @@ var cors = require("cors");
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var foodTypesRouter = require("./routes/foodTypes");
+var foodSizesRouter = require("./routes/foodSizes");
 
 var app = express();
 app.use(cors());
@@ -20,5 +21,6 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/foodtypes", foodTypesRouter);
+app.use("/api/foodsizes", foodSizesRouter);
 
 module.exports = app;
