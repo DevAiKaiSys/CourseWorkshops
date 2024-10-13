@@ -12,6 +12,9 @@ router.get("/list", async (req, res) => {
       where: {
         status: "use",
       },
+      include: {
+        FoodType: true,
+      },
     });
     return res.status(200).json(foodSizes);
   } catch (error) {

@@ -46,4 +46,23 @@ export class FoodSizeService {
         )
       );
   }
+
+  remove(id: number) {
+    return this.http
+      .patch(
+        `${this.apiUrl}/remove/${id}`,
+        {},
+        {
+          observe: 'response',
+        }
+      )
+      .pipe(
+        catchError((error) =>
+          of({
+            success: false,
+            message: 'Failed to delete food size. Please try again.',
+          })
+        )
+      );
+  }
 }

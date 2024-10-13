@@ -5,6 +5,7 @@ import { FoodTypeService } from '../food-type/food-type.service';
 import { FormsModule } from '@angular/forms';
 import { count } from 'console';
 import { FoodSizeService } from './food-size.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-food-size',
@@ -18,6 +19,7 @@ export class FoodSizeComponent implements OnInit {
   private foodSizeService = inject(FoodSizeService);
 
   foodTypes: any[] = [];
+  foodSizes: any[] = [];
   id: number | undefined;
   name: string = '';
   price: number | undefined;
@@ -40,7 +42,19 @@ export class FoodSizeComponent implements OnInit {
     });
   }
 
-  fetchData() {}
+  fetchData() {
+    this.foodSizeService.getAll().subscribe((res: any) => {
+      if (res.status === 200) {
+        this.foodSizes = res.body;
+      } else {
+        Swal.fire({
+          title: 'Error',
+          text: res.error.message,
+          icon: 'error',
+        });
+      }
+    });
+  }
 
   clearForm() {
     this.name = '';
@@ -76,5 +90,28 @@ export class FoodSizeComponent implements OnInit {
     }
 
     document.getElementById('modalFoodSize_btnClose')?.click();
+  }
+
+  async remove(item: any) {
+    // Show confirmation dialog
+    const result = await Swal.fire({
+      title: 'ลบรายการ',
+      text: `คุณต้องการลบรายการ "${item.FoodType.name} - ${item.name}" ใช่หรือไม่`,
+      icon: 'question',
+      showCancelButton: true,
+      showConfirmButton: true,
+    });
+
+    // Check the user's response
+    if (result.isConfirmed) {
+      // If confirmed, update the status to "deleted"
+      this.foodSizeService.remove(item.id).subscribe((res: any) => {
+        if (res.status === 200) {
+          this.fetchData(); // Refresh the list
+        } else {
+          Swal.fire('Error!', 'Failed to delete the food type.', 'error');
+        }
+      });
+    }
   }
 }
