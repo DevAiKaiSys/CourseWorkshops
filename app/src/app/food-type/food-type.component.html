@@ -5,6 +5,7 @@
       class="btn btn-primary"
       data-bs-toggle="modal"
       data-bs-target="#modalFoodType"
+      (click)="clearForm()"
     >
       <i class="fa fa-plus me-2"></i>เพิ่มรายการ
     </button>
@@ -42,7 +43,12 @@
             {{ item.remark }}
           </td>
           <td class="text-center">
-            <button class="btn btn-primary">
+            <button
+              class="btn btn-primary"
+              data-bs-toggle="modal"
+              data-bs-target="#modalFoodType"
+              (click)="edit(item)"
+            >
               <i class="fa fa-pencil"></i>
             </button>
             <button class="btn btn-danger" (click)="remove(item)">

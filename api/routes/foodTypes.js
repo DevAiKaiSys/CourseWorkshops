@@ -74,4 +74,29 @@ router.patch("/remove/:id", async function (req, res) {
   }
 });
 
+// Update food type
+router.put("/update", async function (req, res) {
+  const { id, name, remark } = req.body;
+
+  // Validate the request body
+  if (!id || !name) {
+    return res.status(400).send({ message: "ID and Name are required." });
+  }
+
+  try {
+    const foodType = await prisma.foodType.update({
+      where: { id: Number(id) }, // Ensure id is a number
+      data: {
+        name,
+        ...(remark && { remark }),
+      },
+    });
+
+    return res.status(200).json({ message: "success" });
+  } catch (error) {
+    console.error("Error updating food type:", error);
+    return res.status(500).send({ error: error.message });
+  }
+});
+
 module.exports = router;

@@ -49,3 +49,13 @@ GET http://localhost:3000/api/foodtypes/list
 
 ### Delete a food type
 PATCH  http://localhost:3000/api/foodtypes/remove/8
+
+### Update a food type
+PUT http://localhost:3000/api/foodtypes/update
+Content-Type: application/json
+
+{
+  "id": 9,
+  "name": "Citrus Fruit",
+  "remark": "Includes oranges and lemons"
+}

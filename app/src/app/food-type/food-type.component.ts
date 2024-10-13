@@ -18,11 +18,18 @@ export class FoodTypeComponent implements OnInit {
 
   name: string = '';
   remark: string = '';
+  id: number | undefined;
   foodTypes: any = [];
   isLoading: boolean = true; // Track loading state
 
   ngOnInit(): void {
     this.fetchData();
+  }
+
+  clearForm() {
+    this.name = '';
+    this.remark = '';
+    this.id = undefined;
   }
 
   save() {
@@ -31,24 +38,53 @@ export class FoodTypeComponent implements OnInit {
         name: this.name,
         ...(this.remark && this.remark.trim() ? { remark: this.remark } : {}),
       };
-      this.http
-        .post(`${environment.apiServer}/foodtypes/create`, payload, {
-          observe: 'response',
-        })
-        .pipe(
-          catchError((error) => {
-            return of({
-              ...error,
-              success: false,
-              message: 'Failed to save food type. Please try again.', // More meaningful message
-            });
+      if (this.id) {
+        this.http
+          .put(
+            `${environment.apiServer}/foodtypes/update`,
+            { ...payload, id: this.id },
+            {
+              observe: 'response',
+            }
+          )
+          .pipe(
+            catchError((error) => {
+              return of({
+                ...error,
+                success: false,
+                message: 'Failed to save food type. Please try again.', // More meaningful message
+              });
+            })
+          )
+          .subscribe((res: any) => {
+            if (res.status == 200) {
+              this.fetchData();
+              this.clearForm();
+            }
+          });
+      } else {
+        this.http
+          .post(`${environment.apiServer}/foodtypes/create`, payload, {
+            observe: 'response',
           })
-        )
-        .subscribe((res: any) => {
-          if (res.status == 201) {
-            this.fetchData();
-          }
-        });
+          .pipe(
+            catchError((error) => {
+              return of({
+                ...error,
+                success: false,
+                message: 'Failed to save food type. Please try again.', // More meaningful message
+              });
+            })
+          )
+          .subscribe((res: any) => {
+            if (res.status == 201) {
+              this.fetchData();
+              this.clearForm();
+            }
+          });
+      }
+
+      document.getElementById('modalFoodType_btnClose')?.click();
     } catch (error: any) {
       Swal.fire({
         title: 'error',
@@ -120,5 +156,11 @@ export class FoodTypeComponent implements OnInit {
           }
         });
     }
+  }
+
+  edit(item: any) {
+    this.name = item.name;
+    this.remark = item.remark;
+    this.id = item.id;
   }
 }
