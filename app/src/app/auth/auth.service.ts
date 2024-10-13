@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 })
 export class AuthService {
   private tokenKey = 'angular_token';
-  private usernameKey = 'angular_username';
+  private usernameKey = 'angular_name';
 
   // Simulate an authentication check
   isAuthenticated(): boolean {

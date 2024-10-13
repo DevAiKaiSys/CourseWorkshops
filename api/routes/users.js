@@ -40,7 +40,7 @@ router.post("/signin", async function (req, res, next) {
 
     if (user != null) {
       const token = generateToken(user);
-      return res.status(200).send({ token });
+      return res.status(200).send({ token, name: user.name });
     } else {
       return res.status(401).send({ message: "Unauthorized" });
     }

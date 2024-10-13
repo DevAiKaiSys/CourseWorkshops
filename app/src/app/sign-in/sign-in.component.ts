@@ -53,7 +53,7 @@ export class SignInComponent {
             console.log('Response status:', res.status);
             console.log('Body:', res.body);
             if (res.status == 200) {
-              this.authService.login(this.username, res.body.token);
+              this.authService.login(res.body.name, res.body.token);
               const redirectTo =
                 this.route.snapshot.queryParams['redirectTo'] || '';
               this.router.navigateByUrl(redirectTo);
