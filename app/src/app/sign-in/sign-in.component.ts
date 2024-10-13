@@ -5,6 +5,7 @@ import { catchError, of } from 'rxjs';
 import Swal from 'sweetalert2';
 import { AuthService } from '../auth/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { environment } from '@environments/environment';
 
 @Component({
   selector: 'app-sign-in',
@@ -37,7 +38,7 @@ export class SignInComponent {
 
       try {
         this.http
-          .post('http://localhost:3000/api/users/signin', payload, {
+          .post(`${environment.apiServer}/users/signin`, payload, {
             observe: 'response',
           })
           .pipe(

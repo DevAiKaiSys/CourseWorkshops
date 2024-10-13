@@ -6,9 +6,13 @@ var express = require("express");
 var router = express.Router();
 
 // Get all food types
-router.get("/", async function (req, res) {
+router.get("/list", async function (req, res) {
   try {
-    const foodTypes = await prisma.foodType.findMany();
+    const foodTypes = await prisma.foodType.findMany({
+      where: {
+        status: "use",
+      },
+    });
     return res.status(200).json(foodTypes);
   } catch (error) {
     console.error("Error retrieving food types:", error);
@@ -17,12 +21,12 @@ router.get("/", async function (req, res) {
 });
 
 // Create a new food type
-router.post("/", async function (req, res) {
-  const { name, remark, status } = req.body;
+router.post("/create", async function (req, res) {
+  const { name, remark } = req.body;
 
   // Validate the request body
-  if (!name || !status) {
-    return res.status(400).send({ message: "Name and status are required." });
+  if (!name) {
+    return res.status(400).send({ message: "Name are required." });
   }
 
   try {
@@ -30,11 +34,11 @@ router.post("/", async function (req, res) {
       data: {
         name,
         ...(remark && { remark }), // Only add remark if it exists
-        status,
+        status: "use",
       },
     });
     // Send back the created food type
-    return res.status(201).json(foodType);
+    return res.status(201).json({ message: "success" });
   } catch (error) {
     console.error("Error creating food type:", error);
     return res.status(500).send({ error: error.message });

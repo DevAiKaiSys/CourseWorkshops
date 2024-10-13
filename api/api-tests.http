@@ -26,7 +26,7 @@ Content-Type: application/json
 }
 
 ### Create a new food type
-POST http://localhost:3000/api/foodtypes
+POST http://localhost:3000/api/foodtypes/create
 Content-Type: application/json
 
 {
@@ -36,7 +36,7 @@ Content-Type: application/json
 }
 
 ### Create a new food type without remark
-POST http://localhost:3000/api/foodtypes
+POST http://localhost:3000/api/foodtypes/create
 Content-Type: application/json
 
 {
@@ -45,4 +45,4 @@ Content-Type: application/json
 }
 
 ### Get all food types
-GET http://localhost:3000/api/foodtypes
+GET http://localhost:3000/api/foodtypes/list
