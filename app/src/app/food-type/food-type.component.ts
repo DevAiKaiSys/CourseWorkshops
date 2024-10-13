@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { catchError, of } from 'rxjs';
 import Swal from 'sweetalert2';
 import { environment } from '@environments/environment';
+import { MyModalComponent } from "../my-modal/my-modal.component";
 
 @Component({
   selector: 'app-food-type',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, MyModalComponent],
   templateUrl: './food-type.component.html',
   styleUrl: './food-type.component.css',
 })
