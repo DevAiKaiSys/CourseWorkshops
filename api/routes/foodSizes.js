@@ -75,7 +75,7 @@ router.patch("/remove/:id", async (req, res) => {
 
 // Update a food size
 router.put("/update", async (req, res) => {
-  const { id, name, price, remark } = req.body;
+  const { foodTypeId, id, name, price, remark } = req.body;
 
   // Validate the request body
   if (!id || !name) {
@@ -86,6 +86,7 @@ router.put("/update", async (req, res) => {
     await prisma.foodSize.update({
       where: { id: Number(id) }, // Ensure id is a number
       data: {
+        foodTypeId,
         name,
         ...(price !== undefined && { moneyAdded: price }), // Only add price if it is defined
         ...(remark && { remark }),

@@ -114,4 +114,12 @@ export class FoodSizeComponent implements OnInit {
       });
     }
   }
+
+  edit(item: any) {
+    this.name = item.name;
+    this.price = item.moneyAdded;
+    this.remark = item.remark;
+    this.id = item.id;
+    this.foodTypeId = item.foodTypeId;
+  }
 }
