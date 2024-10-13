@@ -24,3 +24,25 @@ Content-Type: application/json
   "username": "your_username", 
   "password": ""
 }
+
+### Create a new food type
+POST http://localhost:3000/api/foodtypes
+Content-Type: application/json
+
+{
+  "name": "Fruit",
+  "remark": "Fresh seasonal fruits",
+  "status": "use"
+}
+
+### Create a new food type without remark
+POST http://localhost:3000/api/foodtypes
+Content-Type: application/json
+
+{
+  "name": "Vegetable",
+  "status": "use"
+}
+
+### Get all food types
+GET http://localhost:3000/api/foodtypes
