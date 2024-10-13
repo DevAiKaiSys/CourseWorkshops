@@ -9,6 +9,7 @@ var usersRouter = require("./routes/users");
 var foodTypesRouter = require("./routes/foodTypes");
 var foodSizesRouter = require("./routes/foodSizes");
 var tastesRouter = require("./routes/tastes");
+var foodsRouter = require("./routes/foods");
 
 var app = express();
 app.use(cors());
@@ -24,5 +25,6 @@ app.use("/api/users", usersRouter);
 app.use("/api/foodtypes", foodTypesRouter);
 app.use("/api/foodsizes", foodSizesRouter);
 app.use("/api/tastes", tastesRouter);
+app.use("/api/foods", foodsRouter);
 
 module.exports = app;

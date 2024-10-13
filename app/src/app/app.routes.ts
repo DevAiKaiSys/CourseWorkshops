@@ -5,6 +5,7 @@ import { DashboardLayoutComponent } from './dashboard-layout/dashboard-layout.co
 import { FoodTypeComponent } from './food-type/food-type.component';
 import { FoodSizeComponent } from './food-size/food-size.component';
 import { TasteComponent } from './taste/taste.component';
+import { FoodComponent } from './food/food.component';
 
 export const routes: Routes = [
   {
@@ -23,6 +24,10 @@ export const routes: Routes = [
       {
         path: 'taste',
         component: TasteComponent,
+      },
+      {
+        path: 'food',
+        component: FoodComponent,
       },
     ],
   },

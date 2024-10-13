@@ -122,3 +122,38 @@ Content-Type: application/json
 ### Mark a taste as deleted
 PATCH http://localhost:3000/api/tastes/remove/1 HTTP/1.1
 Content-Type: application/json
+
+### Get all foods
+GET http://localhost:3000/api/foods/list
+Accept: application/json
+
+### Create a new food item
+POST http://localhost:3000/api/foods/create
+Content-Type: application/json
+
+{
+  "foodTypeId": 13,
+  "foodType": "food",
+  "name": "Pizza",
+  "fileName": "pizza.jpg",
+  "price": 15,
+  "remark": "Delicious cheese pizza"
+}
+
+### Update a food item
+PUT http://localhost:3000/api/foods/update
+Content-Type: application/json
+
+{
+  "id": 1,
+  "foodTypeId": 1,
+  "foodType": "food",
+  "name": "Updated Pizza",
+  "fileName": "updated_pizza.jpg",
+  "price": 18,
+  "remark": "Updated remark for the pizza"
+}
+
+### Mark a food item as deleted
+PATCH http://localhost:3000/api/foods/remove/1
+Content-Type: application/json
