@@ -20,3 +20,9 @@ npx prisma init
 ```
 npm install jsonwebtoken
 ```
+
+# CORS
+
+```
+npm install cors
+```

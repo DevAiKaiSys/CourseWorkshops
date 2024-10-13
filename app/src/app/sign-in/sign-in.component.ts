@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { error } from 'console';
 import { catchError, of } from 'rxjs';
 import Swal from 'sweetalert2';
 import { AuthService } from '../auth/auth.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-sign-in',
@@ -16,6 +16,8 @@ import { AuthService } from '../auth/auth.service';
 export class SignInComponent {
   private http = inject(HttpClient);
   private authService = inject(AuthService);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   username: string = '';
   password: string = '';
@@ -35,7 +37,9 @@ export class SignInComponent {
 
       try {
         this.http
-          .post('http://localhost:3000/api/user/signin', payload)
+          .post('http://localhost:3000/api/users/signin', payload, {
+            observe: 'response',
+          })
           .pipe(
             catchError((error) => {
               return of({
@@ -49,7 +53,10 @@ export class SignInComponent {
             console.log('Response status:', res.status);
             console.log('Body:', res.body);
             if (res.status == 200) {
-              this.authService.login(this.username, res.token);
+              this.authService.login(this.username, res.body.token);
+              const redirectTo =
+                this.route.snapshot.queryParams['redirectTo'] || '';
+              this.router.navigateByUrl(redirectTo);
             } else {
               Swal.fire({
                 title: 'ตรวจสอบข้อมูล',
