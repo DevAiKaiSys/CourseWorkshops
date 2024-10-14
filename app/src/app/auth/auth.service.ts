@@ -9,6 +9,7 @@ export class AuthService {
 
   private tokenKey = 'angular_token';
   private usernameKey = 'angular_name';
+  private userIdKey = 'angular_id';
 
   // Simulate an authentication check
   isAuthenticated(): boolean {
@@ -16,10 +17,11 @@ export class AuthService {
   }
 
   // Log in the user and store the token and username
-  login(username: string, token: string): void {
+  login(username: string, token: string, userId: number): void {
     if (this.isBrowser()) {
       localStorage.setItem(this.tokenKey, token);
       localStorage.setItem(this.usernameKey, username);
+      localStorage.setItem(this.userIdKey, userId.toString());
     }
   }
 
@@ -28,6 +30,7 @@ export class AuthService {
     if (this.isBrowser()) {
       localStorage.removeItem(this.tokenKey);
       localStorage.removeItem(this.usernameKey);
+      localStorage.removeItem(this.userIdKey);
     }
   }
 
@@ -39,6 +42,12 @@ export class AuthService {
   // Get the stored username
   getUsername(): string | null {
     return this.isBrowser() ? localStorage.getItem(this.usernameKey) : null;
+  }
+
+  // Get the stored userId as a number
+  getUserId(): number | null {
+    const id = this.isBrowser() ? localStorage.getItem(this.userIdKey) : null;
+    return id !== null ? Number(id) : null; // Convert string back to number
   }
 
   // Helper method to check if running in the browser

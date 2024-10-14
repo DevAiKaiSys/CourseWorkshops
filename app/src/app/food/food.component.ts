@@ -87,8 +87,6 @@ export class FoodComponent implements OnInit {
       ...(this.remark && this.remark.trim() ? { remark: this.remark } : {}),
     };
 
-    console.log(payload);
-
     if (this.id) {
       this.foodService
         .update({ ...payload, id: this.id })

@@ -11,6 +11,7 @@ var foodTypesRouter = require("./routes/foodTypes");
 var foodSizesRouter = require("./routes/foodSizes");
 var tastesRouter = require("./routes/tastes");
 var foodsRouter = require("./routes/foods");
+var saleTempsRouter = require("./routes/saleTemps");
 
 var app = express();
 app.use(cors());
@@ -29,5 +30,6 @@ app.use("/api/foodtypes", foodTypesRouter);
 app.use("/api/foodsizes", foodSizesRouter);
 app.use("/api/tastes", tastesRouter);
 app.use("/api/foods", foodsRouter);
+app.use("/api/saletemps", saleTempsRouter);
 
 module.exports = app;

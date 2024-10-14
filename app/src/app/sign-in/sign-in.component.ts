@@ -38,7 +38,7 @@ export class SignInComponent {
 
       try {
         this.http
-          .post(`${environment.apiServer}/users/signin`, payload, {
+          .post(`${environment.apiServer}/api/users/signin`, payload, {
             observe: 'response',
           })
           .pipe(
@@ -54,7 +54,11 @@ export class SignInComponent {
             console.log('Response status:', res.status);
             console.log('Body:', res.body);
             if (res.status == 200) {
-              this.authService.login(res.body.name, res.body.token);
+              this.authService.login(
+                res.body.name,
+                res.body.token,
+                res.body.id
+              );
               const redirectTo =
                 this.route.snapshot.queryParams['redirectTo'] || '';
               this.router.navigateByUrl(redirectTo);

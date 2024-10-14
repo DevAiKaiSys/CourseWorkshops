@@ -1,0 +1,68 @@
+<div class="input-group mb-3 pt-3" style="width: 200px">
+  <span class="input-group-text" id="basic-addon1">โต๊ะ</span>
+  <input
+    type="number"
+    class="form-control"
+    placeholder="เบอร์โต๊ะ"
+    aria-label="Username"
+    aria-describedby="basic-addon1"
+    [(ngModel)]="tableNo"
+  />
+</div>
+
+<div class="card mt-3">
+  <div class="card-header">ขายอาหาร/เครื่องดื่ม</div>
+  <div class="card-body">
+    <button class="btn btn-primary me-2" (click)="filter('food')">
+      <i class="fa fa-home me-2"></i>อาหาร
+    </button>
+    <button class="btn btn-primary me-2" (click)="filter('drink')">
+      <i class="fa fa-calendar me-2"></i>เครื่องดื่ม
+    </button>
+    <button class="btn btn-primary me-2" (click)="filter()">
+      <i class="fa fa-check me-2"></i>ทั้งหมด
+    </button>
+  </div>
+
+  <div class="d-flex flex-row">
+    <div>
+      <div class="row mt-3">
+        @for (item of foods; track $index) {
+        <div
+          class="col-xl-2 col-lg-3 col-md-3 col-sm-6 col-xs-12"
+          (click)="saveToSaleTemp(item)"
+        >
+          <div class="card">
+            @if(item.img){
+            <img
+              [src]="apiUrl + item.img"
+              alt=""
+              class="card-image"
+              height="100px"
+            />
+            }@else {
+            <img src="" alt="" class="" height="100px" />
+            }
+            <div class="card-body">
+              <h5>{{ item.name }}</h5>
+              <h5 class="text-success text-center">{{ item.price }}</h5>
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+    <div>
+      <div>รายการที่เลือก</div>
+      <div class="card">
+        <div class="card-body">
+          <div>ไข่เจียวผัก</div>
+          <div>150</div>
+          <div>
+            <button class="btn btn-primary"><i class="fa fa-minus"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

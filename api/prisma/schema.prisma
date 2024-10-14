@@ -52,13 +52,24 @@ model Taste {
 }
 
 model Food {
-  id         Int      @id() @default(autoincrement())
+  id         Int        @id() @default(autoincrement())
   name       String
   remark     String?
   price      Int
   img        String?
-  status     String   @default("use") // use, delete
-  foodType   String   @default("food") // food, drink
+  status     String     @default("use") // use, delete
+  foodType   String     @default("food") // food, drink
   foodTypeId Int
-  FoodType   FoodType @relation(fields: [foodTypeId], references: [id])
+  FoodType   FoodType   @relation(fields: [foodTypeId], references: [id])
+  SaleTemps  SaleTemp[]
+}
+
+model SaleTemp {
+  id      Int  @id() @default(autoincrement())
+  foodId  Int
+  qty     Int
+  price   Int
+  tableNo Int
+  userId  Int
+  Food    Food @relation(fields: [foodId], references: [id])
 }
