@@ -61,4 +61,19 @@ export class SaleTempService {
         )
       );
   }
+
+  changeQty(payload: any) {
+    return this.http
+      .patch(`${this.apiUrl}/changeqty`, payload, {
+        observe: 'response',
+      })
+      .pipe(
+        catchError((error) =>
+          of({
+            success: false,
+            message: 'Failed to delete food. Please try again.',
+          })
+        )
+      );
+  }
 }

@@ -138,4 +138,62 @@ router.delete("/remove/:saleTempId", async (req, res) => {
   }
 });
 
+// Change quantity of a sale item
+router.patch("/changeQty", async (req, res) => {
+  const { id, operation, qty } = req.body;
+
+  // Validate request body
+  if (!id || !operation) {
+    return res.status(400).json({
+      message: "Invalid request. Ensure 'id' and 'operation' are provided.",
+    });
+  }
+
+  // Default qty to 1 if not provided
+  const quantity = qty ? qty : 1;
+
+  try {
+    // Fetch the existing sale item
+    const sale = await prisma.saleTemp.findUnique({
+      where: { id: parseInt(id, 10) },
+    });
+
+    if (!sale) {
+      return res.status(404).json({ message: "Sale item not found." });
+    }
+
+    let newQty = sale.qty;
+
+    if (operation === "up") {
+      // Increase quantity
+      newQty += quantity; // Calculate new quantity
+    } else if (operation === "down") {
+      // Check if the quantity can be decreased
+      if (sale.qty - quantity < 1) {
+        return res
+          .status(202)
+          .json({ message: "Quantity decrease ignored: cannot go below one." });
+      }
+      newQty -= quantity; // Calculate new quantity
+    } else {
+      return res
+        .status(400)
+        .json({ message: "Invalid operation. Use 'up' or 'down'." });
+    }
+
+    // Update the quantity in the database
+    const updatedSale = await prisma.saleTemp.update({
+      where: { id: parseInt(id, 10) },
+      data: { qty: newQty },
+    });
+
+    return res
+      .status(200)
+      .json({ message: "Quantity changed successfully.", sale: updatedSale });
+  } catch (error) {
+    console.error("Error changing quantity:", error);
+    return res.status(500).json({ error: "Failed to change quantity." });
+  }
+});
+
 module.exports = router;

@@ -148,4 +148,18 @@ export class SaleComponent implements OnInit {
       });
     }
   }
+
+  changeQty(item: any, operation: string) {
+    const payload = {
+      id: item.id,
+      operation: operation,
+    };
+    this.saleTempService.changeQty(payload).subscribe((res: any) => {
+      if (res.status === 200) {
+        this.fetchDataSaleTemp(); // Refresh the list
+      } else {
+        // Swal.fire('Error!', 'Failed to delete the food type.', 'error');
+      }
+    });
+  }
 }
