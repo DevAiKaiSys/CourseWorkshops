@@ -4,6 +4,7 @@ import { MyModalComponent } from '../my-modal/my-modal.component';
 import { FormsModule } from '@angular/forms';
 import { FoodService } from './food.service';
 import Swal from 'sweetalert2';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-food',
@@ -25,6 +26,7 @@ export class FoodComponent implements OnInit {
   remark: string = '';
   foodType: string = 'food';
   id: number | undefined;
+  file: File | undefined;
 
   ngOnInit() {
     this.fetchDataFoodType();
@@ -56,12 +58,14 @@ export class FoodComponent implements OnInit {
     });
   }
 
-  save() {
+  async save() {
+    const fileName = await this.uploadFile();
+
     const payload = {
       foodTypeId: this.foodTypeId,
       foodType: this.foodType,
       name: this.name,
-      ...(this.fileName !== undefined ? { fileName: this.fileName } : {}),
+      ...(fileName !== undefined ? { fileName: fileName } : {}),
       ...(this.price !== undefined ? { price: this.price } : {}),
       ...(this.remark && this.remark.trim() ? { remark: this.remark } : {}),
     };
@@ -103,5 +107,28 @@ export class FoodComponent implements OnInit {
 
   remove(item: any) {
     throw new Error('Method not implemented.');
+  }
+
+  fileSelected(file: any) {
+    if (file.files != undefined) {
+      if (file.files.length > 0) {
+        this.file = file.files[0];
+      }
+    }
+  }
+
+  async uploadFile() {
+    if (this.file !== undefined) {
+      const formData = new FormData();
+      formData.append('img', this.file);
+
+      // Log FormData contents
+      formData.forEach((value, key) => {
+        console.log(`${key}:`, value);
+      });
+
+      const res: any = await firstValueFrom(this.foodService.upload(formData));
+      return res.fileName;
+    }
   }
 }

@@ -2,6 +2,8 @@ const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 var express = require("express");
+const path = require("path");
+const fs = require("fs");
 var router = express.Router();
 
 // Get all foods
@@ -122,6 +124,31 @@ router.put("/update", async (req, res) => {
     console.error("Error updating food item:", error);
     return res.status(500).json({ error: "Failed to update food item." });
   }
+});
+
+router.post("/upload", (req, res) => {
+  // Check if a file is uploaded
+  if (!req.files || !req.files.img) {
+    return res.status(400).json({ message: "No file uploaded." });
+  }
+
+  const img = req.files.img;
+  const fileName = img.name;
+
+  // Ensure the upload directory exists in the root of the project
+  const UPLOAD_DIR = path.join(process.cwd(), "uploads");
+  if (!fs.existsSync(UPLOAD_DIR)) {
+    fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+  }
+
+  img.mv(`uploads/${fileName}`, (err) => {
+    if (err) {
+      res.send({ error: err });
+    }
+  });
+
+  // Return the filename
+  return res.status(200).json({ fileName: fileName });
 });
 
 module.exports = router;

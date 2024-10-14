@@ -65,4 +65,19 @@ export class FoodService {
         )
       );
   }
+
+  upload(formData: FormData) {
+    return this.http
+      .post(`${this.apiUrl}/upload`, formData, {
+        observe: 'response',
+      })
+      .pipe(
+        catchError((error) =>
+          of({
+            success: false,
+            message: 'Failed to upload file. Please try again.',
+          })
+        )
+      );
+  }
 }
