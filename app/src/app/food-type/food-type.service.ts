@@ -9,7 +9,7 @@ import { catchError, of } from 'rxjs';
 export class FoodTypeService {
   private http = inject(HttpClient);
 
-  private apiUrl = `${environment.apiServer}/foodtypes`;
+  private apiUrl = `${environment.apiServer}/api/foodtypes`;
 
   getAll() {
     return this.http

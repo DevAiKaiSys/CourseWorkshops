@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { FoodService } from './food.service';
 import Swal from 'sweetalert2';
 import { firstValueFrom } from 'rxjs';
+import { environment } from '@environments/environment';
 
 @Component({
   selector: 'app-food',
@@ -17,11 +18,13 @@ export class FoodComponent implements OnInit {
   private foodTypeService = inject(FoodTypeService);
   private foodService = inject(FoodService);
 
+  apiUrl = `${environment.apiServer}/uploads/`;
+
   foodTypeId: number | undefined;
   foodTypes: any[] = [];
   foods: any[] = [];
   name: string = '';
-  fileName: string | undefined;
+  img: string | undefined;
   price: number | undefined;
   remark: string = '';
   foodType: string = 'food';
@@ -70,6 +73,8 @@ export class FoodComponent implements OnInit {
       ...(this.remark && this.remark.trim() ? { remark: this.remark } : {}),
     };
 
+    console.log(payload);
+
     if (this.id) {
       this.foodService
         .update({ ...payload, id: this.id })
@@ -97,16 +102,41 @@ export class FoodComponent implements OnInit {
     this.remark = '';
     this.id = undefined;
     this.foodTypeId = undefined;
-    this.fileName = undefined;
+    this.img = undefined;
     this.foodType = 'food';
+    this.file = undefined;
   }
 
   edit(item: any) {
-    throw new Error('Method not implemented.');
+    this.name = item.name;
+    this.price = item.price;
+    this.remark = item.remark;
+    this.id = item.id;
+    this.foodTypeId = item.foodTypeId;
+    this.img = item.img;
+    this.foodType = item.foodType;
   }
 
-  remove(item: any) {
-    throw new Error('Method not implemented.');
+  async remove(item: any) {
+    const result = await Swal.fire({
+      title: 'ลบรายการ',
+      text: `คุณต้องการลบรายการ "${item.FoodType.name} - ${item.name}" ใช่หรือไม่`,
+      icon: 'question',
+      showCancelButton: true,
+      showConfirmButton: true,
+    });
+
+    // Check the user's response
+    if (result.isConfirmed) {
+      // If confirmed, update the status to "deleted"
+      this.foodService.remove(item.id).subscribe((res: any) => {
+        if (res.status === 200) {
+          this.fetchData(); // Refresh the list
+        } else {
+          Swal.fire('Error!', 'Failed to delete the food type.', 'error');
+        }
+      });
+    }
   }
 
   fileSelected(file: any) {
@@ -128,7 +158,7 @@ export class FoodComponent implements OnInit {
       });
 
       const res: any = await firstValueFrom(this.foodService.upload(formData));
-      return res.fileName;
+      return res.body.fileName;
     }
   }
 }

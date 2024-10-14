@@ -13,6 +13,9 @@ router.get("/list", async (req, res) => {
       where: {
         status: "use",
       },
+      orderBy: {
+        id: "desc",
+      },
       include: {
         FoodType: true,
       },

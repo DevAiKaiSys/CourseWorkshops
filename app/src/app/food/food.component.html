@@ -14,23 +14,37 @@
     <table class="mt-3 table table-bordered table-striped">
       <thead>
         <tr>
+          <th width="100px"></th>
           <th>ประเภทอาหาร</th>
-          <th>ชื่อ</th>
+          <th>หมวด</th>
+          <th>รายการ</th>
           <th>หมายเหตุ</th>
+          <th class="text-end">ราคา</th>
           <th width="110px"></th>
         </tr>
       </thead>
       <tbody>
-        @for (item of foods; track item){
+        @for (item of foods; track $index){
         <tr>
           <td>
+            @if (item.img) {
+            <img [src]="apiUrl + item.img" alt="" class="" width="100px" />
+            }
+          </td>
+          <td>
             {{ item.FoodType.name }}
+          </td>
+          <td>
+            {{ item.foodType }}
           </td>
           <td>
             {{ item.name }}
           </td>
           <td>
             {{ item.remark }}
+          </td>
+          <td class="text-end">
+            {{ item.price }}
           </td>
           <td class="text-center">
             <button
@@ -72,6 +86,9 @@
     <input type="text" class="form-control" [(ngModel)]="name" />
   </div>
   <div class="mt-3">
+    @if (img) {
+    <img [src]="apiUrl + img" alt="" class="mb-2" width="100px" />
+    }
     <div>File ภาพ</div>
     <input
       type="file"
