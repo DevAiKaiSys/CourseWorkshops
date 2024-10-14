@@ -6,6 +6,29 @@ const path = require("path");
 const fs = require("fs");
 var router = express.Router();
 
+// Get all sale items for a specific user
+router.get("/list/:userId", async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const sales = await prisma.saleTemp.findMany({
+      where: {
+        userId: parseInt(userId, 10),
+      },
+      orderBy: {
+        id: "desc",
+      },
+      include: {
+        Food: true, // Include related food details
+      },
+    });
+    return res.status(200).json(sales);
+  } catch (error) {
+    console.error("Error retrieving sales:", error);
+    return res.status(500).json({ error: "Failed to retrieve sales." });
+  }
+});
+
 // Create a new sale item
 router.post("/create", async (req, res) => {
   const { foodId, qty, price, tableNo, userId } = req.body;
@@ -16,21 +39,102 @@ router.post("/create", async (req, res) => {
   }
 
   try {
-    const sale = await prisma.saleTemp.create({
-      data: {
+    // Check if a sale item already exists for the given foodId and userId
+    const existingSale = await prisma.saleTemp.findFirst({
+      where: {
         foodId,
-        qty,
-        price,
-        tableNo,
-        userId,
+        userId: parseInt(userId, 10), // Ensure userId is an integer
       },
     });
-    return res
-      .status(201)
-      .json({ message: "Sale item created successfully.", sale });
+
+    if (existingSale) {
+      // If it exists, update the quantity and price (if needed)
+      const updatedSale = await prisma.saleTemp.update({
+        where: { id: existingSale.id },
+        data: {
+          qty: existingSale.qty + qty, // Increment the quantity
+          price, // Update price if needed
+          tableNo, // Update table number if needed
+        },
+      });
+      return res.status(200).json({
+        message: "Sale item updated successfully.",
+        sale: updatedSale,
+      });
+    } else {
+      // If it doesn't exist, create a new sale item
+      const newSale = await prisma.saleTemp.create({
+        data: {
+          foodId,
+          qty,
+          price,
+          tableNo,
+          userId,
+        },
+      });
+      return res
+        .status(201)
+        .json({ message: "Sale item created successfully.", sale: newSale });
+    }
   } catch (error) {
-    console.error("Error creating sale item:", error);
-    return res.status(500).json({ error: "Failed to create sale item." });
+    console.error("Error creating or updating sale item:", error);
+    return res
+      .status(500)
+      .json({ error: "Failed to create or update sale item." });
+  }
+});
+
+// Delete a sale item for a specific user
+router.delete("/clear/:userId", async (req, res) => {
+  const { userId } = req.params;
+
+  // Validate the request body
+  if (!userId) {
+    return res.status(400).json({ message: "User ID is required." });
+  }
+
+  try {
+    const sale = await prisma.saleTemp.deleteMany({
+      where: {
+        userId: parseInt(userId, 10), // Ensure userId is an integer
+      },
+    });
+
+    if (sale.count === 0) {
+      return res.status(404).json({ message: "Sale item not found." });
+    }
+
+    return res.status(200).json({ message: "Sale item deleted successfully." });
+  } catch (error) {
+    console.error("Error deleting sale item:", error);
+    return res.status(500).json({ error: "Failed to delete sale item." });
+  }
+});
+
+// Delete a sale item for a specific user
+router.delete("/remove/:saleTempId", async (req, res) => {
+  const { saleTempId } = req.params;
+
+  // Validate the request body
+  if (!saleTempId) {
+    return res.status(400).json({ message: "User ID is required." });
+  }
+
+  try {
+    const sale = await prisma.saleTemp.deleteMany({
+      where: {
+        id: parseInt(saleTempId, 10), // Ensure userId is an integer
+      },
+    });
+
+    if (sale.count === 0) {
+      return res.status(404).json({ message: "Sale item not found." });
+    }
+
+    return res.status(200).json({ message: "Sale item deleted successfully." });
+  } catch (error) {
+    console.error("Error deleting sale item:", error);
+    return res.status(500).json({ error: "Failed to delete sale item." });
   }
 });
 

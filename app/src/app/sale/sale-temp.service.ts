@@ -11,6 +11,12 @@ export class SaleTempService {
 
   private apiUrl = `${environment.apiServer}/api/saletemps`;
 
+  getAll(userId: number) {
+    return this.http
+      .get(`${this.apiUrl}/list/${userId}`, { observe: 'response' })
+      .pipe(catchError((error) => of(error)));
+  }
+
   create(payload: any) {
     return this.http
       .post(`${this.apiUrl}/create`, payload, {
@@ -21,6 +27,36 @@ export class SaleTempService {
           of({
             success: false,
             message: 'Failed to save food. Please try again.',
+          })
+        )
+      );
+  }
+
+  clear(userId: number) {
+    return this.http
+      .delete(`${this.apiUrl}/clear/${userId}`, {
+        observe: 'response',
+      })
+      .pipe(
+        catchError((error) =>
+          of({
+            success: false,
+            message: 'Failed to save food. Please try again.',
+          })
+        )
+      );
+  }
+
+  remove(id: number) {
+    return this.http
+      .delete(`${this.apiUrl}/remove/${id}`, {
+        observe: 'response',
+      })
+      .pipe(
+        catchError((error) =>
+          of({
+            success: false,
+            message: 'Failed to delete food. Please try again.',
           })
         )
       );
