@@ -22,6 +22,29 @@ router.get("/list", async (req, res) => {
   }
 });
 
+router.get("/filter/:foodTypeId", async (req, res) => {
+  const { foodTypeId } = req.params;
+
+  try {
+    const foodSizes = await prisma.foodSize.findMany({
+      where: {
+        foodTypeId: parseInt(foodTypeId, 10),
+        status: "use",
+      },
+      orderBy: {
+        moneyAdded: "asc",
+      },
+      include: {
+        FoodType: true,
+      },
+    });
+    return res.status(200).json(foodSizes);
+  } catch (error) {
+    console.error("Error retrieving food sizes:", error);
+    return res.status(500).json({ error: "Failed to retrieve food sizes." });
+  }
+});
+
 // Create a new food size
 router.post("/create", async (req, res) => {
   const { foodTypeId, name, price, remark } = req.body;

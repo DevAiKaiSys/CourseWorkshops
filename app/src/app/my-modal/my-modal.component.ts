@@ -10,4 +10,5 @@ import { Component, Input } from '@angular/core';
 export class MyModalComponent {
   @Input({ required: true }) modalId!: string;
   @Input({ required: true }) title!: string;
+  @Input() modalSize: string | undefined;
 }

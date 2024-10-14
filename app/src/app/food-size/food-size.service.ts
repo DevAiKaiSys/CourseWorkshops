@@ -17,6 +17,12 @@ export class FoodSizeService {
       .pipe(catchError((error) => of(error)));
   }
 
+  getByFoodTypeId(foodTypeId: any) {
+    return this.http
+      .get(`${this.apiUrl}/filter/${foodTypeId}`, { observe: 'response' })
+      .pipe(catchError((error) => of(error)));
+  }
+
   create(payload: any) {
     return this.http
       .post(`${this.apiUrl}/create`, payload, {

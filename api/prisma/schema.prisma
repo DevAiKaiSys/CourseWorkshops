@@ -33,22 +33,24 @@ model FoodType {
 }
 
 model FoodSize {
-  id         Int      @id() @default(autoincrement())
-  name       String
-  remark     String?
-  moneyAdded Int      @default(0)
-  status     String   @default("use") // use, delete
-  foodTypeId Int
-  FoodType   FoodType @relation(fields: [foodTypeId], references: [id])
+  id              Int              @id() @default(autoincrement())
+  name            String
+  remark          String?
+  moneyAdded      Int              @default(0)
+  status          String           @default("use") // use, delete
+  foodTypeId      Int
+  FoodType        FoodType         @relation(fields: [foodTypeId], references: [id])
+  SaleTempDetails SaleTempDetail[]
 }
 
 model Taste {
-  id         Int      @id() @default(autoincrement())
-  name       String
-  remark     String?
-  status     String   @default("use") // use, delete
-  foodTypeId Int
-  FoodType   FoodType @relation(fields: [foodTypeId], references: [id])
+  id              Int              @id() @default(autoincrement())
+  name            String
+  remark          String?
+  status          String           @default("use") // use, delete
+  foodTypeId      Int
+  FoodType        FoodType         @relation(fields: [foodTypeId], references: [id])
+  SaleTempDetails SaleTempDetail[]
 }
 
 model Food {
@@ -65,11 +67,23 @@ model Food {
 }
 
 model SaleTemp {
-  id      Int  @id() @default(autoincrement())
-  foodId  Int
-  qty     Int
-  price   Int
-  tableNo Int
-  userId  Int
-  Food    Food @relation(fields: [foodId], references: [id])
+  id              Int              @id() @default(autoincrement())
+  foodId          Int
+  qty             Int
+  price           Int
+  tableNo         Int
+  userId          Int
+  Food            Food             @relation(fields: [foodId], references: [id])
+  SaleTempDetails SaleTempDetail[]
+}
+
+model SaleTempDetail {
+  id         Int       @id() @default(autoincrement())
+  saleTempId Int
+  SaleTemp   SaleTemp  @relation(fields: [saleTempId], references: [id])
+  addedMoney Int?
+  tasteId    Int?
+  Taste      Taste?    @relation(fields: [tasteId], references: [id])
+  foodSizeId Int?
+  FoodSize   FoodSize? @relation(fields: [foodSizeId], references: [id])
 }

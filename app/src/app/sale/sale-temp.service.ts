@@ -17,9 +17,32 @@ export class SaleTempService {
       .pipe(catchError((error) => of(error)));
   }
 
+  getSaleTempDetail(saleTempId: number) {
+    return this.http
+      .get(`${this.apiUrl}/listsaletempdetail/${saleTempId}`, {
+        observe: 'response',
+      })
+      .pipe(catchError((error) => of(error)));
+  }
+
   create(payload: any) {
     return this.http
       .post(`${this.apiUrl}/create`, payload, {
+        observe: 'response',
+      })
+      .pipe(
+        catchError((error) =>
+          of({
+            success: false,
+            message: 'Failed to save food. Please try again.',
+          })
+        )
+      );
+  }
+
+  createDetail(payload: any) {
+    return this.http
+      .post(`${this.apiUrl}/createdetail`, payload, {
         observe: 'response',
       })
       .pipe(
@@ -65,6 +88,21 @@ export class SaleTempService {
   changeQty(payload: any) {
     return this.http
       .patch(`${this.apiUrl}/changeqty`, payload, {
+        observe: 'response',
+      })
+      .pipe(
+        catchError((error) =>
+          of({
+            success: false,
+            message: 'Failed to delete food. Please try again.',
+          })
+        )
+      );
+  }
+
+  updatedFoodSize(payload: any) {
+    return this.http
+      .patch(`${this.apiUrl}/updateFoodSize`, payload, {
         observe: 'response',
       })
       .pipe(
