@@ -17,6 +17,14 @@ export class FoodService {
       .pipe(catchError((error) => of(error)));
   }
 
+  getByFoodType(foodType: string) {
+    return this.http
+      .get(`${this.apiUrl}/filter?foodType=${foodType}`, {
+        observe: 'response',
+      })
+      .pipe(catchError((error) => of(error)));
+  }
+
   create(payload: any) {
     return this.http
       .post(`${this.apiUrl}/create`, payload, {

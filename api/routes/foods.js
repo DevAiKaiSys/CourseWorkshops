@@ -27,6 +27,29 @@ router.get("/list", async (req, res) => {
   }
 });
 
+router.get("/filter", async (req, res) => {
+  const { foodType } = req.query;
+
+  try {
+    const foods = await prisma.food.findMany({
+      where: {
+        foodType: foodType,
+        status: "use",
+      },
+      orderBy: {
+        id: "desc",
+      },
+      include: {
+        FoodType: true,
+      },
+    });
+    return res.status(200).json(foods);
+  } catch (error) {
+    console.error("Error retrieving foods:", error);
+    return res.status(500).json({ error: "Failed to retrieve foods." });
+  }
+});
+
 // Create a new food item
 router.post("/create", async (req, res) => {
   const { foodTypeId, foodType, name, fileName, price, remark } = req.body;

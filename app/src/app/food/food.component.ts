@@ -61,6 +61,20 @@ export class FoodComponent implements OnInit {
     });
   }
 
+  fetchDataFilterFoodType(foodType: string) {
+    this.foodService.getByFoodType(foodType).subscribe((res: any) => {
+      if (res.status === 200) {
+        this.foods = res.body;
+      } else {
+        Swal.fire({
+          title: 'Error',
+          text: res.error.message,
+          icon: 'error',
+        });
+      }
+    });
+  }
+
   async save() {
     const fileName = await this.uploadFile();
 
@@ -159,6 +173,14 @@ export class FoodComponent implements OnInit {
 
       const res: any = await firstValueFrom(this.foodService.upload(formData));
       return res.body.fileName;
+    }
+  }
+
+  filter(foodType?: string) {
+    if (foodType) {
+      this.fetchDataFilterFoodType(foodType);
+    } else {
+      this.fetchData();
     }
   }
 }
