@@ -1,9 +1,8 @@
-var express = require("express");
-var router = express.Router();
-var jwt = require("jsonwebtoken");
+import express from "express";
+import jwt from "jsonwebtoken";
+import { PrismaClient } from "@prisma/client";
 
-var { PrismaClient } = require("@prisma/client");
-
+const router = express.Router();
 const prisma = new PrismaClient();
 
 /* GET users listing. */
@@ -63,4 +62,4 @@ router.post("/signIn", async function (req, res, next) {
   }
 });
 
-module.exports = router;
+export default router;
