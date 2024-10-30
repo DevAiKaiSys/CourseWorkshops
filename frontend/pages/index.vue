@@ -70,6 +70,7 @@ const config = useRuntimeConfig();
 // console.log("API base URL:", config.public.apiBase);
 // if (import.meta.server) {
 //   console.log("API secret:", config.apiSecret);
+//   console.log("Auth secret:", config.authSecret);
 // }
 
 const handleSubmit = async () => {
@@ -81,16 +82,32 @@ const handleSubmit = async () => {
         text: "Username and password are required",
       });
     } else {
-      const res = await $fetch(`${config.public.apiBase}/api/users/signIn`, {
-        method: "POST",
-        body: {
-          username: username.value,
-          password: password.value,
-        },
-      });
+      const res: any = await $fetch(
+        `${config.public.apiBase}/api/users/signIn`,
+        {
+          method: "POST",
+          body: {
+            username: username.value,
+            password: password.value,
+          },
+        }
+      );
 
-      console.log(res);
+      if (res) {
+        localStorage.setItem("token", res.token);
+        localStorage.setItem("nuxt_erp_user_id", res.id);
+
+        navigateTo("/home");
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Invalid username or password",
+        });
+      }
     }
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 };
 </script>

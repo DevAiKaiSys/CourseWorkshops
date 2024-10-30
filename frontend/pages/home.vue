@@ -1,3 +1,9 @@
-<script setup></script>
+<script setup>
+definePageMeta({
+  layout: "admin",
+});
+</script>
 
-<template></template>
+<template>
+  <div>Home</div>
+</template>

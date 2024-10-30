@@ -4,7 +4,7 @@
 
 @layer components {
     .btn {
-        @apply bg-[#12b488] text-white px-3 rounded-md text-sm;
+        @apply bg-indigo-600 text-white px-3 rounded-md text-sm shadow-md;
     }
 
     .card {
@@ -23,5 +23,80 @@
         text-sm font-medium rounded-md text-white
         bg-indigo-600 hover:bg-indigo-700
         focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500;
+    }
+
+    .sidebar {
+        @apply w-64 h-screen bg-gray-800 text-white;
+    }
+
+    .sidebar-title {
+        @apply text-center text-white text-sm bg-gray-900 p-4 border-b border-gray-500;
+    }
+
+    .sidebar-avatar{
+        @apply mt-0 p-4 bg-gray-900;
+    }
+
+    .nav-link {
+        @apply text-gray-300 p-2 rounded-md hover:bg-gray-700 block;
+    }
+
+    .nav-link i {
+        @apply mr-2 w-4 text-center;
+    }
+
+    /* table */
+    .table {
+        @apply w-full;
+    }
+
+    .table thead th:first-child {
+        @apply rounded-tl-xl;
+    }
+    
+    .table thead th:last-child {
+        @apply rounded-tr-xl;
+    }
+
+    .table thead {
+        @apply bg-gray-800 text-white;
+    }
+
+    .table thead th {
+        @apply px-3 py-2 justify-start align-middle text-left;
+    }
+
+    .table thead tr {
+        @apply bg-gray-200 border-b border-gray-400;
+    }
+
+    .table tbody tr td {
+        @apply px-3 py-2 justify-start;
+    }
+
+    .table tbody tr:last-child td:first-child {
+        @apply rounded-bl-xl border-0;
+    }
+
+    .table tbody tr:last-child td:last-child {
+        @apply rounded-br-xl border-0;
+    }
+
+    .table tbody tr:last-child {
+        @apply border-0;
+    }
+
+    /* button */
+    .btn-danger {
+        @apply bg-red-500 hover:bg-red-600;
+    }
+
+    .btn-primary {
+        @apply bg-blue-500 hover:bg-blue-600;
+    }
+
+    /* active menu */
+    .active {
+        @apply bg-gray-400 text-gray-900 hover:bg-gray-400 hover:text-gray-900;
     }
 }
