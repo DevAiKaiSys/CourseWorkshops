@@ -8,6 +8,7 @@ definePageMeta({
 const showModal = ref(false);
 const name = ref("");
 const remark = ref("");
+const id = ref("");
 const config = useRuntimeConfig();
 const productTypes = ref([]);
 
@@ -20,9 +21,10 @@ onMounted(async () => {
 });
 
 const fetchData = async () => {
+  console.log("fetchData");
   try {
     const res = await $fetch(`${config.public.apiBase}/api/productTypes/list`);
-    console.log(res);
+
     if (res) {
       productTypes.value = res;
     }
@@ -43,22 +45,38 @@ const save = async () => {
       remark: remark.value,
     };
 
-    const response = await $fetch(
-      `${config.public.apiBase}/api/productTypes/create`,
-      {
-        method: "POST",
-        body: payload,
-      }
-    );
+    let response;
+
+    if (id.value === "") {
+      // Create
+      response = await $fetch(
+        `${config.public.apiBase}/api/productTypes/create`,
+        {
+          method: "POST",
+          body: payload,
+        }
+      );
+    } else {
+      // Update
+      response = await $fetch(
+        `${config.public.apiBase}/api/productTypes/update/${id.value}`,
+        {
+          method: "PUT",
+          body: { ...payload, id: id.value },
+        }
+      );
+    }
 
     // Handle success response
     console.log(response);
-
     fetchData();
     closeModal();
+
     // Optionally, reset the input fields
+    id.value = "";
     name.value = "";
     remark.value = "";
+
     // Add any additional success handling (like refreshing a list)
   } catch (error) {
     console.error("Error creating product type:", error);
@@ -66,6 +84,44 @@ const save = async () => {
       icon: "error",
       title: "เกิดข้อผิดพลาด!",
       text: "ไม่สามารถเพิ่มประเภทสินค้าได้. กรุณาลองอีกครั้ง.",
+    });
+  }
+};
+
+const update = (productType) => {
+  id.value = productType.id;
+  name.value = productType.name;
+  remark.value = productType.remark;
+  showModal.value = true;
+};
+
+const remove = async (id) => {
+  try {
+    const { isConfirmed } = await Swal.fire({
+      icon: "warning",
+      title: "ยืนยันการลบ",
+      text: "คุณแน่ใจว่าต้องการลบประเภทสินค้านี้?",
+      showCancelButton: true,
+      showConfirmButton: true,
+    });
+
+    if (isConfirmed) {
+      // Call the delete API
+      await $fetch(`${config.public.apiBase}/api/productTypes/remove/${id}`, {
+        method: "DELETE",
+      });
+
+      // Refresh the data after successful deletion
+      fetchData();
+    }
+  } catch (error) {
+    console.error("Error deleting product type:", error);
+
+    // Show error message
+    Swal.fire({
+      icon: "error",
+      title: "เกิดข้อผิดพลาด!",
+      text: "ไม่สามารถลบประเภทสินค้าได้. กรุณาลองอีกครั้ง.",
     });
   }
 };
@@ -92,10 +148,10 @@ const save = async () => {
         <td>{{ productType.name }}</td>
         <td>{{ productType.remark }}</td>
         <td class="text-center">
-          <button class="btn btn-primary me-1">
+          <button class="btn btn-primary me-1" @click="update(productType)">
             <i class="fa fa-pencil"></i>
           </button>
-          <button class="btn btn-danger">
+          <button class="btn btn-danger" @click="remove(productType.id)">
             <i class="fa fa-trash"></i>
           </button>
         </td>

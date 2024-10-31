@@ -10,6 +10,14 @@
         class="w-10 h-10 rounded-full mx-auto"
       />
       <div class="text-center text-white text-sm mt-3">Admin System</div>
+      <div class="text-center mt-3 flex justify-center gap-2">
+        <button class="btn btn-danger text-xs">
+          <i class="fa fa-sign-out mr-1"></i>Sign Out
+        </button>
+        <button class="btn btn-primary text-xs">
+          <i class="fa fa-user mr-1"></i>Profile
+        </button>
+      </div>
     </div>
     <div class="sidebar-menu">
       <NuxtLink class="nav-link" to="/home">
