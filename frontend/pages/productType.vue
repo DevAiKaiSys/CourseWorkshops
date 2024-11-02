@@ -128,8 +128,8 @@ const remove = async (id) => {
 </script>
 
 <template>
-  <div>ประเภทสินค้า</div>
-  <div class="mt-3">
+  <div class="title">ประเภทสินค้า</div>
+  <div class="p-4">
     <button class="btn btn-primary" @click="showModal = true">
       <i class="fa fa-plus"></i>เพิ่มประเภทสินค้า
     </button>
