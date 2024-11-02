@@ -15,6 +15,7 @@ import cors from "cors";
 import indexRouter from "./routes/index.js";
 import usersRouter from "./routes/users.js";
 import productTypesRouter from "./routes/productTypes.js";
+import materialsRouter from "./routes/materials.js";
 
 const app = express();
 app.use(cors());
@@ -30,6 +31,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/productTypes", productTypesRouter);
+app.use("/api/materials", materialsRouter);
 
 // module.exports = app;
 export default app;

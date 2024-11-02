@@ -59,15 +59,15 @@
   } */
 
   .table thead {
-    @apply bg-gray-800 text-white;
+    @apply bg-gray-700 text-white;
   }
 
   .table thead th {
-    @apply px-3 py-2 justify-start align-middle text-left;
+    @apply px-3 py-2;
   }
 
   .table tbody tr {
-    @apply bg-gray-50 border-b border-gray-200;
+    @apply bg-gray-50 border-b border-gray-300;
   }
 
   .table tbody tr td {

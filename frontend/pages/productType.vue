@@ -138,8 +138,8 @@ const remove = async (id) => {
   <table class="table table-bordered mt-3">
     <thead>
       <tr>
-        <th>ชื่อ</th>
-        <th>หมายเหตุ</th>
+        <th class="text-left">ชื่อ</th>
+        <th class="text-left">หมายเหตุ</th>
         <th width="110px"></th>
       </tr>
     </thead>
@@ -152,7 +152,7 @@ const remove = async (id) => {
             <i class="fa fa-pencil"></i>
           </button>
           <button class="btn btn-danger" @click="remove(productType.id)">
-            <i class="fa fa-trash"></i>
+            <i class="fa fa-times"></i>
           </button>
         </td>
       </tr>
