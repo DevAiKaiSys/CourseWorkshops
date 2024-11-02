@@ -14,6 +14,37 @@ const price = ref(0);
 const remark = ref("");
 const config = useRuntimeConfig();
 
+// modal stock material
+const showModalStockMaterial = ref(false);
+const stockMaterialMaterialId = ref("");
+const listMaterial = ref([]);
+const stockMaterialQuantity = ref(0);
+const stockMaterialPrice = ref(0);
+const stockMaterialRemark = ref("");
+const stockMaterialId = ref("");
+
+const openModalStockMaterial = async (material) => {
+  showModalStockMaterial.value = true;
+
+  try {
+    const res = await $fetch(`${config.public.apiBase}/api/materials/list`);
+
+    if (res) {
+      listMaterial.value = res;
+    }
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "เกิดข้อผิดพลาด!",
+      text: "ไม่สามารถโหลดข้อมูลวัสดุ, ส่วนผสมได้.",
+    });
+  }
+};
+
+const closeModalStockMaterial = () => {
+  showModalStockMaterial.value = false;
+};
+
 onMounted(async () => {
   await fetchData();
 });
@@ -33,6 +64,14 @@ const fetchData = async () => {
     const res = await $fetch(`${config.public.apiBase}/api/materials/list`);
 
     if (res) {
+      for (const material of res) {
+        material.balance = 0;
+
+        for (const stockMaterial of material.stockMaterials) {
+          material.balance += stockMaterial.quantity;
+        }
+      }
+
       materials.value = res;
     }
   } catch (error) {
@@ -121,6 +160,49 @@ const remove = async (id) => {
     });
   }
 };
+
+const saveStockMaterial = async () => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) throw new Error("No token found.");
+
+    const headers = { Authorization: `Bearer ${token}` };
+    const payload = {
+      materialId: stockMaterialMaterialId.value,
+      quantity: stockMaterialQuantity.value,
+      price: stockMaterialPrice.value,
+      remark: stockMaterialRemark.value,
+    };
+
+    const response = await $fetch(
+      `${config.public.apiBase}/api/stockMaterials/create`,
+      {
+        method: "POST",
+        headers,
+        body: payload,
+      }
+    );
+
+    if (response) {
+      closeModalStockMaterial();
+      await fetchData();
+    }
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "เกิดข้อผิดพลาด!",
+      text: "ไม่สามารถบันทึกข้อมูลวัสดุ, ส่วนผสมได้.",
+    });
+  }
+};
+
+const selectStockMaterial = () => {
+  const material = listMaterial.value.find(
+    (item) => item.id === stockMaterialMaterialId.value
+  );
+  stockMaterialId.value = material.id;
+  stockMaterialPrice.value = material.price;
+};
 </script>
 
 <template>
@@ -129,7 +211,7 @@ const remove = async (id) => {
     <button class="btn mr-1" @click="showModal = true">
       <i class="fa fa-plus mr-1"></i>เพิ่มวัสดุ, ส่วนผสม
     </button>
-    <button class="btn mr-1">
+    <button class="btn mr-1" @click="openModalStockMaterial">
       <i class="fa fa-arrow-alt-circle-down mr-1"></i>รับเข้าสต๊อก
     </button>
     <button class="btn mr-1">
@@ -184,6 +266,37 @@ const remove = async (id) => {
 
     <button class="btn btn-primary mt-3" @click="save">
       <i class="fa fa-save mr-1"></i>บันทึก
+    </button>
+  </Modal>
+
+  <Modal
+    v-if="showModalStockMaterial"
+    title="รับเข้าสต๊อก"
+    @close="closeModalStockMaterial"
+  >
+    <div>วัสดุ, ส่วนผสม</div>
+    <select
+      class="form-control"
+      v-model="stockMaterialMaterialId"
+      @change="selectStockMaterial"
+    >
+      <option value="">กรุณาเลือกวัสดุ, ส่วนผสม</option>
+      <option v-for="material in listMaterial" :value="material.id">
+        {{ material.name }}
+      </option>
+    </select>
+
+    <div class="mt-3">จํานวน</div>
+    <input type="number" v-model="stockMaterialQuantity" class="form-control" />
+
+    <div class="mt-3">ราคา</div>
+    <input type="number" v-model="stockMaterialPrice" class="form-control" />
+
+    <div class="mt-3">หมายเหตุ</div>
+    <input type="text" v-model="stockMaterialRemark" class="form-control" />
+
+    <button class="btn btn-primary mt-3" @click="saveStockMaterial">
+      <i class="fa fa-check mr-1"></i>บันทึก
     </button>
   </Modal>
 </template>

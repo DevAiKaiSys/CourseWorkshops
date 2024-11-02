@@ -16,6 +16,7 @@ import indexRouter from "./routes/index.js";
 import usersRouter from "./routes/users.js";
 import productTypesRouter from "./routes/productTypes.js";
 import materialsRouter from "./routes/materials.js";
+import stockMaterialsRouter from "./routes/stockMaterials.js";
 
 const app = express();
 app.use(cors());
@@ -32,6 +33,7 @@ app.use("/", indexRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/productTypes", productTypesRouter);
 app.use("/api/materials", materialsRouter);
+app.use("/api/stockMaterials", stockMaterialsRouter);
 
 // module.exports = app;
 export default app;

@@ -11,6 +11,9 @@ router.get("/list", async function (req, res) {
       orderBy: {
         createdAt: "asc",
       },
+      include: {
+        stockMaterials: true,
+      },
     });
     res.json(materials);
   } catch (error) {
