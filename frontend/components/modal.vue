@@ -22,7 +22,7 @@ onMounted(() => {
 
 <template>
   <div
-    class="fixed inset-0 bg-gray-300 bg-opacity-50 flex justify-center items-center shadow-lg"
+    class="fixed inset-0 bg-gray-300 bg-opacity-10 flex justify-center items-center shadow-lg"
     @keydown="escCloseModal"
   >
     <div class="w-full max-w-lg">

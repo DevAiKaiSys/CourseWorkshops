@@ -34,12 +34,12 @@ model ProductType {
 }
 
 model Material {
-  id     String  @id @default(auto()) @map("_id") @db.ObjectId
-  name   String
-  unit   String
-  price  Int
-  remark String?
-
+  id             String          @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  unit           String
+  price          Int
+  remark         String?
+  status         String          @default("active")
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
   stockMaterials StockMaterial[]

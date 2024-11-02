@@ -8,6 +8,9 @@ router.get("/list", async function (req, res) {
   try {
     const materials = await prisma.material.findMany({
       where: { status: "active" },
+      orderBy: {
+        createdAt: "asc",
+      },
     });
     res.json(materials);
   } catch (error) {
@@ -18,19 +21,11 @@ router.get("/list", async function (req, res) {
 
 router.post("/create", async function (req, res) {
   try {
-    const { name, remark, balance, unit, price } = req.body;
-
-    const material = await prisma.material.create({
-      data: {
-        name,
-        remark,
-        balance,
-        unit,
-        price,
-      },
+    await prisma.material.create({
+      data: req.body,
     });
 
-    res.status(201).json(material);
+    res.status(201).json({ message: "success" });
   } catch (error) {
     console.error("Error creating material:", error);
     res.status(500).json({ error: "Internal server error" });
@@ -70,7 +65,7 @@ router.delete("/remove/:id", async function (req, res) {
       },
     });
 
-    res.status(200).json(material);
+    res.status(204).send();
   } catch (error) {
     console.error("Error updating material:", error);
     res.status(500).json({ error: "Internal server error" });

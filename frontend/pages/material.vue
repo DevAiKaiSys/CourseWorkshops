@@ -1,35 +1,126 @@
 <script setup>
+import Swal from "sweetalert2";
+
 definePageMeta({
   layout: "admin",
 });
 
 const showModal = ref(false);
-const materials = ref([
-  {
-    id: 1,
-    name: "แป้งสาลี",
-    remark: "",
-    balance: 10,
-    unit: "กก.",
-    price: 100,
-  },
-  {
-    id: 2,
-    name: "น้ำตาล",
-    remark: "",
-    balance: 20,
-    unit: "กก.",
-    price: 200,
-  },
-  {
-    id: 3,
-    name: "นมผง",
-    remark: "",
-    balance: 30,
-    unit: "กก.",
-    price: 300,
-  },
-]);
+const materials = ref([]);
+const id = ref("");
+const name = ref("");
+const unit = ref("");
+const price = ref(0);
+const remark = ref("");
+const config = useRuntimeConfig();
+
+onMounted(async () => {
+  await fetchData();
+});
+
+const closeModal = () => {
+  showModal.value = false;
+
+  id.value = "";
+  name.value = "";
+  unit.value = "";
+  price.value = 0;
+  remark.value = "";
+};
+
+const fetchData = async () => {
+  try {
+    const res = await $fetch(`${config.public.apiBase}/api/materials/list`);
+
+    if (res) {
+      materials.value = res;
+    }
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "เกิดข้อผิดพลาด!",
+      text: "ไม่สามารถโหลดข้อมูลวัสดุ, ส่วนผสมได้.",
+    });
+  }
+};
+
+const save = async () => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) throw new Error("No token found.");
+
+    const headers = { Authorization: `Bearer ${token}` };
+    const payload = {
+      name: name.value,
+      unit: unit.value,
+      price: price.value,
+      remark: remark.value,
+    };
+
+    let response;
+    if (id.value) {
+      response = await $fetch(
+        `${config.public.apiBase}/api/materials/update/${id.value}`,
+        {
+          method: "PUT",
+          headers,
+          body: payload,
+        }
+      );
+    } else {
+      response = await $fetch(`${config.public.apiBase}/api/materials/create`, {
+        method: "POST",
+        headers,
+        body: payload,
+      });
+    }
+
+    if (response) {
+      closeModal();
+      await fetchData();
+    }
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "เกิดข้อผิดพลาด!",
+      text: "ไม่สามารถบันทึกข้อมูลวัสดุ, ส่วนผสมได้.",
+    });
+  }
+};
+
+const remove = async (id) => {
+  try {
+    const { isConfirmed } = await Swal.fire({
+      icon: "warning",
+      title: "ยืนยันการลบ",
+      text: "คุณแน่ใจว่าต้องการลบวัสดุ, ส่วนผสมนี้?",
+      showCancelButton: true,
+      showConfirmButton: true,
+    });
+
+    if (isConfirmed) {
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("No token found.");
+
+      const headers = { Authorization: `Bearer ${token}` };
+      const response = await $fetch(
+        `${config.public.apiBase}/api/materials/remove/${id}`,
+        {
+          method: "DELETE",
+          headers,
+        }
+      );
+
+      await fetchData();
+    }
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "เกิดข้อผิดพลาด!",
+      text: "ไม่สามารถลบข้อมูลวัสดุ, ส่วนผสมได้.",
+    });
+  }
+};
 </script>
 
 <template>
@@ -37,9 +128,6 @@ const materials = ref([
   <div class="p-4">
     <button class="btn mr-1" @click="showModal = true">
       <i class="fa fa-plus mr-1"></i>เพิ่มวัสดุ, ส่วนผสม
-    </button>
-    <button class="btn mr-1">
-      <i class="fa fa-list mr-1"></i>รายการวัสดุ, ส่วนผสม
     </button>
     <button class="btn mr-1">
       <i class="fa fa-arrow-alt-circle-down mr-1"></i>รับเข้าสต๊อก
@@ -67,7 +155,7 @@ const materials = ref([
         <td>{{ material.remark }}</td>
         <td class="text-right">{{ material.balance }}</td>
         <td>{{ material.unit }}</td>
-        <td class="text-right">{{ material.price }}</td>
+        <td class="text-right">{{ material.price.toLocaleString("th-TH") }}</td>
         <td>18/10/2024 15:00</td>
         <td class="text-center">
           <button class="btn btn-primary me-1" @click="update(material)">
@@ -80,4 +168,22 @@ const materials = ref([
       </tr>
     </tbody>
   </table>
+
+  <Modal v-if="showModal" title="เพิ่มวัสดุ, ส่วนผสม" @close="closeModal">
+    <div>ชื่อ</div>
+    <input type="text" v-model="name" class="form-control" />
+
+    <div class="mt-3">หน่วยเรียก</div>
+    <input type="text" v-model="unit" class="form-control" />
+
+    <div class="mt-3">ราคา</div>
+    <input type="number" v-model="price" class="form-control" />
+
+    <div class="mt-3">หมายเหตุ</div>
+    <input type="text" v-model="remark" class="form-control" />
+
+    <button class="btn btn-primary mt-3" @click="save">
+      <i class="fa fa-save mr-1"></i>บันทึก
+    </button>
+  </Modal>
 </template>
