@@ -57,9 +57,108 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Fonts\Kanit-Regular.ttf" />
+	  <None Remove="Resources\Fonts\Kanit-SemiBold.ttf" />
+	  <None Remove="Resources\Images\beer.png" />
+	  <None Remove="Resources\Images\biryani.png" />
+	  <None Remove="Resources\Images\buns.png" />
+	  <None Remove="Resources\Images\burger_fries_combo.png" />
+	  <None Remove="Resources\Images\cake.png" />
+	  <None Remove="Resources\Images\check_circle_regular_24.png" />
+	  <None Remove="Resources\Images\chevrons_right_regular_24.png" />
+	  <None Remove="Resources\Images\chocolate.png" />
+	  <None Remove="Resources\Images\cocktail.png" />
+	  <None Remove="Resources\Images\coffee.png" />
+	  <None Remove="Resources\Images\credits.txt" />
+	  <None Remove="Resources\Images\cupcake.png" />
+	  <None Remove="Resources\Images\donut.png" />
+	  <None Remove="Resources\Images\drink.png" />
+	  <None Remove="Resources\Images\energy_drink.png" />
+	  <None Remove="Resources\Images\fast_food.png" />
+	  <None Remove="Resources\Images\filter_regular_24.png" />
+	  <None Remove="Resources\Images\fish.png" />
+	  <None Remove="Resources\Images\fish_and_chips.png" />
+	  <None Remove="Resources\Images\french_fries.png" />
+	  <None Remove="Resources\Images\fried_chicken.png" />
+	  <None Remove="Resources\Images\fried_egg.png" />
+	  <None Remove="Resources\Images\fried_rice.png" />
+	  <None Remove="Resources\Images\grid_alt_regular_24.png" />
+	  <None Remove="Resources\Images\hamburger.png" />
+	  <None Remove="Resources\Images\heart_regular_24.png" />
+	  <None Remove="Resources\Images\heart_solid_24.png" />
+	  <None Remove="Resources\Images\home_regular_24.png" />
+	  <None Remove="Resources\Images\hotdog.png" />
+	  <None Remove="Resources\Images\ice_cream.png" />
+	  <None Remove="Resources\Images\idli_platter.png" />
+	  <None Remove="Resources\Images\kebab.png" />
+	  <None Remove="Resources\Images\kimchi_jjiage.png" />
+	  <None Remove="Resources\Images\laddu.png" />
+	  <None Remove="Resources\Images\left_arrow_regular_24.png" />
+	  <None Remove="Resources\Images\list_ul_regular_24.png" />
+	  <None Remove="Resources\Images\lobster.png" />
+	  <None Remove="Resources\Images\mango.png" />
+	  <None Remove="Resources\Images\masala_dosa.png" />
+	  <None Remove="Resources\Images\meal.png" />
+	  <None Remove="Resources\Images\minus_regular_24.png" />
+	  <None Remove="Resources\Images\nachos.png" />
+	  <None Remove="Resources\Images\noodles.png" />
+	  <None Remove="Resources\Images\orange_juice.png" />
+	  <None Remove="Resources\Images\pancakes.png" />
+	  <None Remove="Resources\Images\paneer.png" />
+	  <None Remove="Resources\Images\pasta.png" />
+	  <None Remove="Resources\Images\phone_regular_24.png" />
+	  <None Remove="Resources\Images\pie.png" />
+	  <None Remove="Resources\Images\pizza.png" />
+	  <None Remove="Resources\Images\pizza_slice.png" />
+	  <None Remove="Resources\Images\plus_regular_24.png" />
+	  <None Remove="Resources\Images\ramen.png" />
+	  <None Remove="Resources\Images\rice.png" />
+	  <None Remove="Resources\Images\right_arrow_regular_24.png" />
+	  <None Remove="Resources\Images\roasted_chicken.png" />
+	  <None Remove="Resources\Images\salad_bowl.png" />
+	  <None Remove="Resources\Images\salad_plate.png" />
+	  <None Remove="Resources\Images\samosa.png" />
+	  <None Remove="Resources\Images\sandwich.png" />
+	  <None Remove="Resources\Images\search_regular_24.png" />
+	  <None Remove="Resources\Images\shopping_bag_regular_24.png" />
+	  <None Remove="Resources\Images\snacks.png" />
+	  <None Remove="Resources\Images\soda.png" />
+	  <None Remove="Resources\Images\soft_drink.png" />
+	  <None Remove="Resources\Images\soju.png" />
+	  <None Remove="Resources\Images\spaghetti.png" />
+	  <None Remove="Resources\Images\sushi.png" />
+	  <None Remove="Resources\Images\taco.png" />
+	  <None Remove="Resources\Images\thai_food.png" />
+	  <None Remove="Resources\Images\thali.png" />
+	  <None Remove="Resources\Images\user_regular_24.png" />
+	  <None Remove="Resources\Images\wrap.png" />
+	  <None Remove="Resources\Images\x_regular_24.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Maui" Version="9.1.0" />
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
+		<PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.10" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Models\" />
+	  <Folder Include="Data\" />
+	  <Folder Include="Controls\" />
+	  <Folder Include="ViewModels\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="Pages\ManageMenuItemPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\OrdersPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	</ItemGroup>
 
 </Project>
