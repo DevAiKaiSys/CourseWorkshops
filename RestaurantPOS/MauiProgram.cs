@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
+using RestaurantPOS.Data;
 
 namespace RestaurantPOS
 {
@@ -7,7 +8,7 @@ namespace RestaurantPOS
     {
         public static MauiApp CreateMauiApp()
         {
-            var builder = MauiApp.CreateBuilder();
+            MauiAppBuilder builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
@@ -20,8 +21,10 @@ namespace RestaurantPOS
                 });
 
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
+
+            builder.Services.AddSingleton<DatabaseService>();
 
             return builder.Build();
         }
