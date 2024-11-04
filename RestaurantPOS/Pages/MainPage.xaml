@@ -4,6 +4,7 @@
              xmlns:vm="clr-namespace:RestaurantPOS.ViewModels"
              xmlns:model="clr-namespace:RestaurantPOS.Models"
              xmlns:data="clr-namespace:RestaurantPOS.Data"
+             xmlns:controls="clr-namespace:RestaurantPOS.Controls"
              x:Class="RestaurantPOS.Pages.MainPage"
              x:DataType="vm:HomeViewModel"
              Shell.NavBarIsVisible="False">
@@ -129,7 +130,10 @@
         <!--<Grid Grid.Column="1" BackgroundColor="#fff1e4">-->
         <Grid Grid.Column="1"
               BackgroundColor="{StaticResource LightWheat}">
-            <Label Text="Current Order Items" />
+            <VerticalStackLayout>
+                <Label Text="Current Order Items" />
+                <controls:CurrentDateTimeControl />
+            </VerticalStackLayout>
         </Grid>
     </Grid>
 
