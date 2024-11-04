@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using RestaurantPOS.Data;
 using RestaurantPOS.Models;
+using MenuItem = RestaurantPOS.Data.MenuItem;
 
 namespace RestaurantPOS.ViewModels
 {
@@ -13,6 +14,9 @@ namespace RestaurantPOS.ViewModels
         //private MenuCategory[] _categories = [];
         private MenuCategoryModel[] _categories = [];
         //private ObservableCollection<MenuCategoryModel> _categories = [];
+
+        [ObservableProperty]
+        private MenuItem[] _menuItems = [];
 
         [ObservableProperty]
         private MenuCategoryModel? _selectedCategory = null;
@@ -52,18 +56,22 @@ namespace RestaurantPOS.ViewModels
             {
                 Categories[0].IsSelected = true;
                 SelectedCategory = Categories[0];
+
+                MenuItems = await _databaseService.GetMenuItemsByCategoryAsync(SelectedCategory.Id);
             }
 
             IsLoading = false;
         }
 
         [RelayCommand]
-        private void SelectCategory(int categoryId)
+        private async Task SelectCategoryAsync(int categoryId)
         {
             if (SelectedCategory?.Id == categoryId)
             {
                 return; // The current category is already selected
             }
+
+            IsLoading = true;
 
             MenuCategoryModel existingSelectedCategory = Categories.First(categoryId => categoryId.IsSelected);
             existingSelectedCategory.IsSelected = false;
@@ -72,6 +80,13 @@ namespace RestaurantPOS.ViewModels
             newlySelectedCategory.IsSelected = true;
 
             SelectedCategory = newlySelectedCategory;
+
+            // Test loading
+            //await Task.Delay(3000);
+
+            MenuItems = await _databaseService.GetMenuItemsByCategoryAsync(SelectedCategory.Id);
+
+            IsLoading = false;
 
             // generate command
             //SelectCategoryCommand
