@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using RestaurantPOS.Data;
 using RestaurantPOS.Models;
+using System.Collections.ObjectModel;
 using MenuItem = RestaurantPOS.Data.MenuItem;
 
 namespace RestaurantPOS.ViewModels
@@ -20,6 +21,8 @@ namespace RestaurantPOS.ViewModels
 
         [ObservableProperty]
         private MenuCategoryModel? _selectedCategory = null;
+
+        public ObservableCollection<CartModel> CartItems { get; set; } = [];
 
         [ObservableProperty]
         private bool _isLoading;
@@ -101,5 +104,53 @@ namespace RestaurantPOS.ViewModels
         //    category.IsSelected = true;
         //    SelectedCategory
         //}
+
+        [RelayCommand]
+        private void AddToCart(MenuItem menuItem)
+        {
+            CartModel? cartItem = CartItems.FirstOrDefault(c => c.ItemId == menuItem.Id);
+            if (cartItem == null)
+            {
+                // Item does not exist in the cart
+                // Add item to cart
+                cartItem = new CartModel
+                {
+                    ItemId = menuItem.Id,
+                    Icon = menuItem.Icon,
+                    Name = menuItem.Name,
+                    Price = menuItem.Price,
+                    Quantity = 1
+                };
+                CartItems.Add(cartItem);
+            }
+            else
+            {
+                // This item exists in cart
+                // Increase the quantity for this item in the cart
+                cartItem.Quantity++;
+            }
+        }
+
+        [RelayCommand]
+        private void IncreaseQuantity(CartModel cartItem)
+        {
+            cartItem.Quantity++;
+        }
+
+        [RelayCommand]
+        private void DecreaseQuantity(CartModel cartItem)
+        {
+            cartItem.Quantity--;
+            if (cartItem.Quantity == 0)
+            {
+                _ = CartItems.Remove(cartItem);
+            }
+        }
+
+        [RelayCommand]
+        private void RemoveItemFromCart(CartModel cartItem)
+        {
+            _ = CartItems.Remove(cartItem);
+        }
     }
 }
