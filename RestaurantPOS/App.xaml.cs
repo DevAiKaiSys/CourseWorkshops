@@ -23,5 +23,15 @@ namespace RestaurantPOS
         //    // Initialzie and Seed Database
         //    await _databaseService.InitializeDatabaseAsync();
         //}
+
+        protected override Window CreateWindow(IActivationState? activationState)
+        {
+            Window window = base.CreateWindow(activationState);
+
+            window.Height = window.MinimumHeight = 760;
+            window.Width = window.MinimumWidth = 1200;
+
+            return window;
+        }
     }
 }
