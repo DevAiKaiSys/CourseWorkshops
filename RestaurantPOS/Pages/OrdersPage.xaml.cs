@@ -1,9 +1,21 @@
+using RestaurantPOS.ViewModels;
+
 namespace RestaurantPOS.Pages;
 
 public partial class OrdersPage : ContentPage
 {
-	public OrdersPage()
-	{
-		InitializeComponent();
-	}
+    private readonly OrderViewModel _orderViewModel;
+
+    public OrdersPage(OrderViewModel orderViewModel)
+    {
+        InitializeComponent();
+        _orderViewModel = orderViewModel;
+        BindingContext = _orderViewModel;
+        InitializeViewModelAsync();
+    }
+
+    private async void InitializeViewModelAsync()
+    {
+        await _orderViewModel.InitializeAsync();
+    }
 }

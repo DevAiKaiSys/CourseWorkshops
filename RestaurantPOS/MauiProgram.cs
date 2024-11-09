@@ -29,7 +29,8 @@ namespace RestaurantPOS
             builder.Services.AddSingleton<DatabaseService>()
                 .AddSingleton<HomeViewModel>()
                 .AddSingleton<MainPage>()
-                .AddSingleton<OrderViewModel>();
+                .AddSingleton<OrderViewModel>()
+                .AddSingleton<OrdersPage>();
 
             return builder.Build();
         }

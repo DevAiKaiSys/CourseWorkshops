@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using RestaurantPOS.Data;
 using RestaurantPOS.Models;
+using System.Collections.ObjectModel;
 
 namespace RestaurantPOS.ViewModels
 {
@@ -14,6 +15,7 @@ namespace RestaurantPOS.ViewModels
             _databaseService = databaseService;
         }
 
+        public ObservableCollection<Order> Orders { get; set; } = [];
 
         // Return truer if the order creation was successfull, false otherwise
         public async Task<bool> PlaceOrderAsync(CartModel[] cartItems, bool isPaidOnline)
@@ -46,6 +48,28 @@ namespace RestaurantPOS.ViewModels
             // Order Creation was successfull
             await Toast.Make("Order placed successfully").Show();
             return true;
+        }
+
+        private bool _isInitialized;
+
+        [ObservableProperty]
+        private bool _isLoading;
+
+        public async Task InitializeAsync()
+        {
+            if (_isInitialized)
+            {
+                return;
+            }
+
+            _isInitialized = true;
+            IsLoading = true;
+            Order[] orders = await _databaseService.GetOrdersAsync();
+            foreach (Order order in orders)
+            {
+                Orders.Add(order);
+            }
+            IsLoading = false;
         }
     }
 }
