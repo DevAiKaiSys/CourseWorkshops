@@ -11,7 +11,7 @@ namespace RestaurantPOS.ViewModels
     public partial class HomeViewModel : ObservableObject
     {
         private readonly DatabaseService _databaseService;
-
+        private readonly OrderViewModel _orderViewModel;
         [ObservableProperty]
         //private MenuCategory[] _categories = [];
         private MenuCategoryModel[] _categories = [];
@@ -40,9 +40,10 @@ namespace RestaurantPOS.ViewModels
 
         public decimal Total => Subtotal + TaxAmount;
 
-        public HomeViewModel(DatabaseService databaseService)
+        public HomeViewModel(DatabaseService databaseService, OrderViewModel orderViewModel)
         {
             _databaseService = databaseService;
+            _orderViewModel = orderViewModel;
             CartItems.CollectionChanged += CartItems_CollectingChanged;
         }
 
@@ -220,6 +221,19 @@ namespace RestaurantPOS.ViewModels
 
                 TaxPercentage = exteredTaxPercentage;
             }
+        }
+
+        [RelayCommand]
+        private async Task PlaceOrderAsync(bool isPaidOnline)
+        {
+            IsLoading = true;
+            if (await _orderViewModel.PlaceOrderAsync([.. CartItems], isPaidOnline))
+            {
+                // Order creation succesfull
+                // Clear the cart items
+                CartItems.Clear();
+            }
+            IsLoading = false;
         }
     }
 }

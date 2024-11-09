@@ -1,4 +1,5 @@
-﻿using SQLite;
+﻿using RestaurantPOS.Models;
+using SQLite;
 
 namespace RestaurantPOS.Data
 {
@@ -64,6 +65,48 @@ namespace RestaurantPOS.Data
             {
                 throw new Exception("An error occurred while retrieving menu items.", ex);
             }
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns>Returns Error Message or null (if the operation was successfull)</returns>
+        public async Task<string?> PlaceOrderAsync(OrderModel model)
+        {
+            Order order = new()
+            {
+                Id = model.Id,
+                OrderDate = model.OrderDate,
+                PaymentMode = model.PaymentMode,
+                TotalAmountPaid = model.TotalAmountPaid,
+                TotalItemsCount = model.TotalItemsCount,
+            };
+
+            if (await _connection.InsertAsync(order) > 0)
+            {
+                // Order Inserted succesfully
+                // now we have newly inserted order id in (order.id)
+                // Now we can add the orderId to the OrderItems and Insert OrderItems in the database
+                foreach (OrderItem item in model.Items)
+                {
+                    item.OrderId = order.Id;
+                }
+                if (await _connection.InsertAllAsync(model.Items) == 0)
+                {
+                    // OrderItems inser operation failes
+                    // Remove the Newly Inserted Order in this method
+                    _ = await _connection.DeleteAsync(order);
+                    return "Error in inserting order items";
+                }
+            }
+            else
+            {
+                return "Error in inserting the order";
+            }
+            model.Id = order.Id;
+            return null;
         }
 
         public async ValueTask DisposeAsync()
