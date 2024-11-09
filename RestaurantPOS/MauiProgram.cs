@@ -30,7 +30,9 @@ namespace RestaurantPOS
                 .AddSingleton<HomeViewModel>()
                 .AddSingleton<MainPage>()
                 .AddSingleton<OrderViewModel>()
-                .AddSingleton<OrdersPage>();
+                .AddSingleton<OrdersPage>()
+                .AddSingleton<ManageMenuItemsViewModel>()
+                .AddSingleton<ManageMenuItemPage>();
 
             return builder.Build();
         }

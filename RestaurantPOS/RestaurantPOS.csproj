@@ -74,6 +74,7 @@
 	  <None Remove="Resources\Images\cylinder_regular_60.png" />
 	  <None Remove="Resources\Images\donut.png" />
 	  <None Remove="Resources\Images\drink.png" />
+	  <None Remove="Resources\Images\edit_solid_24.png" />
 	  <None Remove="Resources\Images\energy_drink.png" />
 	  <None Remove="Resources\Images\fast_food.png" />
 	  <None Remove="Resources\Images\filter_regular_24.png" />
