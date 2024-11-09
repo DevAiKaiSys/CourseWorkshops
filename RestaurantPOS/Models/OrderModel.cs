@@ -1,8 +1,9 @@
-﻿using RestaurantPOS.Data;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using RestaurantPOS.Data;
 
 namespace RestaurantPOS.Models
 {
-    public class OrderModel
+    public partial class OrderModel : ObservableObject
     {
         public long Id { get; set; }
         public DateTime OrderDate { get; set; }
@@ -11,5 +12,8 @@ namespace RestaurantPOS.Models
         public string? PaymentMode { get; set; } // Cash or Online
 
         public OrderItem[]? Items { get; set; }
+
+        [ObservableProperty]
+        private bool _isSelected;
     }
 }
