@@ -1,4 +1,5 @@
-﻿using System.Reactive;
+﻿using System.Collections.Generic;
+using System.Reactive;
 using ReactiveUI;
 using RestaurantPOS.Views;
 
@@ -6,12 +7,14 @@ namespace RestaurantPOS.ViewModels;
 
 public class SidebarViewModel : ViewModelBase
 {
+    private readonly Dictionary<Route, object?> _pages = new();
+
     private object _currentPage;
 
     public SidebarViewModel()
     {
         NavigateCommand = ReactiveCommand.Create<Route>(Navigate);
-        CurrentPage = new MainPage(); // Default page
+        Navigate(Route.MainPage); // Default page
     }
 
     public object CurrentPage
@@ -22,15 +25,19 @@ public class SidebarViewModel : ViewModelBase
 
     public ReactiveCommand<Route, Unit> NavigateCommand { get; }
 
-    private void Navigate(Route name)
+    private void Navigate(Route route)
     {
-        // Navigation logic to change the page
-        CurrentPage = name switch
-        {
-            Route.MainPage => new MainPage(),
-            Route.OrdersPage => new OrdersPage(),
-            Route.ManageMenuItemPage => new ManageMenuItemPage(),
-            _ => CurrentPage
-        };
+        // If the page is already created, reuse it
+        if (!_pages.ContainsKey(route))
+            _pages[route] = route switch
+            {
+                Route.MainPage => new MainPage(),
+                Route.OrdersPage => new OrdersPage(),
+                Route.ManageMenuItemPage => new ManageMenuItemPage(),
+                _ => null
+            };
+
+        // Set the current page to the cached page
+        if (_pages[route] != null) CurrentPage = _pages[route]!;
     }
 }
