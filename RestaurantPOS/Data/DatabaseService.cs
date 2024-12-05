@@ -34,7 +34,7 @@ public class DatabaseService : IAsyncDisposable
         await SeedDateAsync();
 
         // test
-        //MenuItem[] result = await GetMenuItemsByCategoryAsync(1);
+        var result = await GetMenuItemsByCategoryAsync(1);
     }
 
     private async Task SeedDateAsync()
@@ -49,5 +49,28 @@ public class DatabaseService : IAsyncDisposable
         _ = await _connection.InsertAllAsync(categories);
         _ = await _connection.InsertAllAsync(menuItems);
         _ = await _connection.InsertAllAsync(mappings);
+    }
+
+    public async Task<MenuCategory[]> GetMenuCategoriesAsync()
+    {
+        return _ = await _connection.Table<MenuCategory>().ToArrayAsync();
+    }
+
+    public async Task<MenuItem[]> GetMenuItemsByCategoryAsync(int categoryId)
+    {
+        var query = @"SELECT * FROM MenuItem AS menu
+                     INNER JOIN MenuItemCategoryMapping AS mapping 
+                     ON menu.Id = mapping.MenuItemId 
+                     WHERE mapping.MenuCategoryId = ?";
+
+        try
+        {
+            var menuItems = await _connection.QueryAsync<MenuItem>(query, categoryId);
+            return menuItems.ToArray();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("An error occurred while retrieving menu items.", ex);
+        }
     }
 }
