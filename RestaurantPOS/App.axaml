@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="RestaurantPOS.App"
              xmlns:local="using:RestaurantPOS"
+             xmlns:converters="clr-namespace:RestaurantPOS.Converters"
              RequestedThemeVariant="Light">
     <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
@@ -13,4 +14,8 @@
         <FluentTheme />
         <StyleInclude Source="avares://RestaurantPOS/Resources/Styles/Colors.axaml" />
     </Application.Styles>
+
+    <Application.Resources>
+        <converters:IconPathConverter x:Key="IconPathConverter" />
+    </Application.Resources>
 </Application>

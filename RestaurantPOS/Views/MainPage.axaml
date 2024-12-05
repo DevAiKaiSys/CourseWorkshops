@@ -34,11 +34,12 @@
                             <Border Padding="20, 10"
                                     Background="{StaticResource LightWheat}"
                                     CornerRadius="10"
-                                    BorderThickness="0">
+                                    BorderThickness="0"
+                                    Margin="10,0">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Height="20"
                                            Width="20"
-                                           Source="{Binding Icon}" />
+                                           Source="{Binding Icon, Converter={StaticResource IconPathConverter}}" />
                                     <Label Content="{Binding Name}" />
                                 </StackPanel>
                             </Border>

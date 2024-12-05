@@ -9,6 +9,7 @@ public class MainPageViewModel : ViewModelBase
     private readonly DatabaseService _databaseService;
 
     private MenuCategory[] _categories = [];
+
     private bool _isInitialized;
 
     private bool _isLoading;
