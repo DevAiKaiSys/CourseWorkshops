@@ -1,0 +1,69 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:RestaurantPOS.ViewModels"
+             xmlns:converters="clr-namespace:RestaurantPOS.Converters"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="450"
+             x:Class="RestaurantPOS.Views.Sidebar"
+             x:DataType="vm:SidebarViewModel">
+    <UserControl.Resources>
+        <!-- Register the converter here -->
+        <converters:RouteToActiveBackgroundConverter x:Key="RouteToActiveBackgroundConverter" />
+    </UserControl.Resources>
+
+    <Grid RowDefinitions="*,Auto"
+          Background="Wheat"
+          Width="60">
+        <StackPanel Grid.Row="0">
+            <Button Command="{Binding NavigateCommand}"
+                    CommandParameter="{x:Static vm:Route.MainPage}"
+                    HorizontalAlignment="Stretch"
+                    Background="{Binding CurrentPage, Converter={StaticResource RouteToActiveBackgroundConverter}, ConverterParameter={x:Static vm:Route.MainPage}}">
+                <StackPanel>
+                    <Image Source="avares://RestaurantPOS/Assets/Boxicons/home_regular_24.png"
+                           Stretch="None" />
+                </StackPanel>
+            </Button>
+
+            <Button Command="{Binding NavigateCommand}"
+                    CommandParameter="{x:Static vm:Route.OrdersPage}"
+                    HorizontalAlignment="Stretch"
+                    Background="{Binding CurrentPage, Converter={StaticResource RouteToActiveBackgroundConverter}, ConverterParameter={x:Static vm:Route.OrdersPage}}">
+                <StackPanel>
+                    <Image Source="avares://RestaurantPOS/Assets/Boxicons/list_ul_regular_24.png"
+                           Stretch="None" />
+                </StackPanel>
+            </Button>
+
+            <Button Command="{Binding NavigateCommand}"
+                    CommandParameter="{x:Static vm:Route.ManageMenuItemPage}"
+                    HorizontalAlignment="Stretch"
+                    Background="{Binding CurrentPage, Converter={StaticResource RouteToActiveBackgroundConverter}, ConverterParameter={x:Static vm:Route.ManageMenuItemPage}}">
+                <StackPanel>
+                    <Image Source="avares://RestaurantPOS/Assets/Boxicons/grid_alt_regular_24.png"
+                           Stretch="None" />
+                </StackPanel>
+            </Button>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1">
+            <Button IsEnabled="False"
+                    HorizontalAlignment="Stretch"
+                    Margin="0 0 0 25">
+                <Button.Styles>
+                    <Style Selector="Button:disabled">
+                        <Setter Property="Opacity"
+                                Value="0.5" />
+                    </Style>
+                </Button.Styles>
+                <StackPanel>
+                    <Image Source="avares://RestaurantPOS/Assets/Boxicons/phone_regular_24.png"
+                           Stretch="None" />
+                </StackPanel>
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

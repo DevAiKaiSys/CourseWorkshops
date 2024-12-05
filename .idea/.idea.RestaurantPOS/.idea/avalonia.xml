@@ -3,7 +3,13 @@
   <component name="AvaloniaProject">
     <option name="projectPerEditor">
       <map>
+        <entry key="RestaurantPOS/App.axaml" value="RestaurantPOS/RestaurantPOS.csproj" />
+        <entry key="RestaurantPOS/Views/FirstView.axaml" value="RestaurantPOS/RestaurantPOS.csproj" />
+        <entry key="RestaurantPOS/Views/MainPage.axaml" value="RestaurantPOS/RestaurantPOS.csproj" />
         <entry key="RestaurantPOS/Views/MainWindow.axaml" value="RestaurantPOS/RestaurantPOS.csproj" />
+        <entry key="RestaurantPOS/Views/ManageMenuItemPage.axaml" value="RestaurantPOS/RestaurantPOS.csproj" />
+        <entry key="RestaurantPOS/Views/OrdersPage.axaml" value="RestaurantPOS/RestaurantPOS.csproj" />
+        <entry key="RestaurantPOS/Views/Sidebar.axaml" value="RestaurantPOS/RestaurantPOS.csproj" />
       </map>
     </option>
   </component>
