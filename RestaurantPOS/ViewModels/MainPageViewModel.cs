@@ -1,6 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using ReactiveUI;
 using RestaurantPOS.Data;
+using RestaurantPOS.Models;
 
 namespace RestaurantPOS.ViewModels;
 
@@ -8,7 +10,8 @@ public class MainPageViewModel : ViewModelBase
 {
     private readonly DatabaseService _databaseService;
 
-    private MenuCategory[] _categories = [];
+    // private MenuCategory[] _categories = [];
+    private MenuCategoryModel[] _categories = [];
 
     private bool _isInitialized;
 
@@ -19,7 +22,12 @@ public class MainPageViewModel : ViewModelBase
         _databaseService = databaseService;
     }
 
-    public MenuCategory[] Categories
+    // public MenuCategory[] Categories
+    // {
+    //     get => _categories;
+    //     set => this.RaiseAndSetIfChanged(ref _categories, value);
+    // }
+    public MenuCategoryModel[] Categories
     {
         get => _categories;
         set => this.RaiseAndSetIfChanged(ref _categories, value);
@@ -39,7 +47,8 @@ public class MainPageViewModel : ViewModelBase
 
         IsLoading = true;
 
-        Categories = await _databaseService.GetMenuCategoriesAsync();
+        // Categories = await _databaseService.GetMenuCategoriesAsync();
+        Categories = (await _databaseService.GetMenuCategoriesAsync()).Select(MenuCategoryModel.FromEntity).ToArray();
 
         IsLoading = false;
     }
