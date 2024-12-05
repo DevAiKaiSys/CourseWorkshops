@@ -34,7 +34,7 @@ public class DatabaseService : IAsyncDisposable
         await SeedDateAsync();
 
         // test
-        var result = await GetMenuItemsByCategoryAsync(1);
+        // var result = await GetMenuItemsByCategoryAsync(1);
     }
 
     private async Task SeedDateAsync()

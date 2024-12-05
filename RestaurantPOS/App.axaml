@@ -11,5 +11,6 @@
 
     <Application.Styles>
         <FluentTheme />
+        <StyleInclude Source="avares://RestaurantPOS/Resources/Styles/Colors.axaml" />
     </Application.Styles>
 </Application>
