@@ -12,10 +12,11 @@ public class MainPageViewModel : ViewModelBase
 
     // private MenuCategory[] _categories = [];
     private MenuCategoryModel[] _categories = [];
-
     private bool _isInitialized;
 
     private bool _isLoading;
+
+    private MenuCategoryModel? _selectedCategory;
 
     public MainPageViewModel(DatabaseService databaseService)
     {
@@ -27,6 +28,12 @@ public class MainPageViewModel : ViewModelBase
     //     get => _categories;
     //     set => this.RaiseAndSetIfChanged(ref _categories, value);
     // }
+    public MenuCategoryModel? SelectedCategory
+    {
+        get => _selectedCategory;
+        set => this.RaiseAndSetIfChanged(ref _selectedCategory, value);
+    }
+
     public MenuCategoryModel[] Categories
     {
         get => _categories;
@@ -49,6 +56,9 @@ public class MainPageViewModel : ViewModelBase
 
         // Categories = await _databaseService.GetMenuCategoriesAsync();
         Categories = (await _databaseService.GetMenuCategoriesAsync()).Select(MenuCategoryModel.FromEntity).ToArray();
+
+        Categories[0].IsSelected = true;
+        SelectedCategory = Categories[0];
 
         IsLoading = false;
     }

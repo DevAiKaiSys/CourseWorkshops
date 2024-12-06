@@ -4,11 +4,17 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:RestaurantPOS.ViewModels"
              xmlns:models="clr-namespace:RestaurantPOS.Models"
+             xmlns:converters="clr-namespace:RestaurantPOS.Converters"
              mc:Ignorable="d"
              d:DesignWidth="800"
              d:DesignHeight="450"
              x:Class="RestaurantPOS.Views.MainPage"
              x:DataType="vm:MainPageViewModel">
+    <UserControl.Resources>
+        <!-- Register the converter here -->
+        <converters:CategorySelectedToBrushConverter x:Key="CategorySelectedToBrushConverter" />
+    </UserControl.Resources>
+
     <Grid ColumnDefinitions=".75*, .25*">
         <Grid Grid.Column="0"
               RowDefinitions="Auto, Auto, *"
@@ -31,8 +37,13 @@
 
                     <ItemsControl.ItemTemplate>
                         <DataTemplate x:DataType="models:MenuCategoryModel">
-                            <Border Padding="20, 10"
+                            <!--<Border Padding="20, 10"
                                     Background="{StaticResource LightWheat}"
+                                    CornerRadius="10"
+                                    BorderThickness="0"
+                                    Margin="10,0">-->
+                            <Border Padding="20, 10"
+                                    Background="{Binding IsSelected, Converter={StaticResource CategorySelectedToBrushConverter}}"
                                     CornerRadius="10"
                                     BorderThickness="0"
                                     Margin="10,0">
