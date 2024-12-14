@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Reactive;
 using System.Threading.Tasks;
 using ReactiveUI;
 using RestaurantPOS.Data;
@@ -21,6 +22,8 @@ public class MainPageViewModel : ViewModelBase
     public MainPageViewModel(DatabaseService databaseService)
     {
         _databaseService = databaseService;
+
+        SelectCategoryCommand = ReactiveCommand.Create<int>(SelectCategory);
     }
 
     // public MenuCategory[] Categories
@@ -46,6 +49,8 @@ public class MainPageViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _isLoading, value);
     }
 
+    public ReactiveCommand<int, Unit> SelectCategoryCommand { get; }
+
     public async ValueTask InitializeAsync()
     {
         if (_isInitialized) return;
@@ -61,5 +66,19 @@ public class MainPageViewModel : ViewModelBase
         SelectedCategory = Categories[0];
 
         IsLoading = false;
+    }
+
+    private void SelectCategory(int categoryId)
+    {
+        if (SelectedCategory?.Id == categoryId)
+            return; // The current category is already selected
+
+        var existingSelectedCategory = Categories.First(category => category.IsSelected);
+        existingSelectedCategory.IsSelected = false;
+
+        var newlySelectedCategory = Categories.First(category => category.Id == categoryId);
+        newlySelectedCategory.IsSelected = true;
+
+        SelectedCategory = newlySelectedCategory;
     }
 }

@@ -46,14 +46,16 @@
                                     Background="{Binding IsSelected, Converter={StaticResource CategorySelectedToBrushConverter}}"
                                     CornerRadius="10"
                                     BorderThickness="0"
-                                    Margin="10,0">
+                                    Margin="10,0"
+                                    PointerPressed="Border_PointerPressed">
+
                                 <StackPanel Orientation="Horizontal"
                                             Spacing="5">
                                     <Image Height="20"
                                            Width="20"
                                            Source="{Binding Icon, Converter={StaticResource IconPathConverter}}" />
                                     <Label Content="{Binding Name}"
-                                           Foreground="Maroon" />
+                                           Foreground="{Binding IsSelected, Converter={StaticResource BooleanToForegroundConverter}}" />
                                 </StackPanel>
                             </Border>
                         </DataTemplate>

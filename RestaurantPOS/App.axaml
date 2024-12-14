@@ -13,9 +13,11 @@
     <Application.Styles>
         <FluentTheme />
         <StyleInclude Source="avares://RestaurantPOS/Resources/Styles/Colors.axaml" />
+        <StyleInclude Source="avares://RestaurantPOS/Icons.axaml" />
     </Application.Styles>
 
     <Application.Resources>
         <converters:IconPathConverter x:Key="IconPathConverter" />
+        <converters:BooleanToForegroundConverter x:Key="BooleanToForegroundConverter" />
     </Application.Resources>
 </Application>

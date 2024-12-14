@@ -4,6 +4,7 @@
     <option name="projectPerEditor">
       <map>
         <entry key="RestaurantPOS/App.axaml" value="RestaurantPOS/RestaurantPOS.csproj" />
+        <entry key="RestaurantPOS/Icons.axaml" value="RestaurantPOS/RestaurantPOS.csproj" />
         <entry key="RestaurantPOS/Views/FirstView.axaml" value="RestaurantPOS/RestaurantPOS.csproj" />
         <entry key="RestaurantPOS/Views/MainPage.axaml" value="RestaurantPOS/RestaurantPOS.csproj" />
         <entry key="RestaurantPOS/Views/MainWindow.axaml" value="RestaurantPOS/RestaurantPOS.csproj" />
