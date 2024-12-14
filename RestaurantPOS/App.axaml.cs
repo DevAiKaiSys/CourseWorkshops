@@ -44,7 +44,10 @@ public class App : Application
     private async Task SeedDataOnStartAsync()
     {
         var databaseService = Services.GetRequiredService<DatabaseService>();
-        await databaseService.InitializeDatabaseAsync();
+
+        // await databaseService.InitializeDatabaseAsync();
+        Task.Run(databaseService.InitializeDatabaseAsync)
+            .GetAwaiter().GetResult();
     }
 }
 
